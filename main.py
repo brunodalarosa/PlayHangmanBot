@@ -107,11 +107,16 @@ class WebhookHandler(webapp2.RequestHandler):
 
         if text.startswith('/'):
             if text == '/start':
-                reply('Bot enabled')
+                reply('Olá! Eu sou o CcUem_Bot mas você pode me chamar de ccu\
+                uemBot.\nEu não tenho um propósito e nem sei para que fui\
+                criado mas você pode me ajudar com isso!\n Alguma ideia?\n\
+                Criado por @bcesarg6')
                 setEnabled(chat_id, True)
             elif text == '/stop':
-                reply('Bot disabled')
+                reply('Você quer me desligar?!')
                 setEnabled(chat_id, False)
+            elif text == '/tio':
+                reply('Bom día, muitos díodos para você hoje!')
             elif text == '/image':
                 img = Image.new('RGB', (512, 512))
                 base = random.randint(0, 16777216)
