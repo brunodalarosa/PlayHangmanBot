@@ -89,7 +89,7 @@ class WebhookHandler(webapp2.RequestHandler):
                     'chat_id': str(chat_id),
                     'text': msg.encode('utf-8'),
                     'disable_web_page_preview': 'true',
-                    'reply_to_message_id': str(message_id),
+                #'reply_to_message_id': str(message_id),
                 })).read()
             elif img:
                 resp = multipart.post_multipart(BASE_URL + 'sendPhoto', [
@@ -117,6 +117,7 @@ class WebhookHandler(webapp2.RequestHandler):
                 setEnabled(chat_id, False)
             elif text == '/tio':
                 reply('Bom día, muitos díodos para você hoje!')
+                setEnabled(chat_id, True)
             elif text == '/image':
                 img = Image.new('RGB', (512, 512))
                 base = random.randint(0, 16777216)
