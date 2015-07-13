@@ -105,8 +105,8 @@ class WebhookHandler(webapp2.RequestHandler):
             logging.info('send response:')
             logging.info(resp)
 
-         if text.startswith('/'):
-            if text == '/start':
+        if text.startswith('/'):
+             if text == '/start':
                 reply('Bot enabled')
                 setEnabled(chat_id, True)
             elif text == '/stop':
@@ -115,13 +115,12 @@ class WebhookHandler(webapp2.RequestHandler):
             elif text == '/image':
                 img = Image.new('RGB', (512, 512))
                 base = random.randint(0, 16777216)
-                pixels = [base+i*j for i in range(512) for j in range(512)]  # generate sample image
-                img.putdata(pixels)
+                pixels = [base+i*j for i in range(512) for j in range(512)]  # generate sample image                img.putdata(pixels)
                 output = StringIO.StringIO()
                 img.save(output, 'JPEG')
                 reply(img=output.getvalue())
-            else:
-                reply('What command?')
+        else:
+            reply('What command?')
         # CUSTOMIZE FROM HERE
 
         elif 'who are you' in text:
