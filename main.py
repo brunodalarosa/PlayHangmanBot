@@ -89,7 +89,7 @@ class WebhookHandler(webapp2.RequestHandler):
                     'chat_id': str(chat_id),
                     'text': msg.encode('utf-8'),
                     'disable_web_page_preview': 'true',
-                #'reply_to_message_id': str(message_id),
+                    'reply_to_message_id': str(message_id),
                 })).read()
             elif img:
                 resp = multipart.post_multipart(BASE_URL + 'sendPhoto', [
@@ -106,7 +106,7 @@ class WebhookHandler(webapp2.RequestHandler):
             logging.info(resp)
 
         if text.startswith('/'):
-             if text == '/start':
+            if text == '/start':
                 reply('Bot enabled')
                 setEnabled(chat_id, True)
             elif text == '/stop':
@@ -122,24 +122,6 @@ class WebhookHandler(webapp2.RequestHandler):
         else:
             reply('What command?')
         # CUSTOMIZE FROM HERE
-
-        elif 'who are you' in text:
-            reply('telebot starter kit, created by yukuku: https://github.com/yukuku/telebot')
-        elif 'what time' in text:
-            reply('look at the top-right corner of your screen!')
-        else:
-            if getEnabled(chat_id):
-                resp1 = json.load(urllib2.urlopen('http://www.simsimi.com/requestChat?lc=en&ft=1.0&req=' + urllib.quote_plus(text.encode('utf-8'))))
-                back = resp1.get('res')
-                if not back:
-                    reply('okay...')
-                elif 'I HAVE NO RESPONSE' in back:
-                    reply('you said something with no meaning')
-                else:
-                    reply(back)
-            else:
-                logging.info('not enabled for chat_id {}'.format(chat_id))
-
 
 app = webapp2.WSGIApplication([
     ('/me', MeHandler),
