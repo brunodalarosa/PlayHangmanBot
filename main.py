@@ -14,7 +14,7 @@ from google.appengine.api import urlfetch
 from google.appengine.ext import ndb
 import webapp2
 
-TOKEN = '105794279:AAEZQkZX-HnXHMBG8NHkc0CWyDjvpOnHM-U'
+TOKEN = 'YOUR_BOT_TOKEN_HERE'
 
 BASE_URL = 'https://api.telegram.org/bot' + TOKEN + '/'
 
@@ -107,28 +107,45 @@ class WebhookHandler(webapp2.RequestHandler):
 
         if text.startswith('/'):
             if text == '/start':
-                reply('Olá, eu sou o ccuembot!\nEu fui criado sem nenhum propósito\
-                e preciso que você me ajude com isso! lol\nQue funções legais você\
-                acha que eu deveria ter?\nCriado por @bcesarg6')
+                reply('Bot enabled')
                 setEnabled(chat_id, True)
             elif text == '/stop':
-                reply('Você quer que eu me desligue?!')
+                reply('Bot disabled')
                 setEnabled(chat_id, False)
-            elif text == '/tio':
-                reply('Bom día!\nDíogo tínha um pacote com 5 díodos, sabe o que ele fez?\n\
-                Montou um circuítínho!\nVai estudar pra minha prova filho da puta\nBom día!')
-                setEnabled(chat_id, True)
             elif text == '/image':
                 img = Image.new('RGB', (512, 512))
                 base = random.randint(0, 16777216)
-                pixels = [base+i*j for i in range(512) for j in range(512)]  # generate sample image                img.putdata(pixels)
+                pixels = [base+i*j for i in range(512) for j in range(512)]  # generate sample image
+                img.putdata(pixels)
                 output = StringIO.StringIO()
                 img.save(output, 'JPEG')
                 reply(img=output.getvalue())
             else:
-                reply('Comando não reconhecido, quer implementar ele? Aprenda Python fdp!')
+                reply('What command?')
 
         # CUSTOMIZE FROM HERE
+
+        elif 'who are you' in text:
+            reply('telebot starter kit, created by yukuku: https://github.com/yukuku/telebot')
+        elif 'what time' in text:
+            reply('look at the top-right corner of your screen!')
+        else:
+            if getEnabled(chat_id):
+                try:
+                    resp1 = json.load(urllib2.urlopen('http://www.simsimi.com/requestChat?lc=en&ft=1.0&req=' + urllib.quote_plus(text.encode('utf-8'))))
+                    back = resp1.get('res')
+                except urllib2.HTTPError, err:
+                    logging.error(err)
+                    back = str(err)
+                if not back:
+                    reply('okay...')
+                elif 'I HAVE NO RESPONSE' in back:
+                    reply('you said something with no meaning')
+                else:
+                    reply(back)
+            else:
+                logging.info('not enabled for chat_id {}'.format(chat_id))
+
 
 app = webapp2.WSGIApplication([
     ('/me', MeHandler),
