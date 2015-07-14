@@ -121,8 +121,7 @@ class WebhookHandler(webapp2.RequestHandler):
             elif text == '/image':
                 img = Image.new('RGB', (512, 512))
                 base = random.randint(0, 16777216)
-                pixels = [base+i*j for i in range(512) for j in range(512)]  # generate sample image
-                img.putdata(pixels)
+                pixels = [base+i*j for i in range(512) for j in range(512)]  # generate sample image                img.putdata(pixels)
                 output = StringIO.StringIO()
                 img.save(output, 'JPEG')
                 reply(img=output.getvalue())
@@ -130,24 +129,6 @@ class WebhookHandler(webapp2.RequestHandler):
                 reply('Comando não reconhecido, quer implementar ele? Aprenda Python fdp!')
 
         # CUSTOMIZE FROM HERE
-
-        elif 'who are you' in text:
-            reply('telebot starter kit, created by yukuku: https://github.com/yukuku/telebot')
-        elif 'what time' in text:
-            reply('look at the top-right corner of your screen!')
-        else:
-            if getEnabled(chat_id):
-                resp1 = json.load(urllib2.urlopen('http://www.simsimi.com/requestChat?lc=en&ft=1.0&req=' + urllib.quote_plus(text.encode('utf-8'))))
-                back = resp1.get('res')
-                if not back:
-                    reply('okay...')
-                elif 'I HAVE NO RESPONSE' in back:
-                    reply('you said something with no meaning')
-                else:
-                    reply(back)
-            else:
-                logging.info('not enabled for chat_id {}'.format(chat_id))
-
 
 app = webapp2.WSGIApplication([
     ('/me', MeHandler),
