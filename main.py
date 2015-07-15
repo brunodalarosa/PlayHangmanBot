@@ -64,6 +64,12 @@ class SetWebhookHandler(webapp2.RequestHandler):
 
 class WebhookHandler(webapp2.RequestHandler):
     def post(self):
+        with open('status','r+') as f:
+            data = f.readlines()
+        if data[0] == 0:
+            caccom = False
+        elif data[0] == 1:
+            caccom = True
         urlfetch.set_default_fetch_deadline(60)
         body = json.loads(self.request.body)
         logging.info('request body:')
@@ -134,6 +140,17 @@ class WebhookHandler(webapp2.RequestHandler):
                 reply('bomdia circuitinhos')
             elif text == '/bomdia@ccuem_bot':
                 reply('bomdia circuitinhos')
+            elif text == '/setcaccom_open':
+                f.write("1\n")
+                reply('Voce abriu o caccom')
+            elif text == '/setcaccom_close':
+                f.write("0\n")
+                reply('Voce fechou o caccom')
+            elif text == '/getcaccom':
+                if caccom:
+                    reply('O caccom ta aberto cara :D')
+                else:
+                    reply('Caccom fechado, idiota.')
             else:
                 reply('mano vc eh burro')
 
