@@ -126,8 +126,12 @@ class WebhookHandler(webapp2.RequestHandler):
                 output = StringIO.StringIO()
                 img.save(output, 'JPEG')
                 reply(img=output.getvalue())
+            elif text == '/tio':
+                reply('diodo')
+            elif text == '/tio@ccuem_bot':
+                reply('diodo')
             else:
-                reply('Não entendi o seu comando... Mensagens começando com / são para comandos você sabe disso né puto?!')
+                reply('mano vc eh burro')
 
         # CUSTOMIZE FROM HERE
 
@@ -135,7 +139,7 @@ class WebhookHandler(webapp2.RequestHandler):
             reply('telebot starter kit, created by yukuku: https://github.com/yukuku/telebot')
         elif 'what time' in text:
             reply('look at the top-right corner of your screen!')
-        elif 'O que cai na prova?' in text:
+        elif 'O que cai na prova' in text:
             reply('Suas lagrimas')
         else:
             if getEnabled(chat_id):
