@@ -113,7 +113,10 @@ class WebhookHandler(webapp2.RequestHandler):
                 reply('Bot dos mano ligado')
                 setEnabled(chat_id, True)
             elif text == '/stop':
-                reply('Bot disabled')
+                reply('Bot dos mano desligado')
+                setEnabled(chat_id, False)
+            elif text == '/stop@ccuem_bot':
+                reply('Bot dos mano desligado')
                 setEnabled(chat_id, False)
             elif text == '/image':
                 img = Image.new('RGB', (512, 512))
@@ -123,8 +126,10 @@ class WebhookHandler(webapp2.RequestHandler):
                 output = StringIO.StringIO()
                 img.save(output, 'JPEG')
                 reply(img=output.getvalue())
+            elif text == '/tio':
+                reply('díodo')
             else:
-                reply('What command?')
+                reply('mano vc eh burro')
 
         # CUSTOMIZE FROM HERE
 
@@ -132,6 +137,8 @@ class WebhookHandler(webapp2.RequestHandler):
             reply('telebot starter kit, created by yukuku: https://github.com/yukuku/telebot')
         elif 'what time' in text:
             reply('look at the top-right corner of your screen!')
+        elif 'O que cai na prova?' in text:
+            reply('Suas lagrimas')
         else:
             if getEnabled(chat_id):
                 try:
