@@ -130,6 +130,10 @@ class WebhookHandler(webapp2.RequestHandler):
                 reply('diodo')
             elif text == '/tio@ccuem_bot':
                 reply('diodo')
+            elif text == '/bomdia':
+                reply('bomdia circuitinhos')
+            elif text == '/bomdia@ccuem_bot':
+                reply('bomdia circuitinhos')
             else:
                 reply('mano vc eh burro')
 
