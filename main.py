@@ -109,6 +109,9 @@ class WebhookHandler(webapp2.RequestHandler):
             if text == '/start':
                 reply('Bot dos mano ligado')
                 setEnabled(chat_id, True)
+            elif text == '/start@ccuem_bot':
+                reply('Bot dos mano ligado')
+                setEnabled(chat_id, True)
             elif text == '/stop':
                 reply('Bot disabled')
                 setEnabled(chat_id, False)
