@@ -113,8 +113,14 @@ class WebhookHandler(webapp2.RequestHandler):
                 reply('Bot dos mano ligado')
                 setEnabled(chat_id, True)
             elif text == '/stop':
-                reply('Bot disabled')
+                reply('Bot dos mano desligado')
                 setEnabled(chat_id, False)
+            elif text == '/stop@ccuem_bot':
+                reply('Bot dos mano desligado')
+                setEnabled(chat_id, False)
+            elif text == '/tio@ccuem_bot':
+                reply('Bom día, hoje vou contar uma historínha: Díogo tinha 5 díodos, sabe o que ele fez? Montou um circuitínho! Vai estudar pra prova fdp!')
+                setEnabled(chat_id, True)
             elif text == '/image':
                 img = Image.new('RGB', (512, 512))
                 base = random.randint(0, 16777216)
@@ -124,7 +130,7 @@ class WebhookHandler(webapp2.RequestHandler):
                 img.save(output, 'JPEG')
                 reply(img=output.getvalue())
             else:
-                reply('What command?')
+                reply('Não entendi o seu comando... Mensagens começando com / são para comandos você sabe disso né puto?!')
 
         # CUSTOMIZE FROM HERE
 
@@ -132,6 +138,8 @@ class WebhookHandler(webapp2.RequestHandler):
             reply('telebot starter kit, created by yukuku: https://github.com/yukuku/telebot')
         elif 'what time' in text:
             reply('look at the top-right corner of your screen!')
+        elif 'O que cai na prova?' in text:
+            reply('Suas lagrimas')
         else:
             if getEnabled(chat_id):
                 try:
