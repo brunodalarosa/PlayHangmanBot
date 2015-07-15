@@ -118,9 +118,6 @@ class WebhookHandler(webapp2.RequestHandler):
             elif text == '/stop@ccuem_bot':
                 reply('Bot dos mano desligado')
                 setEnabled(chat_id, False)
-            elif text == '/tio@ccuem_bot':
-                reply('Bom día, hoje vou contar uma historínha: Díogo tinha 5 díodos, sabe o que ele fez? Montou um circuitínho! Vai estudar pra prova fdp!')
-                setEnabled(chat_id, True)
             elif text == '/image':
                 img = Image.new('RGB', (512, 512))
                 base = random.randint(0, 16777216)
