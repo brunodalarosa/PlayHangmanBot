@@ -128,6 +128,8 @@ class WebhookHandler(webapp2.RequestHandler):
                 reply(img=output.getvalue())
             elif text == '/tio':
                 reply('díodo')
+            elif text == '/tio@ccuem_bot':
+                reply('díodo')
             else:
                 reply('mano vc eh burro')
 
