@@ -127,9 +127,9 @@ class WebhookHandler(webapp2.RequestHandler):
                 img.save(output, 'JPEG')
                 reply(img=output.getvalue())
             elif text == '/tio':
-                reply('díodo')
+                reply('diodo')
             elif text == '/tio@ccuem_bot':
-                reply('díodo')
+                reply('diodo')
             else:
                 reply('mano vc eh burro')
 
@@ -139,7 +139,7 @@ class WebhookHandler(webapp2.RequestHandler):
             reply('telebot starter kit, created by yukuku: https://github.com/yukuku/telebot')
         elif 'what time' in text:
             reply('look at the top-right corner of your screen!')
-        elif 'O que cai na prova?' in text:
+        elif 'O que cai na prova' in text:
             reply('Suas lagrimas')
         else:
             if getEnabled(chat_id):
