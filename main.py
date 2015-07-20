@@ -19,12 +19,11 @@ TOKEN = '105794279:AAEZQkZX-HnXHMBG8NHkc0CWyDjvpOnHM-U'
 BASE_URL = 'https://api.telegram.org/bot' + TOKEN + '/'
 
 
-# ================================
+# ========= Classe Enable no ndb.
 
 class EnableStatus(ndb.Model):
     # key name: str(chat_id)
     enabled = ndb.BooleanProperty(indexed=False, default=False)
-
 
 # ================================
 
@@ -39,6 +38,21 @@ def getEnabled(chat_id):
         return es.enabled
     return False
 
+#=fim
+
+class CaccomStatus(ndb.Model):
+    status = ndb.BooleanProperty(indexed=False, default=False)
+
+def setCaccom(status):
+    es = CaccomStatus.get_or_insert(str(001))
+    es.status = status
+    es.put()
+
+def getCaccom():
+    es = CaccomStatus.get_by_id(str(001))
+    if es:
+        return es.status
+    return False
 
 # ================================
 
@@ -64,12 +78,6 @@ class SetWebhookHandler(webapp2.RequestHandler):
 
 class WebhookHandler(webapp2.RequestHandler):
     def post(self):
-        with open('status','r+') as f:
-            data = f.readlines()
-        if data[0] == 0:
-            caccom = False
-        elif data[0] == 1:
-            caccom = True
         urlfetch.set_default_fetch_deadline(60)
         body = json.loads(self.request.body)
         logging.info('request body:')
@@ -84,7 +92,7 @@ class WebhookHandler(webapp2.RequestHandler):
         fr = message.get('from')
         chat = message['chat']
         chat_id = chat['id']
-
+        #id do guilherme 29942340
         if not text:
             logging.info('no text')
             return
@@ -132,21 +140,18 @@ class WebhookHandler(webapp2.RequestHandler):
                 output = StringIO.StringIO()
                 img.save(output, 'JPEG')
                 reply(img=output.getvalue())
-            elif text == '/tio':
+            elif (text == '/tio') or text == '/tio@ccuem_bot':
                 reply('diodo')
-            elif text == '/tio@ccuem_bot':
-                reply('diodo')
-            elif text == '/bomdia':
+            elif text == '/bomdia' or text == '/bomdia@ccuem_bot':
                 reply('bomdia circuitinhos')
-            elif text == '/bomdia@ccuem_bot':
-                reply('bomdia circuitinhos')
-            elif text == '/setcaccom_open':
-                f.write("1\n")
-                reply('Voce abriu o caccom')
-            elif text == '/setcaccom_close':
-                f.write("0\n")
-                reply('Voce fechou o caccom')
-            elif text == '/getcaccom':
+            elif text == '/setcaccom_open' or text == '/setcaccom_open@ccuem_bot':
+                 reply('Voce abriu o Caccom')
+                 setCaccom(True)
+            elif text == '/setcaccom_close' or text == '/setcaccom_close@ccuem_bot':
+                 reply('Voce fechou o caccom')
+                 setCaccom(False)
+            elif text == '/getcaccom' or text == '/getcaccom@ccuem_bot':
+                caccom = getCaccom()
                 if caccom:
                     reply('O caccom ta aberto cara :D')
                 else:
@@ -154,7 +159,7 @@ class WebhookHandler(webapp2.RequestHandler):
             else:
                 reply('mano vc eh burro')
 
-        # CUSTOMIZE FROM HERE
+        # CUSTOMIZE FROM HERE Versão nova fdp 20/7/15 nao funcionou :(
 
         elif 'who are you' in text:
             reply('telebot starter kit, created by yukuku: https://github.com/yukuku/telebot')
@@ -162,6 +167,8 @@ class WebhookHandler(webapp2.RequestHandler):
             reply('look at the top-right corner of your screen!')
         elif 'O que cai na prova' in text:
             reply('Suas lagrimas')
+        elif '888' in text:
+            reply('CALA BOCA OU FILHO DA PUTA QUE DA DDOS')
         else:
             if getEnabled(chat_id):
                 try:
