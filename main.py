@@ -19,7 +19,7 @@ TOKEN = '105794279:AAEZQkZX-HnXHMBG8NHkc0CWyDjvpOnHM-U'
 BASE_URL = 'https://api.telegram.org/bot' + TOKEN + '/'
 
 
-# ========= Classe Enable no ndb.
+# ========= Classe Enable no ndb. (Do esqueleto)
 
 class EnableStatus(ndb.Model):
     # key name: str(chat_id)
@@ -38,17 +38,19 @@ def getEnabled(chat_id):
         return es.enabled
     return False
 
-#=fim
+#======= Classe Caccom no ndb. Criado para o funcionamento do sistema Caccom
 
 class CaccomStatus(ndb.Model):
     status = ndb.BooleanProperty(indexed=False, default=False)
 
-def setCaccom(status):
+#================================
+
+def setCaccom(status): #Abre ou fecha o caccom dependendo do argumento recebido
     es = CaccomStatus.get_or_insert(str(001))
     es.status = status
     es.put()
 
-def getCaccom():
+def getCaccom(): #Retorna o estado atual do caccom
     es = CaccomStatus.get_by_id(str(001))
     if es:
         return es.status
@@ -120,19 +122,29 @@ class WebhookHandler(webapp2.RequestHandler):
             logging.info(resp)
 
         if text.startswith('/'):
-            if text == '/start':
+            if text == '/start' or text == '/start@ccuem_bot': #Start
                 reply('Bot dos mano ligado')
                 setEnabled(chat_id, True)
-            elif text == '/start@ccuem_bot':
-                reply('Bot dos mano ligado')
-                setEnabled(chat_id, True)
-            elif text == '/stop':
+            elif text == '/stop' or text == '/stop@ccuem_bot': #Stop
                 reply('Bot dos mano desligado')
                 setEnabled(chat_id, False)
-            elif text == '/stop@ccuem_bot':
-                reply('Bot dos mano desligado')
-                setEnabled(chat_id, False)
-            elif text == '/image':
+            elif text == '/tio' or text == '/tio@ccuem_bot': #Tio
+                reply('diodo')
+            elif text == '/bomdia' or text == '/bomdia@ccuem_bot': #Bomdia
+                reply('bomdia circuitinhos')
+            elif text == '/setcaccom_open' or text == '/setcaccom_open@ccuem_bot': #SetCaccomOpen
+                 reply('Voce abriu o Caccom')
+                 setCaccom(True)
+            elif text == '/setcaccom_close' or text == '/setcaccom_close@ccuem_bot': #SetCaccomClose
+                 reply('Voce fechou o caccom')
+                 setCaccom(False)
+            elif text == '/getcaccom' or text == '/getcaccom@ccuem_bot': #GetCaccom
+                caccom = getCaccom()
+                if caccom:
+                    reply('O caccom ta aberto cara :D')
+                else:
+                    reply('Caccom fechado, idiota.')
+            elif text == '/image': #Gera imagem (código do esqueleto)
                 img = Image.new('RGB', (512, 512))
                 base = random.randint(0, 16777216)
                 pixels = [base+i*j for i in range(512) for j in range(512)]  # generate sample image
@@ -140,26 +152,10 @@ class WebhookHandler(webapp2.RequestHandler):
                 output = StringIO.StringIO()
                 img.save(output, 'JPEG')
                 reply(img=output.getvalue())
-            elif (text == '/tio') or text == '/tio@ccuem_bot':
-                reply('diodo')
-            elif text == '/bomdia' or text == '/bomdia@ccuem_bot':
-                reply('bomdia circuitinhos')
-            elif text == '/setcaccom_open' or text == '/setcaccom_open@ccuem_bot':
-                 reply('Voce abriu o Caccom')
-                 setCaccom(True)
-            elif text == '/setcaccom_close' or text == '/setcaccom_close@ccuem_bot':
-                 reply('Voce fechou o caccom')
-                 setCaccom(False)
-            elif text == '/getcaccom' or text == '/getcaccom@ccuem_bot':
-                caccom = getCaccom()
-                if caccom:
-                    reply('O caccom ta aberto cara :D')
-                else:
-                    reply('Caccom fechado, idiota.')
             else:
                 reply('mano vc eh burro')
 
-        # CUSTOMIZE FROM HERE Versão nova fdp 20/7/15 nao funcionou :(
+        # Aqui estão os algoritmos para as respostas sem serem comandos.
 
         elif 'who are you' in text:
             reply('telebot starter kit, created by yukuku: https://github.com/yukuku/telebot')
