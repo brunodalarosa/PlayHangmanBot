@@ -94,6 +94,8 @@ class WebhookHandler(webapp2.RequestHandler):
         fr = message.get('from')
         chat = message['chat']
         chat_id = chat['id']
+        user_id = message['from']
+        id = user_id.get('id')
         #id do guilherme 29942340
         if not text:
             logging.info('no text')
@@ -120,8 +122,9 @@ class WebhookHandler(webapp2.RequestHandler):
 
             logging.info('send response:')
             logging.info(resp)
-
-        if text.startswith('/'):
+        if id == 29942340:
+            reply('CALA BOCA OU FILHO DA PUTA QUE DA DDOS')
+        elif text.startswith('/'):
             if text == '/start' or text == '/start@ccuem_bot': #Start
                 reply('Bot dos mano ligado')
                 setEnabled(chat_id, True)
@@ -144,10 +147,10 @@ class WebhookHandler(webapp2.RequestHandler):
                     reply('O caccom ta aberto cara :D')
                 else:
                     reply('Caccom fechado, idiota.')
-            elif text == '/image': #Gera imagem (código do esqueleto)
-                img = Image.new('RGB', (512, 512))
+            elif text == '/image' or text == '/image@ccuem_bot': #Gera imagem (código do esqueleto)
+                img = Image.new('RGB', (420, 420))
                 base = random.randint(0, 16777216)
-                pixels = [base+i*j for i in range(512) for j in range(512)]  # generate sample image
+                pixels = [base+i*j for i in range(420) for j in range(420)]  # generate sample image
                 img.putdata(pixels)
                 output = StringIO.StringIO()
                 img.save(output, 'JPEG')
@@ -163,8 +166,6 @@ class WebhookHandler(webapp2.RequestHandler):
             reply('look at the top-right corner of your screen!')
         elif 'O que cai na prova' in text:
             reply('Suas lagrimas')
-        elif '888' in text:
-            reply('CALA BOCA OU FILHO DA PUTA QUE DA DDOS')
         else:
             if getEnabled(chat_id):
                 try:
