@@ -95,7 +95,7 @@ class WebhookHandler(webapp2.RequestHandler):
         chat = message['chat']
         chat_id = chat['id']
         user_id = message['from']
-        id = user_id.get('id')
+        uId = user_id.get('id')
         #id do guilherme 29942340
         if not text:
             logging.info('no text')
@@ -122,7 +122,7 @@ class WebhookHandler(webapp2.RequestHandler):
 
             logging.info('send response:')
             logging.info(resp)
-        if id == 29942340:
+        if uId == 29942340:
             reply('CALA BOCA OU FILHO DA PUTA QUE DA DDOS')
         elif text.startswith('/'):
             if text == '/start' or text == '/start@ccuem_bot': #Start
