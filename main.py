@@ -14,49 +14,13 @@ from google.appengine.api import urlfetch
 from google.appengine.ext import ndb
 import webapp2
 
+# Nossos imports
+import cmds
+import conversa
+
 TOKEN = '105794279:AAEZQkZX-HnXHMBG8NHkc0CWyDjvpOnHM-U'
 
 BASE_URL = 'https://api.telegram.org/bot' + TOKEN + '/'
-
-
-# ========= Classe Enable no ndb. (Do esqueleto)
-
-class EnableStatus(ndb.Model):
-    # key name: str(chat_id)
-    enabled = ndb.BooleanProperty(indexed=False, default=False)
-
-# ================================
-
-def setEnabled(chat_id, yes):
-    es = EnableStatus.get_or_insert(str(chat_id))
-    es.enabled = yes
-    es.put()
-
-def getEnabled(chat_id):
-    es = EnableStatus.get_by_id(str(chat_id))
-    if es:
-        return es.enabled
-    return False
-
-#======= Classe Caccom no ndb. Criado para o funcionamento do sistema Caccom
-
-class CaccomStatus(ndb.Model):
-    status = ndb.BooleanProperty(indexed=False, default=False)
-
-#================================
-
-def setCaccom(status): #Abre ou fecha o caccom dependendo do argumento recebido
-    es = CaccomStatus.get_or_insert(str(001))
-    es.status = status
-    es.put()
-
-def getCaccom(): #Retorna o estado atual do caccom
-    es = CaccomStatus.get_by_id(str(001))
-    if es:
-        return es.status
-    return False
-
-# ================================
 
 class MeHandler(webapp2.RequestHandler):
     def get(self):
@@ -121,65 +85,29 @@ class WebhookHandler(webapp2.RequestHandler):
 
             logging.info('send response:')
             logging.info(resp)
-        if uId == 29942340: #if id do guilherme
-            reply('CALA BOCA OU FILHO DA PUTA QUE DA DDOS')
-        elif text.startswith('/'):
-            if text == '/start' or text == '/start@ccuem_bot': #Start
-                reply('Bot dos mano ligado')
-                setEnabled(chat_id, True)
-            elif text == '/stop' or text == '/stop@ccuem_bot': #Stop
-                reply('Bot dos mano desligado')
-                setEnabled(chat_id, False)
-            elif text == '/tio' or text == '/tio@ccuem_bot': #Tio
-                reply('diodo')
-            elif text == '/bomdia' or text == '/bomdia@ccuem_bot': #Bomdia
-                reply('bomdia circuitinhos')
-            elif text == '/setcaccom_open' or text == '/setcaccom_open@ccuem_bot': #SetCaccomOpen
-                 reply('Voce abriu o Caccom')
-                 setCaccom(True)
-            elif text == '/setcaccom_close' or text == '/setcaccom_close@ccuem_bot': #SetCaccomClose
-                 reply('Voce fechou o caccom')
-                 setCaccom(False)
-            elif text == '/getcaccom' or text == '/getcaccom@ccuem_bot': #GetCaccom
-                caccom = getCaccom()
-                if caccom:
-                    reply('O caccom ta aberto cara :D')
+        if text.startswith('/'):
+            cc = cmds.comandos #calls the Cmd class
+            if text.startswith('/meme') or text.startswith('/image'):
+                rpl = cc(text, chat_id)
+                if rpl.startswith('avaibles') or rpl.startswith('there'):
+                    reply(rpl)
                 else:
-                    reply('Caccom fechado, idiota.')
-            elif text == '/image' or text == '/image@ccuem_bot': #Gera imagem (código do esqueleto)
-                img = Image.new('RGB', (420, 420))
-                base = random.randint(0, 16777216)
-                pixels = [base+i*j for i in range(420) for j in range(420)]  # generate sample image
-                img.putdata(pixels)
-                output = StringIO.StringIO()
-                img.save(output, 'JPEG')
-                reply(img=output.getvalue())
+                    reply(img=rpl)
             else:
-                reply('mano vc eh burro')
+                rpl = cc(text, chat_id)
+                reply(rpl)
+        if text.startswith('@'):
+            reply('nao aceitamos arroba')
+        #Aqui estao os algoritmos para as respostas sem serem comandos.
 
-        # Aqui estão os algoritmos para as respostas sem serem comandos.
-
-        elif 'who are you' in text:
-            reply('telebot starter kit, created by yukuku: https://github.com/yukuku/telebot')
-        elif 'what time' in text:
-            reply('look at the top-right corner of your screen!')
-        elif 'O que cai na prova' in text:
-            reply('Suas lagrimas')
         else:
-            if getEnabled(chat_id):
-                try:
-                    resp1 = json.load(urllib2.urlopen('http://www.simsimi.com/requestChat?lc=en&ft=1.0&req=' + urllib.quote_plus(text.encode('utf-8'))))
-                    back = resp1.get('res')
-                except urllib2.HTTPError, err:
-                    logging.error(err)
-                    back = str(err)
-                if not back:
-                    reply('okay...')
-                elif 'I HAVE NO RESPONSE' in back:
-                    reply('you said something with no meaning')
-                else:
-                    reply(back)
+            cc = conversa.responde
+            get = cmds.getEnabled
+            if get(chat_id):
+                rpl = cc(text)
+                reply(rpl)
             else:
+                reply('bot desligado')
                 logging.info('not enabled for chat_id {}'.format(chat_id))
 
 
