@@ -16,6 +16,7 @@ import webapp2
 
 # Nossos imports
 import cmds
+import conversa
 
 TOKEN = '105794279:AAEZQkZX-HnXHMBG8NHkc0CWyDjvpOnHM-U'
 
@@ -85,40 +86,28 @@ class WebhookHandler(webapp2.RequestHandler):
             logging.info('send response:')
             logging.info(resp)
         if text.startswith('/'):
-            cc = cmds.Cmd() #calls the Cmd class
+            cc = cmds.comandos #calls the Cmd class
             if text.startswith('/meme') or text.startswith('/image'):
-                rpl = cc.comandos(text, chat_id)
+                rpl = cc(text, chat_id)
                 if rpl.startswith('avaibles') or rpl.startswith('there'):
                     reply(rpl)
                 else:
                     reply(img=rpl)
             else:
-                rpl = cc.comandos(text, chat_id)
+                rpl = cc(text, chat_id)
                 reply(rpl)
+        if text.startswith('@'):
+            reply('nao aceitamos arroba')
         #Aqui estao os algoritmos para as respostas sem serem comandos.
 
-        elif 'who are you' in text:
-            reply('telebot starter kit, created by yukuku: https://github.com/yukuku/telebot')
-        elif 'what time' in text:
-            reply('look at the top-right corner of your screen!')
-        elif 'O que cai na prova' in text:
-            reply('Suas lagrimas')
         else:
+            cc = conversa.responde
             get = cmds.getEnabled
             if get(chat_id):
-                try:
-                    resp1 = json.load(urllib2.urlopen('http://www.simsimi.com/requestChat?lc=en&ft=1.0&req=' + urllib.quote_plus(text.encode('utf-8'))))
-                    back = resp1.get('res')
-                except urllib2.HTTPError, err:
-                    logging.error(err)
-                    back = str(err)
-                if not back:
-                    reply('okay...')
-                elif 'I HAVE NO RESPONSE' in back:
-                    reply('you said something with no meaning')
-                else:
-                    reply(back)
+                rpl = cc(text)
+                reply(rpl)
             else:
+                reply('bot desligado')
                 logging.info('not enabled for chat_id {}'.format(chat_id))
 
 

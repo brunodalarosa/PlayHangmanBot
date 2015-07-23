@@ -39,72 +39,84 @@ def getCaccom(): #Retorna o estado atual do caccom
         return es.status
     return False
 
-class Cmd:
-    def comandos(self, text, chat_id):
-        if text == '/start' or text == '/start@ccuem_bot': #Start
-            setEnabled(chat_id, True)
-            return('Bot dos mano ligado')
-        elif text == '/stop' or text == '/stop@ccuem_bot': #Stop
-            setEnabled(chat_id, False)
-            return('Bot dos mano desligado')
-        elif text == '/tio' or text == '/tio@ccuem_bot': #Tio
-            return('diodo')
-        elif text == '/bomdia' or text == '/bomdia@ccuem_bot': #Bomdia
-            return('bomdia circuitinhos')
-        elif text == '/setcaccom_open' or text == '/setcaccom_open@ccuem_bot': #SetCaccomOpen
-            setCaccom(True)
-            return('Voce abriu o Caccom')
-        elif text == '/setcaccom_close' or text == '/setcaccom_close@ccuem_bot': #SetCaccomClose
-            setCaccom(False)
-            return('Voce fechou o caccom')
-        elif text == '/getcaccom' or text == '/getcaccom@ccuem_bot': #GetCaccom
-            caccom = getCaccom()
-            if caccom:
-                return('O caccom ta aberto cara :D')
-            else:
-                return('Caccom fechado, idiota.')
-        elif text == '/image' or text == '/image@ccuem_bot': #Gera imagem (codigo do esqueleto)
-            img = Image.open("iden.jpg")
+
+def comandos(text, chat_id):
+    if text == '/start' or text == '/start@ccuem_bot': #Start
+        setEnabled(chat_id, True)
+        return('Bot dos mano ligado')
+    elif text == '/stop' or text == '/stop@ccuem_bot': #Stop
+        setEnabled(chat_id, False)
+        return('Bot dos mano desligado')
+    elif text == '/tio' or text == '/tio@ccuem_bot': #Tio
+        return('diodo')
+    elif text == '/bomdia' or text == '/bomdia@ccuem_bot': #Bomdia
+        return('bomdia circuitinhos')
+    elif text == '/setcaccom_open' or text == '/setcaccom_open@ccuem_bot': #SetCaccomOpen
+        setCaccom(True)
+        return('Voce abriu o Caccom')
+    elif text == '/setcaccom_close' or text == '/setcaccom_close@ccuem_bot': #SetCaccomClose
+        setCaccom(False)
+        return('Voce fechou o caccom')
+    elif text == '/getcaccom' or text == '/getcaccom@ccuem_bot': #GetCaccom
+        caccom = getCaccom()
+        if caccom:
+            return('O caccom ta aberto cara :D')
+        else:
+            return('Caccom fechado, idiota.')
+    elif text == '/image' or text == '/image@ccuem_bot': #Gera imagem (codigo do esqueleto)
+        img = Image.open("images/iden.jpg")
+        output = StringIO.StringIO()
+        img.save(output, 'JPEG')
+        a = img=output.getvalue()
+        return(a)
+    elif text.startswith('/meme'): #manda um meme
+        if text == '/meme thuglife':
+            img = Image.open("images/memes/thuglife.jpg")
             output = StringIO.StringIO()
             img.save(output, 'JPEG')
             a = img=output.getvalue()
             return(a)
-        elif text.startswith('/meme'): #manda um meme
-            if text == '/meme thuglife':
-                img = Image.open("thuglife.jpg")
-                output = StringIO.StringIO()
-                img.save(output, 'JPEG')
-                a = img=output.getvalue()
-                return(a)
-            elif text == '/meme duffzila':
-                img = Image.open("duffzila.jpg")
-                output = StringIO.StringIO()
-                img.save(output, 'JPEG')
-                a = img=output.getvalue()
-                return(a)
-            elif text == '/meme diofire':
-                img = Image.open("diofire.jpg")
-                output = StringIO.StringIO()
-                img.save(output, 'JPEG')
-                a = img=output.getvalue()
-                return(a)
-            elif text == '/meme hacker':
-                img = Image.open("hacker.jpg")
-                output = StringIO.StringIO()
-                img.save(output, 'JPEG')
-                a = img=output.getvalue()
-                return(a)
-            elif text == '/meme isdown':
-                img = Image.open("isdown.jpg")
-                output = StringIO.StringIO()
-                img.save(output, 'JPEG')
-                a = img=output.getvalue()
-                return(a)
-            elif text == '/meme help':
-                a = 'avaibles memes: thuglife, diofire, duffzila, hacker, isdown'
-                return(a)
-            else: #if user entered an non existing meme
-                a = 'there is no meme for this yet, here the avaibles memes: thuglife, diofire, duffzila, hacker, isdown'
-                return(a)
-        else:
-            return('mano vc eh burro')
+        elif text == '/meme duffzila':
+            img = Image.open("images/memes/uffzila.jpg")
+            output = StringIO.StringIO()
+            img.save(output, 'JPEG')
+            a = img=output.getvalue()
+            return(a)
+        elif text == '/meme diofire':
+            img = Image.open("images/memes/diofire.jpg")
+            output = StringIO.StringIO()
+            img.save(output, 'JPEG')
+            a = img=output.getvalue()
+            return(a)
+        elif text == '/meme hacker':
+            img = Image.open("images/memes/hacker.jpg")
+            output = StringIO.StringIO()
+            img.save(output, 'JPEG')
+            a = img=output.getvalue()
+            return(a)
+        elif text == '/meme isdown':
+            img = Image.open("images/memes/isdown.jpg")
+            output = StringIO.StringIO()
+            img.save(output, 'JPEG')
+            a = img=output.getvalue()
+            return(a)
+        elif text == '/meme lsd':
+            img = Image.open("images/memes/lsd.jpg")
+            output = StringIO.StringIO()
+            img.save(output, 'JPEG')
+            a = img=output.getvalue()
+            return(a)
+        elif text == '/meme roladream':
+            img = Image.open("images/memes/roladream.jpg")
+            output = StringIO.StringIO()
+            img.save(output, 'JPEG')
+            a = img=output.getvalue()
+            return(a)
+        elif text == '/meme help':
+            a = 'avaibles memes: thuglife, diofire, duffzila, hacker, isdown'
+            return(a)
+        else: #if user entered an non existing meme
+            a = 'there is no meme for this yet, here the avaibles memes: thuglife, diofire, duffzila, hacker, isdown'
+            return(a)
+    else:
+        return('mano vc eh burro')
