@@ -1,7 +1,6 @@
 import StringIO
 from google.appengine.ext import ndb
 from PIL import Image
-import time
 import datetime
 #============= ndb do /start ou /stop
 
@@ -31,7 +30,20 @@ class CaccomStatus(ndb.Model):
 #================================
 
 def setCaccom(status): #Abre ou fecha o caccom dependendo do argumento recebido
-    st = time.strftime("%H:%M:%S")
+    time = datetime.datetime.now()
+    h = int(time.hour)
+    h = h-3
+    if(h < 0):
+        if h == -1:
+            h = 23
+        elif h == -2:
+            h == 22
+        elif h == -3:
+            h == 21
+    m = str(time.minute)
+    s = str(time.second)
+    h = str(h)
+    st = h+':'+m+':'+s
     es = CaccomStatus.get_or_insert(str(001))
     es.status = status
     es.timestamp = st
