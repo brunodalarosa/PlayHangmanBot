@@ -1,7 +1,8 @@
 import StringIO
 from google.appengine.ext import ndb
 from PIL import Image
-
+import time
+import datetime
 #============= ndb do /start ou /stop
 
 class EnableStatus(ndb.Model):
@@ -25,12 +26,15 @@ def getEnabled(chat_id):
 
 class CaccomStatus(ndb.Model):
     status = ndb.BooleanProperty(indexed=False, default=False)
+    timestamp = ndb.StringProperty(indexed=False, default=False)
 
 #================================
 
 def setCaccom(status): #Abre ou fecha o caccom dependendo do argumento recebido
+    st = time.strftime("%H:%M:%S")
     es = CaccomStatus.get_or_insert(str(001))
     es.status = status
+    es.timestamp = st
     es.put()
 
 def getCaccom(): #Retorna o estado atual do caccom
@@ -38,6 +42,10 @@ def getCaccom(): #Retorna o estado atual do caccom
     if es:
         return es.status
     return False
+
+def getCaccomHora():
+    es = CaccomStatus.get_by_id(str(001))
+    return es.timestamp
 
 
 def comandos(text, chat_id):
@@ -60,9 +68,9 @@ def comandos(text, chat_id):
     elif text == '/getcaccom' or text == '/getcaccom@ccuem_bot': #GetCaccom
         caccom = getCaccom()
         if caccom:
-            return('O caccom ta aberto cara :D')
+            return('O caccom ta aberto cara :D\nUltima modificacao: ' + getCaccomHora())
         else:
-            return('Caccom fechado, idiota.')
+            return('Caccom fechado, idiota.\nUltima modificacao: ' + getCaccomHora())
     elif text == '/image' or text == '/image@ccuem_bot': #Gera imagem (codigo do esqueleto)
         img = Image.open("images/iden.jpg")
         output = StringIO.StringIO()
