@@ -89,7 +89,7 @@ class WebhookHandler(webapp2.RequestHandler):
             cc = cmds.comandos #calls the Cmd class
             if text.startswith('/meme') or text.startswith('/image'):
                 rpl = cc(text, chat_id)
-                if rpl.startswith('avaibles') or rpl.startswith('there'):
+                if rpl.startswith('O comando') or rpl.startswith('Esse meme'):
                     reply(rpl)
                 else:
                     reply(img=rpl)
