@@ -77,7 +77,7 @@ def comandos(text, chat_id):
             a = img=output.getvalue()
             return(a)
         elif text == '/meme duffzila':
-            img = Image.open("images/memes/uffzila.jpg")
+            img = Image.open("images/memes/duffzila.jpg")
             output = StringIO.StringIO()
             img.save(output, 'JPEG')
             a = img=output.getvalue()
@@ -112,11 +112,11 @@ def comandos(text, chat_id):
             img.save(output, 'JPEG')
             a = img=output.getvalue()
             return(a)
-        elif text == '/meme help':
-            a = 'avaibles memes: thuglife, diofire, duffzila, hacker, isdown'
+        elif text == '/meme help' or text == '/meme h':
+            a = 'O comando meme requer apenas um argumento, use /meme NomeDoMeme\nLista de Memes disponiveis:\nthuglife\ndiofire\nduffzila\nhacker\nisdown\nroladream\nlsd\n V -0.1.1lol'
             return(a)
         else: #if user entered an non existing meme
-            a = 'there is no meme for this yet, here the avaibles memes: thuglife, diofire, duffzila, hacker, isdown'
+            a = 'Esse meme nao existe ainda! Para uma lista dos memes disponiveis use /meme h ou /meme help'
             return(a)
     else:
         return('mano vc eh burro')

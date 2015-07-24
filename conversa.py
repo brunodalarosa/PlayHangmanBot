@@ -12,7 +12,7 @@ def responde(text):
         return('look at the top-right corner of your screen!')
     elif 'O que cai na prova' in text:
         return('Suas lagrimas')
-    elif (text.find('quem')!=-1) and (text.find('criou')!=-1) and (text.find('voce')!=-1):
+    elif (text.find('quem')!=-1) and ((text.find('criou')!=-1) or (text.find('te')!=-1)) and ((text.find('voce')!=-1) or (text.find('bot')!=-1)):
         return('Fui criado pelos deuses Bruno e Cristofer')
     else:
         try:
@@ -24,6 +24,6 @@ def responde(text):
         if not back:
             return('okay...')
         elif 'I HAVE NO RESPONSE' in back:
-            return('Você fala de uma forma burra cara!')
+            return('Voce fala de uma forma burra cara!')
         else:
             return(back)

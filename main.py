@@ -96,10 +96,6 @@ class WebhookHandler(webapp2.RequestHandler):
             else:
                 rpl = cc(text, chat_id)
                 reply(rpl)
-        if text.startswith('@'):
-            reply('nao aceitamos arroba')
-        #Aqui estao os algoritmos para as respostas sem serem comandos.
-
         else:
             cc = conversa.responde
             get = cmds.getEnabled
