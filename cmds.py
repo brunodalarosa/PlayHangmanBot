@@ -60,29 +60,42 @@ def getCaccomHora():
     return es.timestamp
 
 
-def comandos(text, chat_id):
+def comandos(text, chat_id, uId):
+    auth = False
+    if (uId == 109554359) or  (uId == 112255461) or (uId == 112228809):
+        auth = True
     if text == '/start' or text == '/start@ccuem_bot': #Start
-        setEnabled(chat_id, True)
-        return('Bot dos mano ligado')
+        if auth:
+            setEnabled(chat_id, True)
+            return('Bot Ccuem ligado :D')
+        else:
+            return('Voce nao tem autorizacao pra fazer isso.')
     elif text == '/stop' or text == '/stop@ccuem_bot': #Stop
-        setEnabled(chat_id, False)
-        return('Bot dos mano desligado')
-    elif text == '/tio' or text == '/tio@ccuem_bot': #Tio
-        return('diodo')
-    elif text == '/bomdia' or text == '/bomdia@ccuem_bot': #Bomdia
-        return('bomdia circuitinhos')
+        if auth:
+            setEnabled(chat_id, False)
+            return('Bot Ccuem desligado D:')
+        else:
+            return('Voce nao tem autorizacao pra fazer isso.')
     elif text == '/setcaccom_open' or text == '/setcaccom_open@ccuem_bot': #SetCaccomOpen
-        setCaccom(True)
-        return('Voce abriu o Caccom')
+        if auth:
+            setCaccom(True)
+            return('Voce abriu o Caccom')
+        else:
+            return('Voce nao tem autorizacao pra fazer isso.')
     elif text == '/setcaccom_close' or text == '/setcaccom_close@ccuem_bot': #SetCaccomClose
-        setCaccom(False)
-        return('Voce fechou o caccom')
+        if auth:
+            setCaccom(False)
+            return('Voce fechou o caccom')
+        else:
+            return('Voce nao tem autorizacao pra fazer isso.')
     elif text == '/getcaccom' or text == '/getcaccom@ccuem_bot': #GetCaccom
         caccom = getCaccom()
         if caccom:
             return('O caccom ta aberto cara :D\nUltima modificacao: ' + getCaccomHora())
         else:
             return('Caccom fechado, idiota.\nUltima modificacao: ' + getCaccomHora())
+    elif text == '/tio' or text == '/tio@ccuem_bot': #Tio
+        return('Bom dia, diogo tinha um pacotinho de diodinhos, sabe o que ele fez? Montou um circuitinho!')
     elif text == '/image' or text == '/image@ccuem_bot': #Gera imagem (codigo do esqueleto)
         img = Image.open("images/iden.jpg")
         output = StringIO.StringIO()
