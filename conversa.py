@@ -13,7 +13,7 @@ def responde(text):
     elif 'O que cai na prova' in text:
         return('Suas lagrimas')
     elif (text.find('quem')!=-1) and ((text.find('criou')!=-1) or (text.find('te')!=-1)) and ((text.find('voce')!=-1) or (text.find('bot')!=-1)):
-        return('Fui criado pelos deuses Bruno e Cristofer')
+        return('Fui criado pelo @bcesarg6 e o @cristoferoswald')
     else:
         try:
             resp1 = json.load(urllib2.urlopen('http://www.simsimi.com/requestChat?lc=en&ft=1.0&req=' + urllib.quote_plus(text.encode('utf-8'))))

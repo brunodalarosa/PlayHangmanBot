@@ -105,7 +105,6 @@ class WebhookHandler(webapp2.RequestHandler):
             else:
                 reply('bot desligado')
                 logging.info('not enabled for chat_id {}'.format(chat_id))
-#Id do Drey:109554359
 
 app = webapp2.WSGIApplication([
     ('/me', MeHandler),

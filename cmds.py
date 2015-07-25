@@ -29,7 +29,7 @@ class CaccomStatus(ndb.Model):
 
 #================================
 
-def setCaccom(status): #Abre ou fecha o caccom dependendo do argumento recebido
+def setCaccom(status): #Abre ou fecha o caccom dependendo do argumento recebido e armazena o timestamp
     time = datetime.datetime.now()
     h = int(time.hour)
     h = h-3
@@ -55,14 +55,15 @@ def getCaccom(): #Retorna o estado atual do caccom
         return es.status
     return False
 
-def getCaccomHora():
+def getCaccomHora(): #Retona o timestamp da ultima alteracao no caccom
     es = CaccomStatus.get_by_id(str(001))
     return es.timestamp
 
 
 def comandos(text, chat_id, uId):
     auth = False
-    if (uId == 109554359) or  (uId == 112255461) or (uId == 112228809):
+    #Ids: Drey=109554359 Bruno= Cristofer=
+    if (uId == 109554359) or  (uId == 112255461) or (uId == 112228809): #checa o Id
         auth = True
     if text == '/start' or text == '/start@ccuem_bot': #Start
         if auth:
@@ -88,7 +89,7 @@ def comandos(text, chat_id, uId):
             return('Voce fechou o caccom')
         else:
             return('Voce nao tem autorizacao pra fazer isso.')
-    elif text == '/getcaccom' or text == '/getcaccom@ccuem_bot': #GetCaccom
+    elif text == '/getcaccom' or text == '/getcaccom@ccuem_bot': #GetCaccom + timestamp
         caccom = getCaccom()
         if caccom:
             return('O caccom ta aberto cara :D\nUltima modificacao: ' + getCaccomHora())
@@ -148,7 +149,7 @@ def comandos(text, chat_id, uId):
         elif text == '/meme help' or text == '/meme h':
             a = 'O comando meme requer apenas um argumento, use /meme NomeDoMeme\nLista de Memes disponiveis:\nthuglife\ndiofire\nduffzila\nhacker\nisdown\nroladream\nlsd\n V -0.1.1lol'
             return(a)
-        else: #if user entered an non existing meme
+        else: #Caso não exista o meme pedido
             a = 'Esse meme nao existe ainda! Para uma lista dos memes disponiveis use /meme h ou /meme help'
             return(a)
     else:
