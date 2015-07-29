@@ -146,8 +146,36 @@ def comandos(text, chat_id, uId):
             img.save(output, 'JPEG')
             a = img=output.getvalue()
             return(a)
+        elif text == '/meme really':
+            img = Image.open("images/memes/really.jpg")
+            output = StringIO.StringIO()
+            img.save(output, 'JPEG')
+            a = img=output.getvalue()
+            return(a)
+        elif text == '/meme igor':
+            img = Image.open("images/memes/igor.jpg")
+            output = StringIO.StringIO()
+            img.save(output, 'JPEG')
+            a = img=output.getvalue()
+        elif text == '/meme hateslufe':
+            img = Image.open("images/memes/hateslufe.jpg")
+            output = StringIO.StringIO()
+            img.save(output, 'JPEG')
+            a = img=output.getvalue()
+        elif text == '/meme hatescris':
+            img = Image.open("images/memes/hatescris.jpg")
+            output = StringIO.StringIO()
+            img.save(output, 'JPEG')
+            a = img=output.getvalue()
+            return(a)
+        elif text == '/meme brunocheff':
+            img = Image.open("images/memes/brunocheff.jpg")
+            output = StringIO.StringIO()
+            img.save(output, 'JPEG')
+            a = img=output.getvalue()
+            return(a)
         elif text == '/meme help' or text == '/meme h':
-            a = 'O comando meme requer apenas um argumento, use /meme NomeDoMeme\nLista de Memes disponiveis:\nthuglife\ndiofire\nduffzila\nhacker\nisdown\nroladream\nlsd\n V -0.1.1lol'
+            a = 'O comando meme requer apenas um argumento, use /meme NomeDoMeme\nLista de Memes disponiveis:\nthuglife\ndiofire\nduffzila\nhacker\nisdown\nroladream\nlsd\nreally\nigor\nhateslufe\nhatescris\nbrunocheff V 0.1\n by @guiquental'
             return(a)
         else: #Caso não exista o meme pedido
             a = 'Esse meme nao existe ainda! Para uma lista dos memes disponiveis use /meme h ou /meme help'
