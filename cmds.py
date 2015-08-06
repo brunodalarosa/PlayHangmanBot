@@ -157,11 +157,13 @@ def comandos(text, chat_id, uId):
             output = StringIO.StringIO()
             img.save(output, 'JPEG')
             a = img=output.getvalue()
+            return(a)
         elif text == '/meme hateslufe':
             img = Image.open("images/memes/hateslufe.jpg")
             output = StringIO.StringIO()
             img.save(output, 'JPEG')
             a = img=output.getvalue()
+            return(a)
         elif text == '/meme hatescris':
             img = Image.open("images/memes/hatescris.jpg")
             output = StringIO.StringIO()

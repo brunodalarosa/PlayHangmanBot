@@ -85,25 +85,28 @@ class WebhookHandler(webapp2.RequestHandler):
 
             logging.info('send response:')
             logging.info(resp)
-        if text.startswith('/'):
-            cc = cmds.comandos #calls the Cmd class
-            if text.startswith('/meme') or text.startswith('/image'):
-                rpl = cc(text, chat_id, uId)
-                if rpl.startswith('O comando') or rpl.startswith('Esse meme'):
-                    reply(rpl)
-                else:
-                    reply(img=rpl)
-            else:
-                rpl = cc(text, chat_id, uId)
-                reply(rpl)
+        get = cmds.getEnabled
+        cc = cmds.comandos #calls the Cmd class
+        if text.startswith('/start') or text.startswith('/stop'):
+            rpl = cc(text, chat_id, uId)
+            reply(rpl)
         else:
-            cc = conversa.responde
-            get = cmds.getEnabled
             if get(chat_id):
-                rpl = cc(text)
-                reply(rpl)
+                if text.startswith('/'):
+                    if text.startswith('/meme') or text.startswith('/image'):
+                        rpl = cc(text, chat_id, uId)
+                        if rpl.startswith('O comando') or rpl.startswith('Esse meme'):
+                            reply(rpl)
+                        else:
+                            reply(img=rpl)
+                    else:
+                        rpl = cc(text, chat_id, uId)
+                        reply(rpl)
+                else:
+                    cc = conversa.responde
+                    rpl = cc(text)
+                    reply(rpl)
             else:
-                reply('bot desligado')
                 logging.info('not enabled for chat_id {}'.format(chat_id))
 
 app = webapp2.WSGIApplication([
