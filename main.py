@@ -115,7 +115,6 @@ class WebhookHandler(webapp2.RequestHandler):
                 resp = None
             logging.info('send response:')
             logging.info(resp)
-<<<<<<< HEAD
 
         if '/start' in text:
             if bds.getEnabled(chat_id):
@@ -137,31 +136,6 @@ class WebhookHandler(webapp2.RequestHandler):
                 #if...
             elif '/rank' in text:
                 reply(toDict(chat_id, 'Sem rank'))
-=======
-        get = cmds.getEnabled
-        cc = cmds.comandos #calls the Cmd class
-        if text.startswith('/start') or text.startswith('/stop'):
-            rpl = cc(text, chat_id, uId)
-            reply(rpl)
-        else:
-            if get(chat_id):
-                if text.startswith('/'):
-                    if text.startswith('/meme') or text.startswith('/image'):
-                        rpl = cc(text, chat_id, uId)
-                        if rpl.startswith('O comando') or rpl.startswith('Esse meme'):
-                            reply(rpl)
-                        else:
-                            reply(img=rpl)
-                    else:
-                        rpl = cc(text, chat_id, uId)
-                        reply(rpl)
-                else:
-                    cc = conversa.responde
-                    rpl = cc(text)
-                    reply(rpl)
-            else:
-                logging.info('not enabled for chat_id {}'.format(chat_id))
->>>>>>> ee01302ee7b301c907e7457acc1441dc6bb668c6
 
 app = webapp2.WSGIApplication([
     ('/me', MeHandler),
