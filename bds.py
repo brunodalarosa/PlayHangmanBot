@@ -1,3 +1,4 @@
+#-*- coding: utf-8 -*-
 #Arquivo gerenciador de dados do banco de dados (NDB)
 
 #Google NDB

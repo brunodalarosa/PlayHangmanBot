@@ -13,8 +13,9 @@ from google.appengine.api import urlfetch
 from google.appengine.ext import ndb
 import webapp2
 
-#Importa o BD
+#Imports nossos
 import bds
+import comandos as c
 
 #TOKEN do bot no telegram
 TOKEN = '105794279:AAEZQkZX-HnXHMBG8NHkc0CWyDjvpOnHM-U'
@@ -31,17 +32,6 @@ creators = ['112228809', '112255461']
 #Línguas suportadas
 linguas = ['português(br)', 'english(us)']
 # ==================================================
-
-#Recebe os dados que serão repondidos e transforma em um dict
-def toDict(chat_id, text, replyTo = None, replyMarkup = None):
-    return dict(chat_id = chat_id, text = text, reply_to_message_id = replyTo, reply_markup = replyMarkup)
-
-#Recebe uma matriz e a tranforma em um teclado personalizado
-def makeKb(kb, resize_keyboard = None, one_time_keyboard = None, selective = None):
-    resize_keyboard = resize_keyboard if resize_keyboard else False
-    one_time_keyboard = one_time_keyboard if one_time_keyboard else False
-    selective = selective if selective else False
-    return json.dumps({'keyboard':kb, 'resize_keyboard':resize_keyboard, 'one_time_keyboard':one_time_keyboard, 'selective':selective})
 
 #Metodos que configuram a conexao do telegram com o App Engine
 class MeHandler(webapp2.RequestHandler):
@@ -100,7 +90,7 @@ class WebhookHandler(webapp2.RequestHandler):
         chat_id = str(chat['id'])
         user_id = message['from']
         u_id = str(user_id.get('id')).encode('utf-8')
-        u_name = user_id.get('first_name')
+        u_name = user_id.get('first_name').encode('utf-8')
 
         #'Chama' a verificação
         if new_chat_participant:
@@ -134,53 +124,6 @@ class WebhookHandler(webapp2.RequestHandler):
                 return l
             return
 
-        def inicial_kb():
-            l = getLanguage(chat_id)
-            return [[l.ligar, l.desligar],[l.ajuda, l.rank], [l.config]] #possíveis keyboards
-
-        #Funções que são executadas dependendo do comando recebido
-
-        def start(chat_id):
-            l = getLanguage(chat_id)
-            if bds.getEnabled(chat_id):
-                return toDict(chat_id, l.is_enabled)
-            bds.setEnabled(chat_id, True)
-            bds.checkChat(chat_id)
-            l = getLanguage(chat_id)
-            return toDict(chat_id, l.start_text, replyMarkup = makeKb(inicial_kb(), one_time_keyboard=True))
-
-        def stop(chat_id):
-            l = getLanguage(chat_id)
-            bds.setEnabled(chat_id, False)
-            return toDict(chat_id, l.stop_text)
-
-        def ajuda(chat_id):
-            l = getLanguage(chat_id)
-            #Vai enviar ajuda dependendo do estado de jogo
-            return toDict(chat_id, l.start_help_text)
-
-        def config(chat_id):
-            l = getLanguage(chat_id)
-            language_kb = [['Português(BR)', 'English(US)']]
-            bds.setWaiting(chat_id, True)
-            keyboard = makeKb(language_kb, one_time_keyboard = True)
-            return toDict(chat_id, l.linguas, replyMarkup = keyboard)
-
-        def changeLanguage(chat_id, lingua):
-            if 'português(br)' in lingua:
-                bds.setLanguage(chat_id, 'ptBR')
-                bds.setWaiting(chat_id, False)
-                l = getLanguage(chat_id)
-                keyboard = makeKb(inicial_kb(), one_time_keyboard=True)
-                return toDict(chat_id, l.mudar_lingua, replyMarkup = keyboard)
-            elif 'english(us)' in text:
-                bds.setLanguage(chat_id, 'enUS')
-                bds.setWaiting(chat_id, False)
-                l = getLanguage(chat_id)
-                keyboard = makeKb(inicial_kb(), one_time_keyboard=True)
-                return toDict(chat_id, l.mudar_lingua, replyMarkup = keyboard)
-
-
         #Aqui começa a lógica principal
         s = bds.getSettings(chat_id)
         l = getLanguage(chat_id)
@@ -189,22 +132,26 @@ class WebhookHandler(webapp2.RequestHandler):
 
         if not s.waiting:
             if '/start' in text:
-                reply(start(chat_id))
+                reply(c.start(chat_id))
             elif bds.getEnabled(chat_id):
                 if l.desligar.lower() in text:
-                    reply(stop(chat_id))
+                    reply(c.stop(chat_id))
                 elif l.ajuda.lower() in text:
-                    reply(ajuda(chat_id))
+                    reply(c.ajuda(chat_id))
                 elif l.rank.lower() in text:
-                    reply(toDict(chat_id, 'Sem rank'))
+                    reply(c.rank(chat_id))
                 elif l.config.lower() in text:
-                    reply(config(chat_id))
-                elif '/adm' in text:
-                    if u_id in creators:
-                        reply(toDict(chat_id, 'vai mandar msg pra todos'))
+                    reply(c.config(chat_id))
+                elif l.novojogo.lower() in text:
+                    reply(c.novojogo(chat_id,u_name))
+                elif l.voltar.lower() in text:
+                    reply(c.voltarMain(chat_id, l.voltar_msg))
+
+                #elif '/adm' in text:
+                    #if u_id in creators:
+                        #reply(toDict(chat_id, 'vai mandar msg pra todos'))
         else:
-            if text in linguas:
-                reply(changeLanguage(chat_id, text))
+            reply(c.changeLanguage(chat_id, text))
 
 app = webapp2.WSGIApplication([
     ('/me', MeHandler),
