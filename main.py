@@ -25,7 +25,11 @@ BASE_URL = 'https://api.telegram.org/bot' + TOKEN + '/'
 #Versão atual
 VERSION = '2.a'
 
+#Nossos IDs
 creators = ['112228809', '112255461']
+
+#Línguas suportadas
+linguas = ['português(br)', 'english(us)']
 # ==================================================
 
 #Recebe os dados que serão repondidos e transforma em um dict
@@ -130,58 +134,77 @@ class WebhookHandler(webapp2.RequestHandler):
                 return l
             return
 
-
-        #Aqui começa a lógica principal
-        s = bds.getSettings(chat_id)
-        l = getLanguage(chat_id)
-
-        text = '/start' if ((text == 'start') or (text == 'ligar')) else text #Tratamento para o caso do /start
-
         def inicial_kb():
             l = getLanguage(chat_id)
             return [[l.ligar, l.desligar],[l.ajuda, l.rank], [l.config]] #possíveis keyboards
 
-        language_kb = [['Português(BR)', 'English(US)']]
+        #Funções que são executadas dependendo do comando recebido
 
-        if not s.waiting:
-            if '/start' in text:
-                if bds.getEnabled(chat_id):
-                    reply(toDict(chat_id, l.is_enabled))
-                else:
-                    bds.setEnabled(chat_id, True)
-                    bds.checkChat(chat_id)
-                    keyboard = makeKb(inicial_kb(), one_time_keyboard=True)
-                    reply(toDict(chat_id, l.start_text, replyMarkup = keyboard))
-            elif l.desligar.lower() in text:
-                bds.setEnabled(chat_id, False)
-                reply(toDict(chat_id, l.stop_text))
-            elif bds.getEnabled(chat_id):
-                if l.ajuda.lower() in text:
-                    #if ingame
-                    reply(toDict(chat_id, l.start_help_text))
-                    #if...
-                elif l.rank.lower() in text:
-                    reply(toDict(chat_id, 'Sem rank'))
-                elif l.config.lower() in text:
-                    bds.setWaiting(chat_id, True)
-                    keyboard = makeKb(language_kb, one_time_keyboard = True)
-                    reply(toDict(chat_id, l.linguas, replyMarkup = keyboard))
-                elif '/adm' in text:
-                    if u_id in creators:
-                        reply(toDict(chat_id, 'vai mandar msg pra todos'))
-        else:
-            if 'português(br)' in text:
+        def start(chat_id):
+            l = getLanguage(chat_id)
+            if bds.getEnabled(chat_id):
+                return toDict(chat_id, l.is_enabled)
+            bds.setEnabled(chat_id, True)
+            bds.checkChat(chat_id)
+            l = getLanguage(chat_id)
+            return toDict(chat_id, l.start_text, replyMarkup = makeKb(inicial_kb(), one_time_keyboard=True))
+
+        def stop(chat_id):
+            l = getLanguage(chat_id)
+            bds.setEnabled(chat_id, False)
+            return toDict(chat_id, l.stop_text)
+
+        def ajuda(chat_id):
+            l = getLanguage(chat_id)
+            #Vai enviar ajuda dependendo do estado de jogo
+            return toDict(chat_id, l.start_help_text)
+
+        def config(chat_id):
+            l = getLanguage(chat_id)
+            language_kb = [['Português(BR)', 'English(US)']]
+            bds.setWaiting(chat_id, True)
+            keyboard = makeKb(language_kb, one_time_keyboard = True)
+            return toDict(chat_id, l.linguas, replyMarkup = keyboard)
+
+        def changeLanguage(chat_id, lingua):
+            if 'português(br)' in lingua:
                 bds.setLanguage(chat_id, 'ptBR')
                 bds.setWaiting(chat_id, False)
-                keyboard = makeKb(inicial_kb(), one_time_keyboard=True)
                 l = getLanguage(chat_id)
-                reply(toDict(chat_id, l.mudar_lingua, replyMarkup = keyboard))
+                keyboard = makeKb(inicial_kb(), one_time_keyboard=True)
+                return toDict(chat_id, l.mudar_lingua, replyMarkup = keyboard)
             elif 'english(us)' in text:
                 bds.setLanguage(chat_id, 'enUS')
                 bds.setWaiting(chat_id, False)
                 l = getLanguage(chat_id)
                 keyboard = makeKb(inicial_kb(), one_time_keyboard=True)
-                reply(toDict(chat_id, l.mudar_lingua, replyMarkup = keyboard))
+                return toDict(chat_id, l.mudar_lingua, replyMarkup = keyboard)
+
+
+        #Aqui começa a lógica principal
+        s = bds.getSettings(chat_id)
+        l = getLanguage(chat_id)
+
+        text = '/start' if (text == l.ligar.lower()) else text #Tratamento para o caso do /start
+
+        if not s.waiting:
+            if '/start' in text:
+                reply(start(chat_id))
+            elif bds.getEnabled(chat_id):
+                if l.desligar.lower() in text:
+                    reply(stop(chat_id))
+                elif l.ajuda.lower() in text:
+                    reply(ajuda(chat_id))
+                elif l.rank.lower() in text:
+                    reply(toDict(chat_id, 'Sem rank'))
+                elif l.config.lower() in text:
+                    reply(config(chat_id))
+                elif '/adm' in text:
+                    if u_id in creators:
+                        reply(toDict(chat_id, 'vai mandar msg pra todos'))
+        else:
+            if text in linguas:
+                reply(changeLanguage(chat_id, text))
 
 app = webapp2.WSGIApplication([
     ('/me', MeHandler),
