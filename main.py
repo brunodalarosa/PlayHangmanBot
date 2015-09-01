@@ -25,10 +25,7 @@ BASE_URL = 'https://api.telegram.org/bot' + TOKEN + '/'
 #Versão atual
 VERSION = '2.a'
 
-start_text = 'Olá, bem vindo ao Forca Bot, para começar digite /novojogo'
-is_ligado = 'Forca Bot já está ligado!'
-stop_text = 'Forca Bot desligado'
-help_text = 'Estamos sem jogo no momento'
+creators = ['112228809', '112255461']
 # ==================================================
 def toDict(chat_id, text, replyTo = None, replyMarkup = None):
     return dict(chat_id = chat_id, text = text, reply_to_message_id = replyTo, reply_markup = replyMarkup)
@@ -94,8 +91,8 @@ class WebhookHandler(webapp2.RequestHandler):
         chat = message['chat']
         chat_id = str(chat['id'])
         user_id = message['from']
-        uId = user_id.get('id')
-        uName = user_id.get('first_name')
+        u_id = str(user_id.get('id')).encode('utf-8')     #cris id: 112228809
+        u_name = user_id.get('first_name')
         if new_chat_participant:
             verifyBot(new_chat_participant = new_chat_participant)
         if left_chat_participant:
@@ -106,6 +103,10 @@ class WebhookHandler(webapp2.RequestHandler):
             logging.info('no text')
             return
 
+        #Le as configurações
+        idioma = bds.getSettings(chat_id).language
+        if idioma == 'pt-BR':
+            import ptBR as l
         #Função que envia o dict para o Telegram
         def reply(dict = None):
             if dict:
@@ -118,24 +119,27 @@ class WebhookHandler(webapp2.RequestHandler):
 
         if '/start' in text:
             if bds.getEnabled(chat_id):
-                reply(toDict(chat_id, is_ligado))
+                reply(toDict(chat_id, l.is_enabled))
             else:
                 bds.setEnabled(chat_id, True)
                 bds.checkChat(chat_id)
                 kb = [['/start', '/stop'],['/help', '/rank']]
                 keyboard = makeKb(kb, one_time_keyboard=True)
-                print keyboard
-                reply(toDict(chat_id, start_text, replyMarkup = keyboard))
+                reply(toDict(chat_id, l.start_text, replyMarkup = keyboard))
         elif '/stop' in text:
             bds.setEnabled(chat_id, False)
-            reply(toDict(chat_id, stop_text))
+            reply(toDict(chat_id, l.stop_text))
         elif bds.getEnabled(chat_id):
             if '/help' in text:
                 #if ingame
-                reply(toDict(chat_id, help_text))
+                reply(toDict(chat_id, l.start_help_text))
                 #if...
             elif '/rank' in text:
                 reply(toDict(chat_id, 'Sem rank'))
+            elif '/adm' in text:
+                if u_id in creators:
+                    reply(toDict(chat_id, 'vai mandar msg pra todos'))
+
 
 app = webapp2.WSGIApplication([
     ('/me', MeHandler),
