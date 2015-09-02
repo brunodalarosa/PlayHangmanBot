@@ -78,3 +78,74 @@ def setWaiting(chat_id, waiting):
     s.waiting = waiting
     s.put()
     return
+
+#Contém todos os dados de cada jogo
+class Game(ndb.Model):
+    pre_game = ndb.BooleanProperty(indexed = False, default = False)
+    in_game = ndb.BooleanProperty(indexed = False, default = False)
+    u_ids = ndb.StringProperty(repeated = True)
+    u_names = ndb.StringProperty(repeated = True)
+    message_ids = ndb.StringProperty(repeated = True)
+    adm = ndb.StringProperty(default = 'noAdm')
+    rnd = ndb.IntegerProperty(default = 0)
+    palavra = ndb.StringProperty(default = 'noPalavra')
+    dica = ndb.StringProperty(default = 'noDica')
+    mascara = ndb.StringProperty(default = 'noMascara')
+    letras = ndb.StringProperty(repeated = True)
+    vidas = ndb.IntegerProperty(default = 6)
+    vidas_init = ndb.IntegerProperty(default = 6)
+
+def getPreGame(chat_id):
+    g = ndb.Key(Game, chat_id).get()
+    if g:
+        return g.pre_game
+    return False
+
+def setPreGame(chat_id, status, u_id = None, u_name = None, message_id = None):
+    g = ndb.Key(Game, chat_id).get()
+    if g:
+        g.pre_game = status
+        g.put()
+        return
+    g = Game(id = chat_id)
+    g.put()
+    g = ndb.Key(Game, chat_id).get()
+    g.pre_game = status
+    g.put()
+    addPlayer(chat_id, u_id, u_name, message_id)
+    setAdm(chat_id, u_id)
+    return
+
+def setInGame(chat_id, status):
+    g = ndb.Key(Game, chat_id).get()
+    g.in_game = status
+    return
+
+def getInGame(chat_id):
+    g = ndb.Key(Game, chat_id).get()
+    if g:
+        return g.in_game
+    return False
+
+def addPlayer(chat_id, u_id, u_name, message_id):
+    g = ndb.Key(Game, chat_id).get()
+    g.u_ids.append(u_id)
+    g.u_names.append(u_name)
+    g.message_ids.append(message_id)
+    g.put()
+
+def setAdm(chat_id, u_id):
+    g = ndb.Key(Game, chat_id).get()
+    g.adm = u_id
+    g.put()
+    return
+
+def checkAdm(chat_id, u_id):
+    g = ndb.Key(Game, chat_id).get()
+    if g.adm == u_id:
+        return True
+    return False
+
+def delGame(chat_id):
+    g = ndb.Key(Game, chat_id).get()
+    g.key.delete()

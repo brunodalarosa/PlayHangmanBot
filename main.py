@@ -79,7 +79,7 @@ class WebhookHandler(webapp2.RequestHandler):
         #Dados que recebemos do telegram
         update_id = body['update_id']
         message = body['message']
-        message_id = message.get('message_id')
+        message_id = str(message.get('message_id')).encode('utf-8')
         left_chat_participant = message.get('left_chat_participant')
         new_chat_participant = message.get('new_chat_participant')
         group_chat_created = message.get('group_chat_created')
@@ -122,17 +122,18 @@ class WebhookHandler(webapp2.RequestHandler):
             elif s.language == 'enUS':
                 import enUS as l
                 return l
+            print 'lol'
             return
 
         #Aqui começa a lógica principal
         s = bds.getSettings(chat_id)
         l = getLanguage(chat_id)
 
-        text = '/start' if (text == l.ligar.lower()) else text #Tratamento para o caso do /start
+        text = '/start' if text == l.ligar.lower() else text #Tratamento para o caso do /start
 
         if not s.waiting:
             if '/start' in text:
-                reply(c.start(chat_id))
+                reply(c.start(chat_id, message_id))
             elif bds.getEnabled(chat_id):
                 if l.desligar.lower() in text:
                     reply(c.stop(chat_id))
@@ -141,17 +142,29 @@ class WebhookHandler(webapp2.RequestHandler):
                 elif l.rank.lower() in text:
                     reply(c.rank(chat_id))
                 elif l.config.lower() in text:
-                    reply(c.config(chat_id))
-                elif l.novojogo.lower() in text:
-                    reply(c.novojogo(chat_id,u_name))
+                    reply(c.config(chat_id, message_id))
                 elif l.voltar.lower() in text:
-                    reply(c.voltarMain(chat_id, l.voltar_msg))
+                    reply(c.voltar(chat_id, l.voltar_msg, 'main',  u_id = u_id, message_id = message_id))
+                elif l.comandos.lower() in text:
+                    reply(c.voltar(chat_id, l.comandos_msg,'sec', u_id = u_id, message_id = message_id))
+                elif l.novojogo.lower() in text:
+                    reply(c.novojogo(chat_id, u_id, u_name, message_id))
+                elif l.entrar.lower() in text:
+                    reply(c.entrar(chat_id, u_id, u_name, message_id))
+                elif l.fechar_jogo.lower() in text:
+                    reply(c.fecharJogo(chat_id, u_id))
+                elif l.cancelar_jogo.lower() in text:
+                    reply(c.cancelarJogo(chat_id, u_id))
+
 
                 #elif '/adm' in text:
                     #if u_id in creators:
                         #reply(toDict(chat_id, 'vai mandar msg pra todos'))
         else:
-            reply(c.changeLanguage(chat_id, text))
+            if l.ajuda.lower() in text:
+                reply(c.ajuda(chat_id))
+            else:
+                reply(c.changeLanguage(chat_id, text, u_id))
 
 app = webapp2.WSGIApplication([
     ('/me', MeHandler),
