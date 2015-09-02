@@ -25,6 +25,6 @@ voltar_msg = 'Main menu'
 
 #respostas PreGame
 def inicialMsg(u_name):
-    return 'Starting a new game!\n'+u_name+' will be the manager of this game!\nLets start defining the players of this game, who wants to join please choose Enter '+emoji_sorriso
+    return 'Starting a new game!\n'+u_name+' will be the manager of this game! '+emoji_blink+'\nLets start defining the players of this game, who wants to join please choose Enter and wait the manager start the game '+emoji_sorriso
 
 #repostas InGame

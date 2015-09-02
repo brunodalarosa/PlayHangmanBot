@@ -25,6 +25,7 @@ voltar_msg = 'Menu inicial'
 
 #respostas PreGame
 def inicialMsg(u_name):
-    return 'Começando um novo jogo!\n'+u_name+' será o administrador dessa rodada.\nVamos começar definindo os jogadores desta rodada, quem quiser participar escolha Entrar'+emoji_sorriso
+    return 'Começando um novo jogo!\n'+u_name+' será o administrador dessa rodada. '+emoji_blink+'\nVamos começar definindo os jogadores desta rodada, quem quiser participar escolha Entrar e aguarde o administrador começar o jogo!'+emoji_sorriso
 
+ajuda_preGame
 #repostas InGame
