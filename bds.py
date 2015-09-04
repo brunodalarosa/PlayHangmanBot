@@ -1,6 +1,9 @@
 #-*- coding: utf-8 -*-
 #Arquivo gerenciador de dados do banco de dados (NDB)
 
+#TODO
+#Transformar em structured property
+
 #Google NDB
 from google.appengine.ext import ndb
 
@@ -129,10 +132,13 @@ def getInGame(chat_id):
 
 def addPlayer(chat_id, u_id, u_name, message_id):
     g = ndb.Key(Game, chat_id).get()
-    g.u_ids.append(u_id)
-    g.u_names.append(u_name)
-    g.message_ids.append(message_id)
-    g.put()
+    if not (u_id in g.u_ids):
+        g.u_ids.append(u_id)
+        g.u_names.append(u_name)
+        g.message_ids.append(message_id)
+        g.put()
+        return True
+    return False
 
 def setAdm(chat_id, u_id):
     g = ndb.Key(Game, chat_id).get()
@@ -142,8 +148,9 @@ def setAdm(chat_id, u_id):
 
 def checkAdm(chat_id, u_id):
     g = ndb.Key(Game, chat_id).get()
-    if g.adm == u_id:
-        return True
+    if g:
+        if g.adm == u_id:
+            return True
     return False
 
 def delGame(chat_id):

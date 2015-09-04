@@ -33,16 +33,18 @@ is_enabled = 'Forca Bot is already on'
 stop_msg = 'Forca Bot stopped'
 start_help_msg = 'There is no game, please use "new game" to start one'
 config_help_msg = 'Choose the language of the Bot\nPs.: The words for the game depends on the language'
-pre_game_help_msg = 'Jogo em modo de entrada, para entrar utilize Entrar\nADM: utilize Fechar Jogo para começar o jogo ou Cancelar Jogo para cancelar esse jogo'
+pre_game_help_msg = 'The game is open to people to join\nManager: use Close Game to close the game and start or Cancel Game to cancel it'
 in_game_help_msg = 'Clique nas letras para chuta-las, se quiser mais opções vá em Comandos'
 voltar_msg = 'Main menu'
 comandos_msg = 'Commands'
 ocupado_msg = 'Bot occupied'
+esta_dentro_msg = 'You are already in this game'
 cancelar_jogo_msg = 'Game canceled by the manager'
 
 #respostas PreGame
 def inicialMsg(u_name):
-    return 'Starting a new game!\n'+u_name+' will be the manager of this game!\nLets start defining the players of this game, who wants to join please choose Enter '+emoji_sorriso
+    return 'Starting a new game!\n'+u_name+' will be the manager of this game!'
+inicial_msg = 'Lets start defining the players of this game, who wants to join please choose Enter '+emoji_sorriso
 
 def entrarMsg(u_name):
     return 'Ok '+u_name+', você vai participar dessa rodada\nSe quiser sair é só usar o Sair'

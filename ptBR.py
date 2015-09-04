@@ -38,11 +38,13 @@ in_game_help_msg = 'Clique nas letras para chuta-las, se quiser mais opções v�
 voltar_msg = 'Menu inicial'
 comandos_msg = 'Comandos'
 ocupado_msg = 'Bot ocupado'
+esta_dentro_msg = 'Você já participa desta partida'
 cancelar_jogo_msg = 'Jogo cancelado pelo administrador'
 
 #respostas PreGame
 def inicialMsg(u_name):
-    return 'Começando um novo jogo!\n'+u_name+' será o administrador dessa rodada.\nVamos começar definindo os jogadores desta rodada, quem quiser participar escolha Entrar'+emoji_sorriso
+    return 'Começando um novo jogo!\n'+u_name+' será o administrador dessa rodada.'
+inicial_msg = 'Vamos começar definindo os jogadores desta rodada, quem quiser participar escolha Entrar'+emoji_sorriso
 
 def entrarMsg(u_name):
     return 'Ok '+u_name+', você vai participar dessa rodada\nSe quiser sair é só usar o Sair'
