@@ -1,6 +1,9 @@
 #-*- coding: utf-8 -*-
 #Arquivo com as funções dos comandos executados (melhorar)
 
+#TODO
+#Arrumar casos do kb
+
 #Standard imports
 import json
 import bds
@@ -65,7 +68,7 @@ def start(chat_id, message_id):
     bds.setEnabled(chat_id, True)
     bds.checkChat(chat_id)
     l = getLanguage(chat_id)
-    keyboard = makeKb(getKb(chat_id, 'main'), one_time_keyboard = True)
+    keyboard = makeKb(getKb(chat_id, 'main'), resize_keyboard = True one_time_keyboard = True)
     return toDict(chat_id, l.start_msg, replyMarkup = keyboard)
 
 def stop(chat_id):
@@ -131,6 +134,8 @@ def changeLanguage(chat_id, lingua, u_id):
         return voltar(chat_id, l.mudar_lingua, 'main', u_id = u_id)
     elif l.voltar.lower() in lingua:
         bds.setWaiting(chat_id, False)
+        if bds.getPreGame(chat_id) or bds.getInGame(chat_id):
+                return voltar(chat_id, l.voltar_msg, 'sec', u_id = u_id)
         return voltar(chat_id, l.voltar_msg, 'main', u_id = u_id)
     else:
         return toDict(chat_id, l.ocupado_msg)

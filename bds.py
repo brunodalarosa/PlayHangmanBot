@@ -1,9 +1,6 @@
 #-*- coding: utf-8 -*-
 #Arquivo gerenciador de dados do banco de dados (NDB)
 
-#TODO
-#Transformar em structured property
-
 #Google NDB
 from google.appengine.ext import ndb
 
@@ -29,11 +26,16 @@ def delChat(chat_id):
     c = ndb.Key(Chats, 'chats').get()
     e = ndb.Key(Enabled, chat_id).get()
     s = ndb.Key(Settings, chat_id).get()
+    g = ndb.Key(Game, chat_id).get()
     if chat_id in c.chats:
         c.chats.remove(chat_id)
         c.put()
         e.key.delete()
         s.key.delete()
+        if g:
+            g.key.delete()
+        return
+    return
 
 #Retorna a lista de todos os chats ativos no momento
 def getChats():
@@ -90,6 +92,7 @@ class Game(ndb.Model):
     u_names = ndb.StringProperty(repeated = True)
     message_ids = ndb.StringProperty(repeated = True)
     adm = ndb.StringProperty(default = 'noAdm')
+    adm_message = ndb.StringProperty(default = 'noAdm')
     rnd = ndb.IntegerProperty(default = 0)
     palavra = ndb.StringProperty(default = 'noPalavra')
     dica = ndb.StringProperty(default = 'noDica')
@@ -116,7 +119,7 @@ def setPreGame(chat_id, status, u_id = None, u_name = None, message_id = None):
     g.pre_game = status
     g.put()
     addPlayer(chat_id, u_id, u_name, message_id)
-    setAdm(chat_id, u_id)
+    setAdm(chat_id, u_id, message_id)
     return
 
 def setInGame(chat_id, status):
@@ -140,9 +143,10 @@ def addPlayer(chat_id, u_id, u_name, message_id):
         return True
     return False
 
-def setAdm(chat_id, u_id):
+def setAdm(chat_id, u_id, message_id):
     g = ndb.Key(Game, chat_id).get()
     g.adm = u_id
+    g.adm_message = message_id
     g.put()
     return
 
@@ -151,6 +155,12 @@ def checkAdm(chat_id, u_id):
     if g:
         if g.adm == u_id:
             return True
+    return False
+
+def getAdm(chat_id):
+    g = ndb.Key(Game, chat_id).get()
+    if g:
+        return g.adm_message
     return False
 
 def delGame(chat_id):
