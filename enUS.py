@@ -27,6 +27,7 @@ cancelar_jogo = 'Cancel game'
 
 #Respostas iniciais
 linguas = 'Choose your language:'
+iniciar_msg = 'Starting'
 mudar_lingua = 'Change successfull'
 start_msg = 'Hi, I am Forca Bot (HangMan) and I will help you to play hangman games!\nPress "new game" to start.'
 is_enabled = 'Forca Bot is already on'

@@ -134,52 +134,50 @@ class WebhookHandler(webapp2.RequestHandler):
         if not s.waiting:
             #comandos que indiferem do estado atual de jogo
             if '/start' in text:
-                reply(c.start(chat_id, message_id))
+                rpl = c.start(chat_id, message_id)
             elif bds.getEnabled(chat_id):
                 if l.desligar.lower() in text:
-                    reply(c.stop(chat_id))
+                    rpl = c.stop(chat_id)
                 elif l.ajuda.lower() in text:
-                    reply(c.ajuda(chat_id))
+                    rpl = c.ajuda(chat_id)
                 elif l.rank.lower() in text:
-                    reply(c.rank(chat_id))
+                    rpl = c.rank(chat_id)
                 elif l.config.lower() in text:
-                    reply(c.config(chat_id, message_id))
+                    rpl = c.config(chat_id, message_id)
                 elif l.voltar.lower() in text:
-                    reply(c.voltar(chat_id, l.voltar_msg, 'main',  u_id = u_id, message_id = message_id))
+                    rpl = c.voltar(chat_id, l.voltar_msg, message_id, u_id)
                 elif l.comandos.lower() in text:
-                    reply(c.voltar(chat_id, l.comandos_msg,'sec', u_id = u_id, message_id = message_id))
+                    rpl = c.comandos(chat_id, message_id, u_id)
                 #comandos inGame
                 elif bds.getInGame(chat_id):
                     if 'a' == 'a':
                         print 'teste'
                     elif l.cancelar_jogo.lower() in text:
-                        reply(g.cancelarJogo(chat_id, u_id))
+                        rpl = g.cancelarJogo(chat_id, u_id)
                 #comandos preGame
                 elif bds.getPreGame(chat_id):
-                    print 'entrou'
-                    print l.fechar_jogo
                     if l.entrar.lower() in text:
-                        reply(p.entrar(chat_id, u_id, u_name, message_id))
+                        rpl = p.entrar(chat_id, u_id, u_name, message_id)
                     elif l.fechar_jogo.lower() in text:
-                        reply(p.fecharJogo(chat_id, u_id))
+                        rpl = p.fecharJogo(chat_id, u_id)
                     elif l.cancelar_jogo.lower() in text:
-                        reply(p.cancelarJogo(chat_id, u_id))
+                        rpl = p.cancelarJogo(chat_id, u_id)
                 #se preGame e inGame == False (vide flowchart)
                 elif (not bds.getPreGame(chat_id)) and (not bds.getInGame(chat_id)):
                     if l.novojogo.lower() in text:
-                        for i in range(0,2):
-                            print 'for'
-                            reply(c.novojogo(chat_id, u_id, u_name, message_id))
-
+                        rpl = c.novojogo(chat_id, u_id, u_name, message_id)
 
                 #elif '/adm' in text:
                     #if u_id in creators:
                         #reply(toDict(chat_id, 'vai mandar msg pra todos'))
         else:
             if l.ajuda.lower() in text:
-                reply(c.ajuda(chat_id))
+                rpl = c.ajuda(chat_id)
             else:
-                reply(c.changeLanguage(chat_id, text, u_id))
+                rpl = c.changeLanguage(chat_id, text, message_id, u_id)
+
+        for i in range(len(rpl)):
+            reply(rpl[i])
 
 app = webapp2.WSGIApplication([
     ('/me', MeHandler),

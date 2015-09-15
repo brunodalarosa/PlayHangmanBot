@@ -27,6 +27,7 @@ cancelar_jogo = 'Cancelar jogo'
 
 #Respostas iniciais
 linguas = 'Escolha sua linguagem:'
+iniciar_msg = 'Iniciando'
 mudar_lingua = 'Mudança feita com sucesso'
 start_msg = 'Olá, eu sou o Forca Bot e fui criado para organizar jogos da forca!\nAperte no botão "novo jogo" para começar!'
 is_enabled = 'Forca Bot já está ligado'
