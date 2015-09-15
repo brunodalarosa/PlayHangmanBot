@@ -128,7 +128,7 @@ class WebhookHandler(webapp2.RequestHandler):
         #Aqui começa a lógica principal
         s = bds.getSettings(chat_id)
         l = getLanguage(chat_id)
-
+        rpl = []
         text = '/start' if text == l.ligar.lower() else text #Tratamento para o caso do /start
 
         if not s.waiting:
