@@ -128,7 +128,7 @@ class WebhookHandler(webapp2.RequestHandler):
         #Aqui começa a lógica principal
         s = bds.getSettings(chat_id)
         l = getLanguage(chat_id)
-        rpl = []
+        rpl = [c.toDict(chat_id, 'comando não reconhecido')]
         text = '/start' if text == l.ligar.lower() else text #Tratamento para o caso do /start
 
         if not s.waiting:
@@ -158,6 +158,8 @@ class WebhookHandler(webapp2.RequestHandler):
                 elif bds.getPreGame(chat_id):
                     if l.entrar.lower() in text:
                         rpl = p.entrar(chat_id, u_id, u_name, message_id)
+                    elif l.sair.lower() in text:
+                        rpl = p.sair(chat_id, u_id, u_name, message_id)
                     elif l.fechar_jogo.lower() in text:
                         rpl = p.fecharJogo(chat_id, u_id)
                     elif l.cancelar_jogo.lower() in text:
@@ -175,9 +177,11 @@ class WebhookHandler(webapp2.RequestHandler):
                 rpl = c.ajuda(chat_id)
             else:
                 rpl = c.changeLanguage(chat_id, text, message_id, u_id)
-
-        for i in range(len(rpl)):
-            reply(rpl[i])
+        try:
+            for i in range(len(rpl)):
+                reply(rpl[i])
+        except:
+            reply(c.toDict(chat_id, 'erro'))
 
 app = webapp2.WSGIApplication([
     ('/me', MeHandler),

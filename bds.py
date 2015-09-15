@@ -143,6 +143,34 @@ def addPlayer(chat_id, u_id, u_name, message_id):
         return True
     return False
 
+def rmPlayer(chat_id, u_id, message_id):
+    g = ndb.Key(Game, chat_id).get()
+    if u_id in g.u_ids:
+        ind = g.u_ids.index(u_id)
+        g.u_ids.pop(ind)
+        g.u_names.pop(ind)
+        g.message_ids.pop(ind)
+        g.put()
+        if len(g.u_ids) == 0:
+            delGame(chat_id)
+            return False
+        if ind == 0:
+            setAdm(chat_id, g.u_ids[0], g.message_ids[0])
+            return 'setAdm'
+        return True
+    return 'semPlayer'
+
+def getPlayers(chat_id):
+    g = ndb.Key(Game, chat_id).get()
+    u_ids = []
+    u_names = []
+    message_ids = []
+    for i in range(len(g.u_ids)):
+        u_ids.append(g.u_ids[i].encode('utf-8'))
+        u_names.append(g.u_names[i].encode('utf-8'))
+        message_ids.append(g.message_ids[i].encode('utf-8'))
+    return [u_ids, u_names, message_ids]
+
 def setAdm(chat_id, u_id, message_id):
     g = ndb.Key(Game, chat_id).get()
     g.adm = u_id
