@@ -27,6 +27,7 @@ cancelar_jogo = 'Cancelar jogo'
 
 #Respostas iniciais
 linguas = 'Escolha sua linguagem:'
+iniciar_msg = 'Iniciando'
 mudar_lingua = 'Mudança feita com sucesso'
 start_msg = 'Olá, eu sou o Forca Bot e fui criado para organizar jogos da forca!\nAperte no botão "novo jogo" para começar!'
 is_enabled = 'Forca Bot já está ligado'
@@ -38,17 +39,15 @@ in_game_help_msg = 'Clique nas letras para chuta-las, se quiser mais opções v�
 voltar_msg = 'Menu inicial'
 comandos_msg = 'Comandos'
 ocupado_msg = 'Bot ocupado'
+esta_dentro_msg = 'Você já participa desta partida'
 cancelar_jogo_msg = 'Jogo cancelado pelo administrador'
 
 #respostas PreGame
 def inicialMsg(u_name):
-    return 'Começando um novo jogo!\n'+u_name+' será o administrador dessa rodada. '+emoji_blink+'\nVamos começar definindo os jogadores desta rodada, quem quiser participar escolha Entrar e aguarde o administrador começar o jogo!'+emoji_sorriso
+    return 'Começando um novo jogo!\n'+u_name+' será o administrador dessa rodada.'
+inicial_msg = 'Vamos começar definindo os jogadores desta rodada, quem quiser participar escolha Entrar'+emoji_sorriso
 
-<<<<<<< HEAD
-ajuda_preGame
-=======
 def entrarMsg(u_name):
     return 'Ok '+u_name+', você vai participar dessa rodada\nSe quiser sair é só usar o Sair'
 
->>>>>>> e698c6991f1f63f6cd8b8ce506cfcd1e2f0c68f6
 #repostas InGame
