@@ -1,5 +1,5 @@
-#Main do forca_bot 2.0
 #-*- coding: utf-8 -*-
+#Main do forca_bot 2.0
 
 #Standard imports
 import json
@@ -16,6 +16,8 @@ import webapp2
 #Imports nossos
 import bds
 import comandos as c
+import preGame as p
+import game as g
 
 #TOKEN do bot no telegram
 TOKEN = '105794279:AAEZQkZX-HnXHMBG8NHkc0CWyDjvpOnHM-U'
@@ -122,49 +124,63 @@ class WebhookHandler(webapp2.RequestHandler):
             elif s.language == 'enUS':
                 import enUS as l
                 return l
-            print 'lol'
             return
 
         #Aqui começa a lógica principal
         s = bds.getSettings(chat_id)
         l = getLanguage(chat_id)
-
+        rpl = [c.toDict(chat_id, 'comando não reconhecido')]
         text = '/start' if text == l.ligar.lower() else text #Tratamento para o caso do /start
 
         if not s.waiting:
+            #comandos que indiferem do estado atual de jogo
             if '/start' in text:
-                reply(c.start(chat_id, message_id))
+                rpl = c.start(chat_id, message_id)
             elif bds.getEnabled(chat_id):
                 if l.desligar.lower() in text:
-                    reply(c.stop(chat_id))
+                    rpl = c.stop(chat_id)
                 elif l.ajuda.lower() in text:
-                    reply(c.ajuda(chat_id))
+                    rpl = c.ajuda(chat_id)
                 elif l.rank.lower() in text:
-                    reply(c.rank(chat_id))
+                    rpl = c.rank(chat_id)
                 elif l.config.lower() in text:
-                    reply(c.config(chat_id, message_id))
+                    rpl = c.config(chat_id, message_id)
                 elif l.voltar.lower() in text:
-                    reply(c.voltar(chat_id, l.voltar_msg, 'main',  u_id = u_id, message_id = message_id))
+                    rpl = c.voltar(chat_id, l.voltar_msg, message_id, u_id)
                 elif l.comandos.lower() in text:
-                    reply(c.voltar(chat_id, l.comandos_msg,'sec', u_id = u_id, message_id = message_id))
-                elif l.novojogo.lower() in text:
-                    reply(c.novojogo(chat_id, u_id, u_name, message_id))
-                elif l.entrar.lower() in text:
-                    reply(c.entrar(chat_id, u_id, u_name, message_id))
-                elif l.fechar_jogo.lower() in text:
-                    reply(c.fecharJogo(chat_id, u_id))
-                elif l.cancelar_jogo.lower() in text:
-                    reply(c.cancelarJogo(chat_id, u_id))
-
+                    rpl = c.comandos(chat_id, message_id, u_id)
+                #comandos inGame
+                elif bds.getInGame(chat_id):
+                    if l.cancelar_jogo.lower() in text:
+                        rpl = g.cancelarJogo(chat_id, u_id)
+                #comandos preGame
+                elif bds.getPreGame(chat_id):
+                    if l.entrar.lower() in text:
+                        rpl = p.entrar(chat_id, u_id, u_name, message_id)
+                    elif l.sair.lower() in text:
+                        rpl = p.sair(chat_id, u_id, u_name, message_id)
+                    elif l.fechar_jogo.lower() in text:
+                        rpl = p.fecharJogo(chat_id, u_id, message_id)
+                    elif l.cancelar_jogo.lower() in text:
+                        rpl = p.cancelarJogo(chat_id, u_id)
+                #se preGame e inGame == False (vide flowchart)
+                elif (not bds.getPreGame(chat_id)) and (not bds.getInGame(chat_id)):
+                    if l.novojogo.lower() in text:
+                        rpl = c.novojogo(chat_id, u_id, u_name, message_id)
 
                 #elif '/adm' in text:
                     #if u_id in creators:
                         #reply(toDict(chat_id, 'vai mandar msg pra todos'))
         else:
             if l.ajuda.lower() in text:
-                reply(c.ajuda(chat_id))
+                rpl = c.ajuda(chat_id)
             else:
-                reply(c.changeLanguage(chat_id, text, u_id))
+                rpl = c.changeLanguage(chat_id, text, message_id, u_id)
+        try:
+            for i in range(len(rpl)):
+                reply(rpl[i])
+        except:
+            reply(c.toDict(chat_id, 'erro'))
 
 app = webapp2.WSGIApplication([
     ('/me', MeHandler),

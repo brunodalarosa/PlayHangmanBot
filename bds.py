@@ -4,6 +4,8 @@
 #Google NDB
 from google.appengine.ext import ndb
 
+from random import shuffle
+
 #Entidade que guarda os IDs dos chats
 class Chats(ndb.Model):
     chats = ndb.StringProperty(repeated = True)
@@ -26,11 +28,16 @@ def delChat(chat_id):
     c = ndb.Key(Chats, 'chats').get()
     e = ndb.Key(Enabled, chat_id).get()
     s = ndb.Key(Settings, chat_id).get()
+    g = ndb.Key(Game, chat_id).get()
     if chat_id in c.chats:
         c.chats.remove(chat_id)
         c.put()
         e.key.delete()
         s.key.delete()
+        if g:
+            g.key.delete()
+        return
+    return
 
 #Retorna a lista de todos os chats ativos no momento
 def getChats():
@@ -87,9 +94,10 @@ class Game(ndb.Model):
     u_names = ndb.StringProperty(repeated = True)
     message_ids = ndb.StringProperty(repeated = True)
     adm = ndb.StringProperty(default = 'noAdm')
+    adm_message = ndb.StringProperty(default = 'noAdm')
     rnd = ndb.IntegerProperty(default = 0)
     palavra = ndb.StringProperty(default = 'noPalavra')
-    dica = ndb.StringProperty(default = 'noDica')
+    categoria = ndb.StringProperty(default = 'noCategoria')
     mascara = ndb.StringProperty(default = 'noMascara')
     letras = ndb.StringProperty(repeated = True)
     vidas = ndb.IntegerProperty(default = 6)
@@ -113,12 +121,13 @@ def setPreGame(chat_id, status, u_id = None, u_name = None, message_id = None):
     g.pre_game = status
     g.put()
     addPlayer(chat_id, u_id, u_name, message_id)
-    setAdm(chat_id, u_id)
+    setAdm(chat_id, u_id, message_id)
     return
 
 def setInGame(chat_id, status):
     g = ndb.Key(Game, chat_id).get()
     g.in_game = status
+    g.put()
     return
 
 def getInGame(chat_id):
@@ -129,22 +138,127 @@ def getInGame(chat_id):
 
 def addPlayer(chat_id, u_id, u_name, message_id):
     g = ndb.Key(Game, chat_id).get()
-    g.u_ids.append(u_id)
-    g.u_names.append(u_name)
-    g.message_ids.append(message_id)
+    if not (u_id in g.u_ids):
+        g.u_ids.append(u_id)
+        g.u_names.append(u_name)
+        g.message_ids.append(message_id)
+        g.put()
+        return True
+    return False
+
+def rmPlayer(chat_id, u_id, message_id):
+    g = ndb.Key(Game, chat_id).get()
+    if u_id in g.u_ids:
+        ind = g.u_ids.index(u_id)
+        g.u_ids.pop(ind)
+        g.u_names.pop(ind)
+        g.message_ids.pop(ind)
+        g.put()
+        if len(g.u_ids) == 0:
+            delGame(chat_id)
+            return False
+        if checkAdm(chat_id, u_id):
+            setAdm(chat_id, g.u_ids[0], g.message_ids[0])
+            return 'setAdm'
+        return True
+    return 'semPlayer'
+
+def getPlayers(chat_id):
+    g = ndb.Key(Game, chat_id).get()
+    u_ids = []
+    u_names = []
+    message_ids = []
+    for i in range(len(g.u_ids)):
+        u_ids.append(g.u_ids[i].encode('utf-8'))
+        u_names.append(g.u_names[i].encode('utf-8'))
+        message_ids.append(g.message_ids[i].encode('utf-8'))
+    return [u_ids, u_names, message_ids]
+
+#Randomizar a lista de participantes
+def shufflePlayers(chat_id):
+    g = ndb.Key(Game, chat_id).get()
+    u_names_shuf = []
+    u_ids_shuf = []
+    message_ids_shuf = []
+    index_shuf = range(len(g.u_ids))
+    shuffle(index_shuf)
+    for i in index_shuf:
+        u_ids_shuf.append(g.u_ids[i])
+        u_names_shuf.append(g.u_names[i])
+        message_ids_shuf.append(g.message_ids[i])
+    g.u_ids = u_ids_shuf
+    g.u_names = u_names_shuf
+    g.message_ids = message_ids_shuf
     g.put()
 
-def setAdm(chat_id, u_id):
+def setAdm(chat_id, u_id, message_id):
     g = ndb.Key(Game, chat_id).get()
     g.adm = u_id
+    g.adm_message = message_id
     g.put()
     return
 
 def checkAdm(chat_id, u_id):
     g = ndb.Key(Game, chat_id).get()
-    if g.adm == u_id:
-        return True
+    if g:
+        if g.adm == u_id:
+            return True
     return False
+
+def getAdm(chat_id):
+    g = ndb.Key(Game, chat_id).get()
+    if g:
+        return g.adm_message
+    return False
+
+def setCP(chat_id, categoria, palavra):
+    g = ndb.Key(Game, chat_id).get()
+    g.categoria = categoria
+    g.palavra = palavra
+    mascara = ''
+    for i in range(len(palavra)):
+        if palavra[i] == ' ':
+            mascara = mascara+' '
+        else:
+            mascara = mascara+'*'
+    g.mascara = mascara
+    g.put()
+    return
+
+def setVidas(chat_id):
+    g = ndb.Key(Game, chat_id).get()
+    modVida = len(g.palavra)/5 if len(g.palavra) > 5 else 0
+    modVida += len(g.u_ids)-3 if len(g.u_ids) > 4 else 0
+    modVida = 9 if modVida > 9 else modVida
+    vidas = g.vidas + modVida
+    g.vidas = vidas
+    g.vidas_init = g.vidas_init + modVida
+    g.put()
+    return vidas
+
+def menosVida(chat_id):
+    g = ndb.Key(Game, chat_id).get()
+    g.vidas -= 1
+    g.put()
+
+def getVidas(chat_id):
+    g = ndb.Key(Game, chat_id).get()
+    return g.vidas
+
+def getVidasInit(chat_id):
+    g = ndb.Key(Game, chat_id).get()
+    return g.vidas_init
+
+def getLetras(chat_id):
+    g = ndb.Key(Game, chat_id).get()
+    letras = [['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+    ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
+    ['Z', 'X', 'C', 'V', 'B', 'N', 'M']]
+    for i in range(len(g.letras)):
+        for i in range(len(letras)):
+            if g.letras[i] in letras[i]:
+                letras[i].remove(g.letras[i])
+    return letras
 
 def delGame(chat_id):
     g = ndb.Key(Game, chat_id).get()
