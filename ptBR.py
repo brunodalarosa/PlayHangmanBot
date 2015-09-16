@@ -45,7 +45,7 @@ def inicialMsg(u_name):
     return 'Começando um novo jogo!\n'+u_name+' será o administrador dessa rodada.'
 
 inicial_msg = 'Vamos começar definindo os jogadores desta rodada, quem quiser participar escolha Entrar'+emoji_sorriso
-close_game_msg = 'O jogo vai começar! Na sua vez, clique nas letras para chutar ou clique em arriscar e me mande a palavra para arriscar\nVocês jogarão nesse ordem:'
+close_game_msg = 'O jogo vai começar! Na sua vez, clique nas letras para chutar ou clique em arriscar e me mande a palavra para arriscar\nVocês jogarão nessa ordem:'
 palavra_msg = 'A palavra é: '
 categoria_msg = 'Categoria: '
 esta_dentro_msg = 'Você já participa desta partida'
@@ -66,3 +66,7 @@ def entrarMsg(u_name):
 
 #repostas InGame
 in_game_help_msg = 'Clique nas letras para chuta-las, se quiser mais opções vá em Comandos'
+arriscar_msg = 'Muito bem, agora me diga qual é a palavra? Pense bem, se você errar será eliminado!'
+round_errado_msg = 'Não é a sua vez de jogar, espere a sua vez!'
+venceu_msg = 'Voce venceu, hue hue hue'
+perdeu_msg = 'Voce perdeu, hue hue hue'

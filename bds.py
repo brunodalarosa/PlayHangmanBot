@@ -102,12 +102,50 @@ class Game(ndb.Model):
     letras = ndb.StringProperty(repeated = True)
     vidas = ndb.IntegerProperty(default = 6)
     vidas_init = ndb.IntegerProperty(default = 6)
+    arriscarBlock = ndb.BooleanProperty(indexed = False, default = False)
+
+def checkPalavra(chat_id, text):
+    g = ndb.Key(game, chat_id).get()
+    if g:
+        if text == palavra:
+            return True
+    return False
+
+def setArriscarBlock(chat_id, opt):
+    g = ndb.Key(game, chat_id).get()
+    if g:
+        g.arriscarBlock = opt
+        g.put()
+        return
+    return
+
+def getArriscarBlock(chat_id):
+    g = ndb.Key(game, chat_id).get()
+    if g:
+        return arriscarBlock
+    return False
 
 def getPreGame(chat_id):
     g = ndb.Key(Game, chat_id).get()
     if g:
         return g.pre_game
     return False
+
+def getRound(chat_id):
+    g = ndb.Key(Game, chat_id).get()
+    return g.rnd
+
+def setRound(chat_id):
+    g = ndb.Key(Game, chat_id).get()
+    g.rnd = g.rnd+1 if g.rnd+1 < len(g.u_ids) else 0
+    g.put()
+    return
+
+def checkRound(chat_id, u_id):
+    g = ndb.Key(Game, chat_id).get()
+    if g.u_ids[g.rnd] == u_id:
+        return True
+        return False
 
 def setPreGame(chat_id, status, u_id = None, u_name = None, message_id = None):
     g = ndb.Key(Game, chat_id).get()

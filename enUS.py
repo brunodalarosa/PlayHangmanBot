@@ -66,3 +66,7 @@ def entrarMsg(u_name):
 
 #repostas InGame
 in_game_help_msg = 'Clique nas letras para chuta-las, se quiser mais opções vá em Comandos'
+arriscar_msg = 'Ok, tell me then, what is the word? Think wisely, if you make a mistake you will be eliminated from the game!'
+round_errado_msg = 'It is not your turn! Wait for your turn to play.'
+venceu_msg = 'You Win, hue hue hue'
+perdeu_msg = 'You lose, hue hue hue'

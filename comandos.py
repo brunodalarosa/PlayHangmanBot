@@ -36,6 +36,9 @@ def getKb(chat_id, k):
     if k == 'main':
         if bds.getEnabled(chat_id):
             if bds.getInGame(chat_id):
+                if k == 'voltar':
+                    kb.append([[l.voltar]])
+                    return kb
                 letras = bds.getLetras(chat_id)
                 kb.append([letras[0], letras[1], letras[2], [l.arriscar], [l.comandos]])
             elif bds.getPreGame(chat_id):

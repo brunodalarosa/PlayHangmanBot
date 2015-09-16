@@ -129,6 +129,7 @@ class WebhookHandler(webapp2.RequestHandler):
         #Aqui começa a lógica principal
         s = bds.getSettings(chat_id)
         l = getLanguage(chat_id)
+        ab = bds.getArriscarBlock(chat_id)
         rpl = [c.toDict(chat_id, 'comando não reconhecido')]
         text = '/start' if text == l.ligar.lower() else text #Tratamento para o caso do /start
 
@@ -151,8 +152,13 @@ class WebhookHandler(webapp2.RequestHandler):
                     rpl = c.comandos(chat_id, message_id, u_id)
                 #comandos inGame
                 elif bds.getInGame(chat_id):
-                    if l.cancelar_jogo.lower() in text:
+                    if bds.arriscarBlock:
+                        rpl = g.arriscarPalavra2(chat_id, u_id, text.lower())
+                    elif l.cancelar_jogo.lower() in text:
                         rpl = g.cancelarJogo(chat_id, u_id)
+                    elif l.arriscar.lower() in text:
+                        rpl = g.arriscarPalavra1(chat_id, u_id)
+
                 #comandos preGame
                 elif bds.getPreGame(chat_id):
                     if l.entrar.lower() in text:
