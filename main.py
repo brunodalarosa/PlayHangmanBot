@@ -152,7 +152,7 @@ class WebhookHandler(webapp2.RequestHandler):
                     rpl = c.comandos(chat_id, message_id, u_id)
                 #comandos inGame
                 elif bds.getInGame(chat_id):
-                    if bds.arriscarBlock:
+                    if bds.getArriscarBlock(chat_id):
                         rpl = g.arriscarPalavra2(chat_id, u_id, text.lower())
                     elif l.cancelar_jogo.lower() in text:
                         rpl = g.cancelarJogo(chat_id, u_id)

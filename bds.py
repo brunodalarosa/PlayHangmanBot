@@ -105,14 +105,14 @@ class Game(ndb.Model):
     arriscarBlock = ndb.BooleanProperty(indexed = False, default = False)
 
 def checkPalavra(chat_id, text):
-    g = ndb.Key(game, chat_id).get()
+    g = ndb.Key(Game, chat_id).get()
     if g:
-        if text == palavra:
+        if text == g.palavra.lower():
             return True
     return False
 
 def setArriscarBlock(chat_id, opt):
-    g = ndb.Key(game, chat_id).get()
+    g = ndb.Key(Game, chat_id).get()
     if g:
         g.arriscarBlock = opt
         g.put()
@@ -120,9 +120,9 @@ def setArriscarBlock(chat_id, opt):
     return
 
 def getArriscarBlock(chat_id):
-    g = ndb.Key(game, chat_id).get()
+    g = ndb.Key(Game, chat_id).get()
     if g:
-        return arriscarBlock
+        return g.arriscarBlock
     return False
 
 def getPreGame(chat_id):

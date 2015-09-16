@@ -36,11 +36,11 @@ def getKb(chat_id, k):
     if k == 'main':
         if bds.getEnabled(chat_id):
             if bds.getInGame(chat_id):
-                if k == 'voltar':
+                if bds.getArriscarBlock(chat_id):
                     kb.append([[l.voltar]])
-                    return kb
-                letras = bds.getLetras(chat_id)
-                kb.append([letras[0], letras[1], letras[2], [l.arriscar], [l.comandos]])
+                else:
+                    letras = bds.getLetras(chat_id)
+                    kb.append([letras[0], letras[1], letras[2], [l.arriscar], [l.comandos]])
             elif bds.getPreGame(chat_id):
                 kb.append([[l.entrar, l.sair], [l.comandos]])
                 kb.append([[l.entrar, l.sair], [l.cancelar_jogo, l.fechar_jogo], [l.comandos]])
