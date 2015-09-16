@@ -36,12 +36,8 @@ def getKb(chat_id, k):
     if k == 'main':
         if bds.getEnabled(chat_id):
             if bds.getInGame(chat_id):
-                kb.append([ #getLetras
-                    ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
-                    ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
-                    ['Z', 'X', 'C', 'V', 'B', 'N', 'M'],
-                    [l.comandos]
-                ])
+                letras = bds.getLetras(chat_id)
+                kb.append([letras[0], letras[1], letras[2], [l.arriscar], [l.comandos]])
             elif bds.getPreGame(chat_id):
                 kb.append([[l.entrar, l.sair], [l.comandos]])
                 kb.append([[l.entrar, l.sair], [l.cancelar_jogo, l.fechar_jogo], [l.comandos]])
@@ -52,7 +48,7 @@ def getKb(chat_id, k):
     elif k == 'cmd':
         if bds.getInGame(chat_id):
             kb.append([[l.ajuda, l.rank], [l.config], [l.voltar], [l.desligar]])
-            kb.append([[l.cancelar_jogo], [l.ajuda, l.rank], [l.config], [l.voltar], [l.desligar]])
+            kb.append([[l.cancelar_jogo], [l.ajuda, l.rank], [l.config, l.voltar], [l.desligar]])
         elif bds.getPreGame(chat_id):
             kb.append([[l.ajuda, l.rank], [l.config, l.voltar], [l.desligar]])
     elif k == 'config':
@@ -113,7 +109,8 @@ def novojogo(chat_id, u_id, u_name, message_id):
     rpl.append(toDict(chat_id, l.inicialMsg(u_name), replyTo = message_id, replyMarkup = keyboard))
     return rpl
 
-def voltar(chat_id, msg, message_id, u_id):
+def voltar(chat_id, msg, message_id, u_id, esp = None):
+    rpl = []
     i = 0
     if bds.getSettings(chat_id).waiting:
         bds.setWaiting(chat_id, False)
@@ -136,8 +133,16 @@ def voltar(chat_id, msg, message_id, u_id):
                 i = 0
             else:
                 i = 1
-    keyboard = makeKb(kb[i], resize_keyboard = True, selective = True, one_time_keyboard = True)
-    return [toDict(chat_id, msg, replyTo = message_id, replyMarkup = keyboard)]
+    if not esp:
+        keyboard = makeKb(kb[i], resize_keyboard = True, selective = True, one_time_keyboard = True)
+        rpl.append(toDict(chat_id, msg, replyTo = message_id, replyMarkup = keyboard))
+    else:
+        keyboard = makeKb(kb[0], resize_keyboard = True, one_time_keyboard = True)
+        rpl.append(toDict(chat_id, msg, replyMarkup = keyboard))
+        if len(kb) != 1:
+            keyboard = makeKb(kb[1], resize_keyboard = True, selective = True, one_time_keyboard = True)
+            rpl.append(toDict(chat_id, msg, replyTo = message_id, replyMarkup = keyboard))
+    return rpl
 
 def config(chat_id, message_id):
     l = getLanguage(chat_id)
@@ -149,7 +154,7 @@ def config(chat_id, message_id):
 def comandos(chat_id, message_id, u_id):
     l = getLanguage(chat_id)
     kb = getKb(chat_id, 'cmd')
-    if not (bds.getInGame(chat_id) and bds.checkAdm(chat_id)):
+    if not (bds.getInGame(chat_id) and bds.checkAdm(chat_id, u_id)):
         keyboard = makeKb(kb[0], resize_keyboard = True, selective = True, one_time_keyboard = True)
     else:
         keyboard = makeKb(kb[1], resize_keyboard = True, selective = True, one_time_keyboard = True)
@@ -159,14 +164,12 @@ def changeLanguage(chat_id, lingua, message_id, u_id):
     l = getLanguage(chat_id)
     if 'português(br)' in lingua:
         bds.setLanguage(chat_id, 'ptBR')
-        bds.setWaiting(chat_id, False)
         l = getLanguage(chat_id)
-        return voltar(chat_id, l.mudar_lingua, message_id, u_id)
+        return voltar(chat_id, l.mudar_lingua, message_id, u_id, esp = True)
     elif 'english(us)' in lingua:
         bds.setLanguage(chat_id, 'enUS')
-        bds.setWaiting(chat_id, False)
         l = getLanguage(chat_id)
-        return voltar(chat_id, l.mudar_lingua, message_id, u_id)
+        return voltar(chat_id, l.mudar_lingua, message_id, u_id, esp = True)
     elif l.voltar.lower() in lingua:
         return voltar(chat_id, l.voltar_msg, message_id, u_id)
     else:
