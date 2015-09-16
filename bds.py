@@ -104,27 +104,6 @@ class Game(ndb.Model):
     vidas_init = ndb.IntegerProperty(default = 6)
     arriscarBlock = ndb.BooleanProperty(indexed = False, default = False)
 
-def checkPalavra(chat_id, text):
-    g = ndb.Key(Game, chat_id).get()
-    if g:
-        if text == g.palavra.lower():
-            return True
-    return False
-
-def setArriscarBlock(chat_id, opt):
-    g = ndb.Key(Game, chat_id).get()
-    if g:
-        g.arriscarBlock = opt
-        g.put()
-        return
-    return
-
-def getArriscarBlock(chat_id):
-    g = ndb.Key(Game, chat_id).get()
-    if g:
-        return g.arriscarBlock
-    return False
-
 def getPreGame(chat_id):
     g = ndb.Key(Game, chat_id).get()
     if g:
@@ -262,6 +241,45 @@ def setCP(chat_id, categoria, palavra):
     g.mascara = mascara
     g.put()
     return
+
+def checkPalavra(chat_id, text):
+    g = ndb.Key(Game, chat_id).get()
+    if g:
+        if text == g.palavra.encode('utf-8').lower():
+            g.key.delete()
+            return True
+    return False
+
+def getPalavra(chat_id):
+    g = ndb.Key(Game, chat_id).get()
+    return g.palavra
+
+'''def getMascara(chat_id, letra):
+    g = ndb.Key(Game, chat_id).get()
+    mascara = ''
+    for i in range(len(g.palavra)):
+        if g.palavra[i] == letra:
+            if g.mascara[i] == '*':
+                mascara = mascara+letra
+            else:
+                mascara = mascara+g.mascara[i]
+    g.mascara = mascara
+    g.put()
+    return mascara'''
+
+def setArriscarBlock(chat_id, opt):
+    g = ndb.Key(Game, chat_id).get()
+    if g:
+        g.arriscarBlock = opt
+        g.put()
+        return
+    return
+
+def getArriscarBlock(chat_id):
+    g = ndb.Key(Game, chat_id).get()
+    if g:
+        return g.arriscarBlock
+    return False
 
 def setVidas(chat_id):
     g = ndb.Key(Game, chat_id).get()

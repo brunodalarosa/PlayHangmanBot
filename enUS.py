@@ -70,3 +70,4 @@ arriscar_msg = 'Ok, tell me then, what is the word? Think wisely, if you make a 
 round_errado_msg = 'It is not your turn! Wait for your turn to play.'
 venceu_msg = 'You Win, hue hue hue'
 perdeu_msg = 'You lose, hue hue hue'
+esta_fora_msg = 'You are out of this game'
