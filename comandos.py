@@ -56,6 +56,8 @@ def getKb(chat_id, k):
             kb.append([[l.ajuda, l.rank], [l.config, l.voltar], [l.desligar]])
     elif k == 'config':
         kb.append([['Português(BR)', 'English(US)'], [l.ajuda], [l.voltar]])
+    elif k == 'fora':
+        kb.append([[l.esta_fora_msg]])
     return kb
 
 
@@ -130,6 +132,8 @@ def voltar(chat_id, msg, message_id, u_id, esp = None):
             kb = getKb(chat_id, 'main')
             i = 0
     else:
+        if bds.getArriscarBlock(chat_id):
+            bds.setArriscarBlock(chat_id, False)
         kb = getKb(chat_id, 'main')
         if len(kb) != 1:
             if not bds.checkAdm(chat_id, u_id):

@@ -153,11 +153,11 @@ class WebhookHandler(webapp2.RequestHandler):
                 #comandos inGame
                 elif bds.getInGame(chat_id):
                     if bds.getArriscarBlock(chat_id):
-                        rpl = g.arriscarPalavra2(chat_id, u_id, text.lower())
+                        rpl = g.arriscarPalavra2(chat_id, u_id, message_id, text)
                     elif l.cancelar_jogo.lower() in text:
                         rpl = g.cancelarJogo(chat_id, u_id)
                     elif l.arriscar.lower() in text:
-                        rpl = g.arriscarPalavra1(chat_id, u_id)
+                        rpl = g.arriscarPalavra1(chat_id, u_id, message_id)
 
                 #comandos preGame
                 elif bds.getPreGame(chat_id):

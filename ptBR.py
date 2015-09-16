@@ -70,3 +70,4 @@ arriscar_msg = 'Muito bem, agora me diga qual é a palavra? Pense bem, se você 
 round_errado_msg = 'Não é a sua vez de jogar, espere a sua vez!'
 venceu_msg = 'Voce venceu, hue hue hue'
 perdeu_msg = 'Voce perdeu, hue hue hue'
+esta_fora_msg = 'Você está fora desse jogo'
