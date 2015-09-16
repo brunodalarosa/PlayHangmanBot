@@ -4,6 +4,7 @@
 #Importa os comandos
 import comandos as c
 import bds
+from random import randint, shuffle
 
 def entrar(chat_id, u_id, u_name, message_id):
     l = c.getLanguage(chat_id)
@@ -30,9 +31,31 @@ def sair(chat_id, u_id, u_name, message_id):
     elif aux == 'semPlayer':
         return [c.toDict(chat_id, l.is_out_msg)]
 
-def fecharJogo(chat_id, u_id):
+def fecharJogo(chat_id, u_id, message_id):
     l = c.getLanguage(chat_id)
-    return [c.toDict(chat_id, 'sem jogo ainda')]
+    rpl = []
+    if bds.checkAdm(chat_id, u_id):
+        bds.setPreGame(chat_id, False)
+        bds.setInGame(chat_id, True)
+        categoria = randint(0, (len(l.palavras)-1))
+        palavra = randint(1, (len(l.palavras[categoria])-1))
+        palavra = l.palavras[categoria][palavra]
+        categoria = l.palavras[categoria][0]
+        bds.setCP(chat_id, categoria, palavra)
+        vidas = bds.setVidas(chat_id)
+        bds.shufflePlayers(chat_id)
+        u_names = bds.getPlayers(chat_id)[1]
+        ordem = ''
+        for i in range(len(u_names)):
+            ordem = ordem+u_names[i]+'\n'
+        kb = c.makeKb(c.getKb(chat_id, 'main')[0], resize_keyboard = True, one_time_keyboard = True)
+        rpl.append(c.toDict(chat_id, l.close_game_msg, replyMarkup = kb))
+        rpl.append(c.toDict(chat_id, ordem))
+        rpl.append(c.toDict(chat_id, l.categoria_msg+categoria))
+        rpl.append(c.toDict(chat_id, l.palavra_msg+palavra))
+        rpl.append(c.toDict(chat_id, l.vidas_msg+str(vidas)))
+        return rpl
+    return [c.toDict(chat_id, l.cantdo_msg)]
 
 def cancelarJogo(chat_id, u_id):
     l = c.getLanguage(chat_id)
@@ -40,3 +63,4 @@ def cancelarJogo(chat_id, u_id):
         bds.delGame(chat_id)
         keyboard = c.makeKb(c.getKb(chat_id, 'main')[0], resize_keyboard = True, one_time_keyboard = True)
         return [c.toDict(chat_id, l.cancelar_jogo_msg, replyMarkup = keyboard)]
+    return [c.toDict(chat_id, l.cantdo_msg)]

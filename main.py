@@ -1,5 +1,5 @@
-#Main do forca_bot 2.0
 #-*- coding: utf-8 -*-
+#Main do forca_bot 2.0
 
 #Standard imports
 import json
@@ -17,6 +17,7 @@ import webapp2
 import bds
 import comandos as c
 import preGame as p
+import game as g
 
 #TOKEN do bot no telegram
 TOKEN = '105794279:AAEZQkZX-HnXHMBG8NHkc0CWyDjvpOnHM-U'
@@ -150,9 +151,7 @@ class WebhookHandler(webapp2.RequestHandler):
                     rpl = c.comandos(chat_id, message_id, u_id)
                 #comandos inGame
                 elif bds.getInGame(chat_id):
-                    if 'a' == 'a':
-                        print 'teste'
-                    elif l.cancelar_jogo.lower() in text:
+                    if l.cancelar_jogo.lower() in text:
                         rpl = g.cancelarJogo(chat_id, u_id)
                 #comandos preGame
                 elif bds.getPreGame(chat_id):
@@ -161,7 +160,7 @@ class WebhookHandler(webapp2.RequestHandler):
                     elif l.sair.lower() in text:
                         rpl = p.sair(chat_id, u_id, u_name, message_id)
                     elif l.fechar_jogo.lower() in text:
-                        rpl = p.fecharJogo(chat_id, u_id)
+                        rpl = p.fecharJogo(chat_id, u_id, message_id)
                     elif l.cancelar_jogo.lower() in text:
                         rpl = p.cancelarJogo(chat_id, u_id)
                 #se preGame e inGame == False (vide flowchart)
