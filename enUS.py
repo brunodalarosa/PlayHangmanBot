@@ -42,9 +42,6 @@ ocupado_msg = 'Bot occupied'
 
 #respostas PreGame
 def inicialMsg(u_name):
-<<<<<<< HEAD
-    return 'Starting a new game!\n'+u_name+' will be the manager of this game! '+emoji_blink+'\nLets start defining the players of this game, who wants to join please choose Enter and wait the manager start the game '+emoji_sorriso
-=======
     return 'Starting a new game!\n'+u_name+' will be the manager of this game!'
 
 inicial_msg = 'Lets start defining the players of this game, who wants to join please choose Enter '+emoji_sorriso
@@ -63,7 +60,6 @@ def novoAdmMsg(u_name):
 
 def playerQuitMsg(u_name):
     return 'The player '+u_name+' quited.'
->>>>>>> 6aeb89d7c1926e6d144648a96a300f07f2168d34
 
 def entrarMsg(u_name):
     return 'Ok '+u_name+', you gonna play this turn\nIf you want to quit just use Quit'

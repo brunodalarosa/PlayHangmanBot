@@ -42,9 +42,6 @@ ocupado_msg = 'Bot ocupado'
 
 #respostas PreGame
 def inicialMsg(u_name):
-<<<<<<< HEAD
-    return 'Começando um novo jogo!\n'+u_name+' será o administrador dessa rodada. '+emoji_blink+'\nVamos começar definindo os jogadores desta rodada, quem quiser participar escolha Entrar e aguarde o administrador começar o jogo!'+emoji_sorriso
-=======
     return 'Começando um novo jogo!\n'+u_name+' será o administrador dessa rodada.'
 
 inicial_msg = 'Vamos começar definindo os jogadores desta rodada, quem quiser participar escolha Entrar'+emoji_sorriso
@@ -63,14 +60,9 @@ def novoAdmMsg(u_name):
 
 def playerQuitMsg(u_name):
     return 'O jogador '+u_name+' saiu da partida.'
->>>>>>> 6aeb89d7c1926e6d144648a96a300f07f2168d34
 
-<<<<<<< HEAD
-ajuda_preGame
-=======
 def entrarMsg(u_name):
     return 'Ok '+u_name+', você vai participar dessa rodada\nSe quiser sair é só usar o Sair'
 
->>>>>>> e698c6991f1f63f6cd8b8ce506cfcd1e2f0c68f6
 #repostas InGame
 in_game_help_msg = 'Clique nas letras para chuta-las, se quiser mais opções vá em Comandos'
