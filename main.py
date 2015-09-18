@@ -132,6 +132,8 @@ class WebhookHandler(webapp2.RequestHandler):
         ab = bds.getArriscarBlock(chat_id)
         rpl = [c.toDict(chat_id, 'comando não reconhecido')]
         text = '/start' if text == l.ligar.lower() else text #Tratamento para o caso do /start
+        if text.startswith('@ccuem_bot'):
+            text = text[11:]
 
         if not s.waiting:
             #comandos que indiferem do estado atual de jogo
@@ -185,7 +187,8 @@ class WebhookHandler(webapp2.RequestHandler):
         try:
             for i in range(len(rpl)):
                 reply(rpl[i])
-        except:
+        except Exception, e:
+            print e
             reply(c.toDict(chat_id, 'erro'))
 
 app = webapp2.WSGIApplication([

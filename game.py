@@ -25,6 +25,14 @@ def cancelarJogo(chat_id, u_id):
     else:
         'nao é sua vez'            '''
 
+def nextRound(chat_id):
+    l = c.getLanguage(chat_id)
+    bds.roundPlus(chat_id)
+    players = bds.getPlayers(chat_id)
+    aRound = bds.getRound(chat_id)
+    keyboard = c.makeKb(c.getKb(chat_id, 'main')[0], resize_keyboard = True, one_time_keyboard = True, selective = True)
+    return c.toDict(chat_id, l.arriscar_msg, replyTo = players[2][aRound], replyMarkup = keyboard)
+
 def arriscarPalavra1(chat_id, u_id, message_id):
     l = c.getLanguage(chat_id)
     if bds.checkRound(chat_id, u_id):
@@ -36,20 +44,25 @@ def arriscarPalavra1(chat_id, u_id, message_id):
 
 def arriscarPalavra2(chat_id, u_id, message_id, text):
     l = c.getLanguage(chat_id)
+    bds.setArriscarBlock(chat_id, False)
     if bds.checkRound(chat_id, u_id):
         if bds.checkPalavra(chat_id,text):
             keyboard = c.makeKb(c.getKb(chat_id, 'main')[0], resize_keyboard = True, one_time_keyboard = True)
             return [c.toDict(chat_id, l.venceu_msg, replyMarkup = keyboard)]
         else:
             rm = bds.rmPlayer(chat_id, u_id, message_id)
-            keyboard = c.makeKb(c.getKb(chat_id, 'fora')[0], resize_keyboard = True, one_time_keyboard = True)
+            keyboard = c.makeKb(c.getKb(chat_id, 'fora')[0], resize_keyboard = True, one_time_keyboard = True, selective = True)
             if rm == True:
-                return [c.toDict(chat_id, l.perdeu_msg, replyTo = message_id, replyMarkup = keyboard)]
-            elif rm == 'setAdm':
-                pl = bds.getPlayers(chat_id)
                 rpl = []
                 rpl.append(c.toDict(chat_id, l.perdeu_msg, replyTo = message_id, replyMarkup = keyboard))
-                rpl.append(c.toDict(chat_id, l.novoAdmMsg(pl[1][0])))
+                rpl.append(nextRound(chat_id))
+                return rpl
+            elif rm == 'setAdm':
+                rpl = []
+                adm = bds.getAdm(chat_id)
+                rpl.append(c.toDict(chat_id, l.perdeu_msg, replyTo = message_id, replyMarkup = keyboard))
+                rpl.append(c.toDict(chat_id, l.novoAdmMsg(adm[1])))
+                rpl.append(nextRound(chat_id))
                 return rpl
             else:
                 keyboard = c.makeKb(c.getKb(chat_id, 'main')[0], resize_keyboard = True, one_time_keyboard = True)

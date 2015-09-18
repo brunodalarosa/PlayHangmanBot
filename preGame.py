@@ -45,11 +45,12 @@ def fecharJogo(chat_id, u_id, message_id):
         vidas = bds.setVidas(chat_id)
         bds.shufflePlayers(chat_id)
         u_names = bds.getPlayers(chat_id)[1]
+        message_ids = bds.getPlayers(chat_id)[2]
         ordem = ''
         for i in range(len(u_names)):
             ordem = ordem+u_names[i]+'\n'
-        kb = c.makeKb(c.getKb(chat_id, 'main')[0], resize_keyboard = True, one_time_keyboard = True)
-        rpl.append(c.toDict(chat_id, l.close_game_msg, replyMarkup = kb))
+        kb = c.makeKb(c.getKb(chat_id, 'main')[0], resize_keyboard = True, one_time_keyboard = True, selective = True)
+        rpl.append(c.toDict(chat_id, l.close_game_msg, replyTo = message_ids[0], replyMarkup = kb))
         rpl.append(c.toDict(chat_id, ordem))
         rpl.append(c.toDict(chat_id, l.categoria_msg+categoria))
         rpl.append(c.toDict(chat_id, l.palavra_msg+palavra))

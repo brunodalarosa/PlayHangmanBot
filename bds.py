@@ -94,6 +94,7 @@ class Game(ndb.Model):
     u_names = ndb.StringProperty(repeated = True)
     message_ids = ndb.StringProperty(repeated = True)
     adm = ndb.StringProperty(default = 'noAdm')
+    adm_name = ndb.StringProperty(default = 'noAdm')
     adm_message = ndb.StringProperty(default = 'noAdm')
     rnd = ndb.IntegerProperty(default = 0)
     palavra = ndb.StringProperty(default = 'noPalavra')
@@ -114,7 +115,7 @@ def getRound(chat_id):
     g = ndb.Key(Game, chat_id).get()
     return g.rnd
 
-def setRound(chat_id):
+def roundPlus(chat_id):
     g = ndb.Key(Game, chat_id).get()
     g.rnd = g.rnd+1 if g.rnd+1 < len(g.u_ids) else 0
     g.put()
@@ -124,7 +125,7 @@ def checkRound(chat_id, u_id):
     g = ndb.Key(Game, chat_id).get()
     if g.u_ids[g.rnd] == u_id:
         return True
-        return False
+    return False
 
 def setPreGame(chat_id, status, u_id = None, u_name = None, message_id = None):
     g = ndb.Key(Game, chat_id).get()
@@ -138,7 +139,7 @@ def setPreGame(chat_id, status, u_id = None, u_name = None, message_id = None):
     g.pre_game = status
     g.put()
     addPlayer(chat_id, u_id, u_name, message_id)
-    setAdm(chat_id, u_id, message_id)
+    setAdm(chat_id, u_id, u_name, message_id)
     return
 
 def setInGame(chat_id, status):
@@ -175,7 +176,7 @@ def rmPlayer(chat_id, u_id, message_id):
             delGame(chat_id)
             return False
         if checkAdm(chat_id, u_id):
-            setAdm(chat_id, g.u_ids[0], g.message_ids[0])
+            setAdm(chat_id, g.u_ids[0], g.u_names[0], g.message_ids[0])
             return 'setAdm'
         return True
     return 'semPlayer'
@@ -208,9 +209,10 @@ def shufflePlayers(chat_id):
     g.message_ids = message_ids_shuf
     g.put()
 
-def setAdm(chat_id, u_id, message_id):
+def setAdm(chat_id, u_id, u_name, message_id):
     g = ndb.Key(Game, chat_id).get()
     g.adm = u_id
+    g.adm_name = u_name
     g.adm_message = message_id
     g.put()
     return
@@ -225,7 +227,7 @@ def checkAdm(chat_id, u_id):
 def getAdm(chat_id):
     g = ndb.Key(Game, chat_id).get()
     if g:
-        return g.adm_message
+        return [g.adm.encode('utf-8'), g.adm_name.encode('utf-8') ,g.adm_message.encode('utf-8')]
     return False
 
 def setCP(chat_id, categoria, palavra):

@@ -57,7 +57,7 @@ def getKb(chat_id, k):
     elif k == 'config':
         kb.append([['Português(BR)', 'English(US)'], [l.ajuda], [l.voltar]])
     elif k == 'fora':
-        kb.append([[l.esta_fora_msg]])
+        kb.append([[l.esta_fora]])
     return kb
 
 
@@ -76,7 +76,7 @@ def start(chat_id, message_id):
         keyboard = makeKb(kb[0], resize_keyboard = True, one_time_keyboard = True)
         rpl.append(toDict(chat_id, l.iniciar_msg, replyMarkup = keyboard))
         keyboard = makeKb(kb[1], resize_keyboard = True, one_time_keyboard = True, selective = True)
-        rpl.append(toDict(chat_id, l.start_msg, replyTo = adm, replyMarkup = keyboard))
+        rpl.append(toDict(chat_id, l.start_msg, replyTo = adm[2], replyMarkup = keyboard))
     else:
         keyboard = makeKb(kb[0], resize_keyboard = True, one_time_keyboard = True)
         rpl.append(toDict(chat_id, l.start_msg, replyMarkup = keyboard))
