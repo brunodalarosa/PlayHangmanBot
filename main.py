@@ -152,14 +152,22 @@ class WebhookHandler(webapp2.RequestHandler):
                     rpl = c.voltar(chat_id, l.voltar_msg, message_id, u_id)
                 elif l.comandos.lower() in text:
                     rpl = c.comandos(chat_id, message_id, u_id)
+                elif '/kb' in text:
+                    rpl = c.kb(chat_id, u_id, message_id)
                 #comandos inGame
                 elif bds.getInGame(chat_id):
-                    if bds.getArriscarBlock(chat_id):
-                        rpl = g.arriscarPalavra2(chat_id, u_id, message_id, text)
-                    elif l.cancelar_jogo.lower() in text:
-                        rpl = g.cancelarJogo(chat_id, u_id)
-                    elif l.arriscar.lower() in text:
-                        rpl = g.arriscarPalavra1(chat_id, u_id, message_id)
+                    check = bds.checkUid(chat_id, u_id)
+                    if check == True:
+                        if bds.getArriscarBlock(chat_id):
+                            rpl = g.arriscarPalavra2(chat_id, u_id, message_id, text)
+                        elif l.cancelar_jogo.lower() in text:
+                            rpl = g.cancelarJogo(chat_id, u_id)
+                        elif l.arriscar.lower() in text:
+                            rpl = g.arriscarPalavra1(chat_id, u_id, message_id)
+                    elif check == 'rnd':
+                        rpl = [c.toDict(chat_id, l.round_errado_msg)]
+                    elif check == 'out':
+                        rpl = [c.toDict(chat_id, l.fora_msg)]
 
                 #comandos preGame
                 elif bds.getPreGame(chat_id):

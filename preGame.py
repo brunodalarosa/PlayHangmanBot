@@ -50,8 +50,8 @@ def fecharJogo(chat_id, u_id, message_id):
         for i in range(len(u_names)):
             ordem = ordem+u_names[i]+'\n'
         kb = c.makeKb(c.getKb(chat_id, 'main')[0], resize_keyboard = True, one_time_keyboard = True, selective = True)
-        rpl.append(c.toDict(chat_id, l.close_game_msg, replyTo = message_ids[0], replyMarkup = kb))
-        rpl.append(c.toDict(chat_id, ordem))
+        rpl.append(c.toDict(chat_id, l.close_game_msg, replyMarkup = c.makeKbh(True)))
+        rpl.append(c.toDict(chat_id, ordem, replyTo = message_ids[0], replyMarkup = kb))
         rpl.append(c.toDict(chat_id, l.categoria_msg+categoria))
         rpl.append(c.toDict(chat_id, l.palavra_msg+palavra))
         rpl.append(c.toDict(chat_id, l.vidas_msg+str(vidas)))

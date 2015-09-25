@@ -40,6 +40,7 @@ voltar_msg = 'Main menu'
 cantdo_msg = 'You cant do this'
 comandos_msg = 'Commands'
 ocupado_msg = 'Bot occupied'
+teclado_msg = 'Keyboard'
 
 #respostas PreGame
 def inicialMsg(u_name):
@@ -69,5 +70,7 @@ def entrarMsg(u_name):
 in_game_help_msg = 'Clique nas letras para chuta-las, se quiser mais opções vá em Comandos'
 arriscar_msg = 'Ok, tell me then, what is the word? Think wisely, if you make a mistake you will be eliminated from the game!'
 round_errado_msg = 'It is not your turn! Wait for your turn to play.'
-venceu_msg = 'You Win, hue hue hue'
-perdeu_msg = 'You lose, hue hue hue'
+fora_msg = 'You are out of this game, wait untill it is over to enter in a new one'
+prox_round_msg = 'Now it is your turn, '
+venceu_msg = 'Correct! Congratulations, you won this game!'
+perdeu_msg = 'Wrong! And you are out of this game now!'

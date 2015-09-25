@@ -23,6 +23,14 @@ def getLanguage(chat_id):
 def toDict(chat_id, text, replyTo = None, replyMarkup = None):
     return dict(chat_id = chat_id, text = text, reply_to_message_id = replyTo, reply_markup = replyMarkup)
 
+def makeFr(force_reply, selective = None):
+    selective = selective if selective else False
+    return json.dumps({'force_reply':force_reply, 'selective':selective})
+
+def makeKbh(hide_keyboard, selective = None):
+    selective = selective if selective else False
+    return json.dumps({'hide_keyboard':hide_keyboard, 'selective':selective})
+
 #Recebe uma matriz e a tranforma em um teclado personalizado
 def makeKb(kb, resize_keyboard = None, one_time_keyboard = None, selective = None):
     resize_keyboard = resize_keyboard if resize_keyboard else False
@@ -102,6 +110,20 @@ def ajuda(chat_id):
 def rank(chat_id):
     l = getLanguage(chat_id)
     return [toDict(chat_id, 'Sem rank')]
+
+def kb(chat_id, u_id, message_id):
+    l = getLanguage(chat_id)
+    kb = getKb(chat_id, 'main')
+    keyboard = makeKb(kb[0], resize_keyboard = True, one_time_keyboard = True, selective = True)
+    if (bds.getInGame(chat_id)) or (not bds.getPreGame(chat_id)):
+        i = 0
+    elif bds.getPreGame(chat_id):
+        i = 0
+        if bds.checkAdm(chat_id, u_id):
+            i = 1
+    keyboard = makeKb(kb[i], resize_keyboard = True, one_time_keyboard = True, selective = True)
+    return [toDict(chat_id, l.teclado_msg, replyTo = message_id, replyMarkup = keyboard)]
+
 
 def novojogo(chat_id, u_id, u_name, message_id):
     l = getLanguage(chat_id)

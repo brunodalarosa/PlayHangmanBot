@@ -269,6 +269,14 @@ def getPalavra(chat_id):
     g.put()
     return mascara'''
 
+def checkUid(chat_id, u_id):
+    g = ndb.Key(Game, chat_id).get()
+    if u_id in g.u_ids:
+        if checkRound(chat_id, u_id):
+            return True
+        return 'rnd'
+    return 'out'
+
 def setArriscarBlock(chat_id, opt):
     g = ndb.Key(Game, chat_id).get()
     if g:
