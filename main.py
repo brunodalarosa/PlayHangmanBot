@@ -164,6 +164,10 @@ class WebhookHandler(webapp2.RequestHandler):
                             rpl = g.cancelarJogo(chat_id, u_id)
                         elif l.arriscar.lower() in text:
                             rpl = g.arriscarPalavra1(chat_id, u_id, message_id)
+                        elif (len(text) == 1) or (text.startswith('@ccuemBot')):
+                            if text.startswith('@ccuemBot'):
+                                text = text[10:]
+                            rpl = g.chutarLetra(chat_id, u_id, message_id, text)
                     elif check == 'rnd':
                         rpl = [c.toDict(chat_id, l.round_errado_msg)]
                     elif check == 'out':

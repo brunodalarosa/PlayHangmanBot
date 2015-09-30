@@ -12,18 +12,27 @@ def cancelarJogo(chat_id, u_id):
         return [c.toDict(chat_id, l.cancelar_jogo_msg, replyMarkup = keyboard)]
     return [c.toDict(chat_id, l.cantdo_msg)]
 
-'''def chutar(chat_id, letra, u_id):
+def chutarLetra(chat_id, u_id, message_id, letra):
     l = c.getLanguage(chat_id)
-    if bds.checkRound(chat_id, u_id):
-        if bds.checkLetra(chat_id, letra):
-            if letra in bds.getPalavra(chat_id):
-                mascara = bds.getMascara(chat_id, letra)
-            else:
-                'errou'
+    r = bds.checkLetra(chat_id, letra)
+    rpl = []
+    if r == True: #Se acertou a letra
+        rpl.append(c.toDict(chat_id, l.acertou_letra_msg, replyTo = message_id, replyMarkup = c.makeKbh(True, selective = True)))
+        rpl.append(nextRound(chat_id))
+    elif r == 2: #Se a letra já foi chutada
+        rpl.append(c.toDict(chat_id, l.jachutada_msg))
+    else: #Se errou a letra
+        rpl.append(c.toDict(chat_id, l.errou_letra_msg, replyTo = message_id, replyMarkup = c.makeKbh(True, selective = True)))
+        vida = bds.menosVida(chat_id)
+        if vida == True: #Se acabou as vidas
+            keyboard = c.makeKb(c.getKb(chat_id, 'main')[0], resize_keyboard = True, one_time_keyboard = True)
+            rpl.append(c.toDict(chat_id, l.gameover_msg, replyMarkup = keyboard))
+        elif vida == 2: #Se resta somente uma vida
+            rpl.append(c.toDict(chat_id, l.umavida_msg))
+            rpl.append(nextRound(chat_id))
         else:
-             'essa letra foi chutada'
-    else:
-        'nao é sua vez'            '''
+            rpl.append(nextRound(chat_id))
+    return rpl
 
 def nextRound(chat_id):
     l = c.getLanguage(chat_id)
@@ -31,7 +40,7 @@ def nextRound(chat_id):
     players = bds.getPlayers(chat_id)
     aRound = bds.getRound(chat_id)
     keyboard = c.makeKb(c.getKb(chat_id, 'main')[0], resize_keyboard = True, one_time_keyboard = True, selective = True)
-    return c.toDict(chat_id, (l.prox_round_msg+players[1][aRound]), replyTo = players[2][aRound], replyMarkup = keyboard)
+    return c.toDict(chat_id, (bds.getMascara(chat_id)+'\n'+l.prox_round_msg+players[1][aRound]), replyTo = players[2][aRound], replyMarkup = keyboard)
 
 def arriscarPalavra1(chat_id, u_id, message_id):
     l = c.getLanguage(chat_id)

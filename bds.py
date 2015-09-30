@@ -242,7 +242,7 @@ def setCP(chat_id, categoria, palavra):
             mascara = mascara+'*'
     g.mascara = mascara
     g.put()
-    return
+    return mascara
 
 def checkPalavra(chat_id, text):
     g = ndb.Key(Game, chat_id).get()
@@ -256,18 +256,9 @@ def getPalavra(chat_id):
     g = ndb.Key(Game, chat_id).get()
     return g.palavra
 
-'''def getMascara(chat_id, letra):
+def getMascara(chat_id):
     g = ndb.Key(Game, chat_id).get()
-    mascara = ''
-    for i in range(len(g.palavra)):
-        if g.palavra[i] == letra:
-            if g.mascara[i] == '*':
-                mascara = mascara+letra
-            else:
-                mascara = mascara+g.mascara[i]
-    g.mascara = mascara
-    g.put()
-    return mascara'''
+    return g.mascara.encode('utf-8')
 
 def checkUid(chat_id, u_id):
     g = ndb.Key(Game, chat_id).get()
@@ -305,7 +296,14 @@ def setVidas(chat_id):
 def menosVida(chat_id):
     g = ndb.Key(Game, chat_id).get()
     g.vidas -= 1
+    if g.vidas <= 0:
+        delGame(chat_id)
+        return True
+    if g.vidas == 1:
+        g.put()
+        return 2
     g.put()
+    return False
 
 def getVidas(chat_id):
     g = ndb.Key(Game, chat_id).get()
@@ -321,10 +319,30 @@ def getLetras(chat_id):
     ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
     ['Z', 'X', 'C', 'V', 'B', 'N', 'M']]
     for i in range(len(g.letras)):
-        for i in range(len(letras)):
-            if g.letras[i] in letras[i]:
-                letras[i].remove(g.letras[i])
+        for j in range(len(letras)):
+            if g.letras[i].upper() in letras[j]:
+                letras[j].remove(g.letras[i].upper())
     return letras
+
+def checkLetra(chat_id, letra):
+    g = ndb.Key(Game, chat_id).get()
+    if not (letra in g.letras):
+        if letra.lower() in g.palavra.lower():
+            nMascara = ''
+            for i in range(len(g.palavra)):
+                if g.palavra[i].lower() == letra:
+                    nMascara = nMascara+letra
+                else:
+                    nMascara = nMascara+g.mascara[i]
+            g.mascara = nMascara
+            g.letras.append(letra)
+            g.put()
+            return True
+        g.letras.append(letra)
+        g.put()
+        return False
+    g.put()
+    return 2
 
 def delGame(chat_id):
     g = ndb.Key(Game, chat_id).get()
