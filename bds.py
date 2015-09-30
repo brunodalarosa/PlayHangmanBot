@@ -16,7 +16,9 @@ def checkChat(chat_id):
     if not (chat_id in c.chats):
         e = Enabled(id = chat_id)
         s = Settings(id = chat_id)
+        r = Rank(id = chat_id)
         c.chats.append(chat_id)
+        r.put()
         e.put()
         s.put()
         c.put()
@@ -85,6 +87,61 @@ def setWaiting(chat_id, waiting):
     s.waiting = waiting
     s.put()
     return
+
+class User(ndb.Model):
+    u_id = ndb.StringProperty()
+    u_name = ndb.StringProperty()
+    u_score = ndb.IntegerProperty()
+
+class Rank(ndb.Model):
+    players = ndb.StructuredProperty(User, repeated = True)
+
+def addPlayerRank(chat_id, u_id, u_name):
+    r = ndb.Key(Rank, chat_id).get()
+    for i in range(len(r.players)):
+        if u_id == r.players[i].u_id:
+            return False
+    user = User(u_id = u_id, u_name = u_name, u_score = 0)
+    r.players.append(user)
+    r.put()
+    return True
+
+def updateRank(chat_id):
+    r = ndb.Key(Rank, chat_id).get()
+    matriz = []
+    vet = []
+    for i in range(0, (len(r.rank)), 2):
+        aux = []
+        aux.append(r.rank[i])
+        aux.append(int(r.rank[i+1]))
+        matriz.append(aux)
+        i = i+1
+    matriz = sorted(matriz, key=itemgetter(1), reverse=True)
+    for i in range(len(matriz)):
+        vet.append(matriz[i][0])
+        vet.append(str(matriz[i][1]))
+    r.rank = vet
+    r.put()
+
+def getRank(chat_id):
+    r = ndb.Key(Rank, chat_id).get()
+    if len(r.players) != 0:
+        rank = sorted(r.players, key = lambda players: players.u_score, reverse = True)
+        nomes = []
+        scores = []
+        for i in range(len(rank)):
+            nomes.append(rank[i].u_name.encode('utf-8'))
+            scores.append(rank[i].u_score)
+    return [nomes, scores]
+
+def addScore(chat_id, u_id, score):
+    r = ndb.Key(Rank, chat_id).get()
+    for i in range(len(r.players)):
+        if r.players[i].u_id == u_id:
+            r.players[i].u_score += score
+    r.put()
+    return
+
 
 #Contém todos os dados de cada jogo
 class Game(ndb.Model):
@@ -157,6 +214,7 @@ def getInGame(chat_id):
 def addPlayer(chat_id, u_id, u_name, message_id):
     g = ndb.Key(Game, chat_id).get()
     if not (u_id in g.u_ids):
+        addPlayerRank(chat_id, u_id, u_name)
         g.u_ids.append(u_id)
         g.u_names.append(u_name)
         g.message_ids.append(message_id)
@@ -244,10 +302,11 @@ def setCP(chat_id, categoria, palavra):
     g.put()
     return mascara
 
-def checkPalavra(chat_id, text):
+def checkPalavra(chat_id, u_id, text):
     g = ndb.Key(Game, chat_id).get()
     if g:
         if text == g.palavra.encode('utf-8').lower():
+            addScore(chat_id, u_id, (len(text)*2))
             g.key.delete()
             return True
     return False
@@ -324,17 +383,20 @@ def getLetras(chat_id):
                 letras[j].remove(g.letras[i].upper())
     return letras
 
-def checkLetra(chat_id, letra):
+def checkLetra(chat_id, u_id, letra):
     g = ndb.Key(Game, chat_id).get()
     if not (letra in g.letras):
         if letra.lower() in g.palavra.lower():
             nMascara = ''
+            score = 0
             for i in range(len(g.palavra)):
                 if g.palavra[i].lower() == letra:
                     nMascara = nMascara+letra
+                    score += 1
                 else:
                     nMascara = nMascara+g.mascara[i]
             g.mascara = nMascara
+            addScore(chat_id, u_id, (score*2))
             g.letras.append(letra)
             g.put()
             return True
