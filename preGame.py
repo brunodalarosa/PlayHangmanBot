@@ -16,14 +16,14 @@ def sair(chat_id, u_id, u_name, message_id):
     aux = bds.rmPlayer(chat_id, u_id, message_id)
     l = c.getLanguage(chat_id)
     if aux == False:
-        kb = c.makeKb(c.getKb(chat_id, 'main')[0], resize_keyboard = True, one_time_keyboard = True)
+        kb = c.makeKb(c.getKb(chat_id, 'main')[0], resize_keyboard = True)
         return [c.toDict(chat_id, l.sem_jogador_msg, replyMarkup = kb)]
     elif aux == 'setAdm':
         rpl = []
         pl = bds.getPlayers(chat_id)
-        kb = c.makeKb(c.getKb(chat_id,'main')[0], resize_keyboard = True, one_time_keyboard = True, selective = True)
+        kb = c.makeKb(c.getKb(chat_id,'main')[0], resize_keyboard = True, selective = True)
         rpl.append(c.toDict(chat_id, l.playerQuitMsg(u_name), replyTo = message_id, replyMarkup = kb))
-        kb = c.makeKb(c.getKb(chat_id,'main')[1], resize_keyboard = True, one_time_keyboard = True, selective = True)
+        kb = c.makeKb(c.getKb(chat_id,'main')[1], resize_keyboard = True, selective = True)
         rpl.append(c.toDict(chat_id, l.novoAdmMsg(pl[1][0]), replyTo = pl[2][0], replyMarkup = kb))
         return rpl
     elif aux == True:
@@ -49,7 +49,7 @@ def fecharJogo(chat_id, u_id, message_id):
         ordem = ''
         for i in range(len(u_names)):
             ordem = ordem+u_names[i]+'\n'
-        kb = c.makeKb(c.getKb(chat_id, 'main')[0], resize_keyboard = True, one_time_keyboard = True, selective = True)
+        kb = c.makeKb(c.getKb(chat_id, 'main')[0], resize_keyboard = True, selective = True)
         rpl.append(c.toDict(chat_id, l.close_game_msg, replyMarkup = c.makeKbh(True)))
         rpl.append(c.toDict(chat_id, ordem, replyTo = message_ids[0], replyMarkup = kb))
         rpl.append(c.toDict(chat_id, l.categoria_msg+categoria))
@@ -62,6 +62,6 @@ def cancelarJogo(chat_id, u_id):
     l = c.getLanguage(chat_id)
     if bds.checkAdm(chat_id, u_id):
         bds.delGame(chat_id)
-        keyboard = c.makeKb(c.getKb(chat_id, 'main')[0], resize_keyboard = True, one_time_keyboard = True)
+        keyboard = c.makeKb(c.getKb(chat_id, 'main')[0], resize_keyboard = True)
         return [c.toDict(chat_id, l.cancelar_jogo_msg, replyMarkup = keyboard)]
     return [c.toDict(chat_id, l.cantdo_msg)]

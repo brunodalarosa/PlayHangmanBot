@@ -82,19 +82,19 @@ def start(chat_id, message_id):
     kb = getKb(chat_id, 'main')
     if (len(kb) != 1):
         adm = bds.getAdm(chat_id)
-        keyboard = makeKb(kb[0], resize_keyboard = True, one_time_keyboard = True)
+        keyboard = makeKb(kb[0], resize_keyboard = True)
         rpl.append(toDict(chat_id, l.iniciar_msg, replyMarkup = keyboard))
-        keyboard = makeKb(kb[1], resize_keyboard = True, one_time_keyboard = True, selective = True)
+        keyboard = makeKb(kb[1], resize_keyboard = True, selective = True)
         rpl.append(toDict(chat_id, l.start_msg, replyTo = adm[2], replyMarkup = keyboard))
     else:
-        keyboard = makeKb(kb[0], resize_keyboard = True, one_time_keyboard = True)
+        keyboard = makeKb(kb[0], resize_keyboard = True)
         rpl.append(toDict(chat_id, l.start_msg, replyMarkup = keyboard))
     return rpl
 
 def stop(chat_id):
     l = getLanguage(chat_id)
     bds.setEnabled(chat_id, False)
-    keyboard = makeKb(getKb(chat_id, 'main')[0], resize_keyboard = True, one_time_keyboard = True)
+    keyboard = makeKb(getKb(chat_id, 'main')[0], resize_keyboard = True)
     return [toDict(chat_id, l.stop_msg, replyMarkup = keyboard)]
 
 def ajuda(chat_id):
@@ -110,19 +110,23 @@ def ajuda(chat_id):
 
 def rank(chat_id):
     l = getLanguage(chat_id)
-    return [toDict(chat_id, 'Sem rank')]
+    rank = bds.getRank(chat_id)
+    ranking = l.ranking_msg+'\n'
+    for i in range(len(rank[0])):
+        ranking = ranking+rank[0][i]+' - '+str(rank[1][i])+'\n'
+    return [toDict(chat_id, ranking)]
 
 def kb(chat_id, u_id, message_id):
     l = getLanguage(chat_id)
     kb = getKb(chat_id, 'main')
-    keyboard = makeKb(kb[0], resize_keyboard = True, one_time_keyboard = True, selective = True)
+    keyboard = makeKb(kb[0], resize_keyboard = True, selective = True)
     if (bds.getInGame(chat_id)) or (not bds.getPreGame(chat_id)):
         i = 0
     elif bds.getPreGame(chat_id):
         i = 0
         if bds.checkAdm(chat_id, u_id):
             i = 1
-    keyboard = makeKb(kb[i], resize_keyboard = True, one_time_keyboard = True, selective = True)
+    keyboard = makeKb(kb[i], resize_keyboard = True, selective = True)
     return [toDict(chat_id, l.teclado_msg, replyTo = message_id, replyMarkup = keyboard)]
 
 
@@ -131,9 +135,9 @@ def novojogo(chat_id, u_id, u_name, message_id):
     rpl = []
     bds.setPreGame(chat_id, True, u_id = u_id, u_name = u_name, message_id = message_id)
     kb = getKb(chat_id, 'main')
-    keyboard = makeKb(kb[0], resize_keyboard = True, one_time_keyboard = True)
+    keyboard = makeKb(kb[0], resize_keyboard = True)
     rpl.append(toDict(chat_id, l.inicial_msg, replyMarkup = keyboard))
-    keyboard = makeKb(kb[1], resize_keyboard = True, one_time_keyboard = True, selective = True)
+    keyboard = makeKb(kb[1], resize_keyboard = True, selective = True)
     rpl.append(toDict(chat_id, l.inicialMsg(u_name), replyTo = message_id, replyMarkup = keyboard))
     return rpl
 
@@ -164,13 +168,13 @@ def voltar(chat_id, msg, message_id, u_id, esp = None):
             else:
                 i = 1
     if not esp:
-        keyboard = makeKb(kb[i], resize_keyboard = True, selective = True, one_time_keyboard = True)
+        keyboard = makeKb(kb[i], resize_keyboard = True, selective = True)
         rpl.append(toDict(chat_id, msg, replyTo = message_id, replyMarkup = keyboard))
     else:
-        keyboard = makeKb(kb[0], resize_keyboard = True, one_time_keyboard = True)
+        keyboard = makeKb(kb[0], resize_keyboard = True)
         rpl.append(toDict(chat_id, msg, replyMarkup = keyboard))
         if len(kb) != 1:
-            keyboard = makeKb(kb[1], resize_keyboard = True, selective = True, one_time_keyboard = True)
+            keyboard = makeKb(kb[1], resize_keyboard = True, selective = True)
             rpl.append(toDict(chat_id, msg, replyTo = message_id, replyMarkup = keyboard))
     return rpl
 
@@ -178,16 +182,16 @@ def config(chat_id, message_id):
     l = getLanguage(chat_id)
     language_kb = [['Português(BR)', 'English(US)'], [l.ajuda], [l.voltar]]
     bds.setWaiting(chat_id, True)
-    keyboard = makeKb(language_kb, resize_keyboard = True, selective = True, one_time_keyboard = True)
+    keyboard = makeKb(language_kb, resize_keyboard = True, selective = True)
     return [toDict(chat_id, l.linguas, replyTo = message_id, replyMarkup = keyboard)]
 
 def comandos(chat_id, message_id, u_id):
     l = getLanguage(chat_id)
     kb = getKb(chat_id, 'cmd')
     if not (bds.getInGame(chat_id) and bds.checkAdm(chat_id, u_id)):
-        keyboard = makeKb(kb[0], resize_keyboard = True, selective = True, one_time_keyboard = True)
+        keyboard = makeKb(kb[0], resize_keyboard = True, selective = True)
     else:
-        keyboard = makeKb(kb[1], resize_keyboard = True, selective = True, one_time_keyboard = True)
+        keyboard = makeKb(kb[1], resize_keyboard = True, selective = True)
     return [toDict(chat_id, l.comandos_msg, replyTo = message_id, replyMarkup = keyboard)]
 
 def changeLanguage(chat_id, lingua, message_id, u_id):

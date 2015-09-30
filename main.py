@@ -132,6 +132,8 @@ class WebhookHandler(webapp2.RequestHandler):
         ab = bds.getArriscarBlock(chat_id)
         rpl = [c.toDict(chat_id, 'comando não reconhecido')]
         text = '/start' if text == l.ligar.lower() else text #Tratamento para o caso do /start
+        text = l.ajuda.lower() if text.startswith('/help') else text
+        text = l.desligar.lower() if text.startswith('/stop') else text
         if text.startswith('@ccuem_bot'):
             text = text[11:]
 
