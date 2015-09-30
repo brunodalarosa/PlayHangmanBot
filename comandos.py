@@ -7,6 +7,7 @@
 #Standard imports
 import json
 import bds
+from emoji import *
 
 #Lê as configurações
 def getLanguage(chat_id):
@@ -63,7 +64,7 @@ def getKb(chat_id, k):
         elif bds.getPreGame(chat_id):
             kb.append([[l.ajuda, l.rank], [l.config, l.voltar], [l.desligar]])
     elif k == 'config':
-        kb.append([['Português(BR)', 'English(US)'], [l.ajuda], [l.voltar]])
+        kb.append([['Português(BR)' + emoji_br, 'English(US)' + emoji_usa], [l.ajuda], [l.voltar]])
     elif k == 'fora':
         kb.append([[l.esta_fora]])
     return kb

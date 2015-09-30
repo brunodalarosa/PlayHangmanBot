@@ -40,7 +40,7 @@ def nextRound(chat_id):
     players = bds.getPlayers(chat_id)
     aRound = bds.getRound(chat_id)
     keyboard = c.makeKb(c.getKb(chat_id, 'main')[0], resize_keyboard = True, one_time_keyboard = True, selective = True)
-    return c.toDict(chat_id, (bds.getMascara(chat_id)+'\n'+l.prox_round_msg+players[1][aRound]), replyTo = players[2][aRound], replyMarkup = keyboard)
+    return c.toDict(chat_id, (bds.getMascara(chat_id)+'\n'+l.nextPlayer(players[1][aRound]), replyTo = players[2][aRound], replyMarkup = keyboard)
 
 def arriscarPalavra1(chat_id, u_id, message_id):
     l = c.getLanguage(chat_id)
@@ -52,18 +52,18 @@ def arriscarPalavra2(chat_id, u_id, message_id, text):
     bds.setArriscarBlock(chat_id, False)
     if bds.checkPalavra(chat_id, text):
         keyboard = c.makeKb(c.getKb(chat_id, 'main')[0], resize_keyboard = True, one_time_keyboard = True)
-        return [c.toDict(chat_id, l.venceu_msg, replyMarkup = keyboard)]
+        return [c.toDict(chat_id, l.venceu(u_name), replyMarkup = keyboard)]
     else:
         rm = bds.rmPlayer(chat_id, u_id, message_id)
         if rm == True:
             rpl = []
-            rpl.append(c.toDict(chat_id, l.perdeu_msg, replyTo = message_id, replyMarkup = c.makeKbh(True, selective = True)))
+            rpl.append(c.toDict(chat_id, l.perdeu(u_name), replyTo = message_id, replyMarkup = c.makeKbh(True, selective = True)))
             rpl.append(nextRound(chat_id))
             return rpl
         elif rm == 'setAdm':
             rpl = []
             adm = bds.getAdm(chat_id)
-            rpl.append(c.toDict(chat_id, l.perdeu_msg, replyTo = message_id, replyMarkup = c.makeKbh(True, selective = True)))
+            rpl.append(c.toDict(chat_id, l.perdeu(u_name), replyTo = message_id, replyMarkup = c.makeKbh(True, selective = True)))
             rpl.append(c.toDict(chat_id, l.novoAdmMsg(adm[1])))
             rpl.append(nextRound(chat_id))
             return rpl
