@@ -7,7 +7,7 @@
 #Standard imports
 import json
 import bds
-from emoji import *
+from emojis import *
 
 #Lê as configurações
 def getLanguage(chat_id):
@@ -39,7 +39,7 @@ def makeKb(kb, resize_keyboard = None, one_time_keyboard = None, selective = Non
     selective = selective if selective else False
     return json.dumps({'keyboard':kb, 'resize_keyboard':resize_keyboard, 'one_time_keyboard':one_time_keyboard, 'selective':selective})
 
-def getKb(chat_id, k):
+def getKb(chat_id, k, u_id = None):
     l = getLanguage(chat_id)
     kb = []
     if k == 'main':
@@ -51,8 +51,11 @@ def getKb(chat_id, k):
                     letras = bds.getLetras(chat_id)
                     kb.append([letras[0], letras[1], letras[2], [l.arriscar], [l.comandos]])
             elif bds.getPreGame(chat_id):
-                kb.append([[l.entrar, l.sair], [l.comandos]])
-                kb.append([[l.entrar, l.sair], [l.cancelar_jogo, l.fechar_jogo], [l.comandos]])
+                if u_id in bds.getPlayers[0]:
+                    kb.append([[l.sair], [l.comandos]])
+                else:
+                    kb.append([[l.entrar], [l.comandos]])
+                kb.append([[l.cancelar_jogo, l.fechar_jogo], [l.comandos]])
             else:
                 kb.append([[l.novojogo], [l.ajuda, l.rank], [l.config], [l.desligar]])
         else:
@@ -79,7 +82,7 @@ def start(chat_id, message_id):
     bds.setEnabled(chat_id, True)
     bds.checkChat(chat_id)
     l = getLanguage(chat_id)
-    kb = getKb(chat_id, 'main')
+    kb = getKb(chat_id, 'main', u_id = u_id)
     if (len(kb) != 1):
         adm = bds.getAdm(chat_id)
         keyboard = makeKb(kb[0], resize_keyboard = True)
@@ -118,7 +121,7 @@ def rank(chat_id):
 
 def kb(chat_id, u_id, message_id):
     l = getLanguage(chat_id)
-    kb = getKb(chat_id, 'main')
+    kb = getKb(chat_id, 'main', u_id = u_id)
     keyboard = makeKb(kb[0], resize_keyboard = True, selective = True)
     if (bds.getInGame(chat_id)) or (not bds.getPreGame(chat_id)):
         i = 0
@@ -161,7 +164,7 @@ def voltar(chat_id, msg, message_id, u_id, esp = None):
     else:
         if bds.getArriscarBlock(chat_id):
             bds.setArriscarBlock(chat_id, False)
-        kb = getKb(chat_id, 'main')
+        kb = getKb(chat_id, 'main', u_id = u_id)
         if len(kb) != 1:
             if not bds.checkAdm(chat_id, u_id):
                 i = 0
@@ -180,7 +183,7 @@ def voltar(chat_id, msg, message_id, u_id, esp = None):
 
 def config(chat_id, message_id):
     l = getLanguage(chat_id)
-    language_kb = [['Português(BR)', 'English(US)'], [l.ajuda], [l.voltar]]
+    language_kb = getKb(chat_id, 'config')
     bds.setWaiting(chat_id, True)
     keyboard = makeKb(language_kb, resize_keyboard = True, selective = True)
     return [toDict(chat_id, l.linguas, replyTo = message_id, replyMarkup = keyboard)]

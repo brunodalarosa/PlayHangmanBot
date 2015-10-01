@@ -6,8 +6,7 @@ from emojis import *
 
 #palavras
 palavras = [
-                ['Coisas', 'Vassoura', 'Panela', 'Cadeira', 'Chão'],
-                ['Jogos', 'League of Legends', 'Defence of the Ancient', 'Tree of savior', 'Spore']
+                ['Palavras com acento','Cristão','País','Médico','Solução']
             ]
 
 #Botões dos Keyboards

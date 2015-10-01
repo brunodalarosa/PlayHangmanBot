@@ -161,7 +161,7 @@ class WebhookHandler(webapp2.RequestHandler):
                     check = bds.checkUid(chat_id, u_id)
                     if check == True:
                         if bds.getArriscarBlock(chat_id):
-                            rpl = g.arriscarPalavra2(chat_id, u_id, message_id, text)
+                            rpl = g.arriscarPalavra2(chat_id, u_id, u_name, message_id, text)
                         elif l.cancelar_jogo.lower() in text:
                             rpl = g.cancelarJogo(chat_id, u_id)
                         elif l.arriscar.lower() in text:

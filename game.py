@@ -41,17 +41,17 @@ def nextRound(chat_id):
     aRound = bds.getRound(chat_id)
     vidas = str(bds.getVidas(chat_id))
     keyboard = c.makeKb(c.getKb(chat_id, 'main')[0], resize_keyboard = True, selective = True)
-    return c.toDict(chat_id, (bds.getMascara(chat_id)+'\n'+l.vidas_msg+vidas+'\n'+l.nextPlayer(players[1][aRound]), replyTo = players[2][aRound], replyMarkup = keyboard)
+    return c.toDict(chat_id, (bds.getMascara(chat_id)+'\n'+l.vidas_msg+vidas+'\n'+l.nextPlayer(players[1][aRound])), replyTo = players[2][aRound], replyMarkup = keyboard)
 
 def arriscarPalavra1(chat_id, u_id, message_id):
     l = c.getLanguage(chat_id)
     bds.setArriscarBlock(chat_id, True)
     return [c.toDict(chat_id, l.arriscar_msg, replyTo = message_id, replyMarkup = c.makeFr(True, selective = True))]
 
-def arriscarPalavra2(chat_id, u_id, message_id, text):
+def arriscarPalavra2(chat_id, u_id, u_name, message_id, text):
     l = c.getLanguage(chat_id)
     bds.setArriscarBlock(chat_id, False)
-    if bds.checkPalavra(chat_id, text):
+    if bds.checkPalavra(chat_id, u_id, text):
         keyboard = c.makeKb(c.getKb(chat_id, 'main')[0], resize_keyboard = True)
         return [c.toDict(chat_id, l.venceu(u_name), replyMarkup = keyboard)]
     else:
@@ -70,4 +70,4 @@ def arriscarPalavra2(chat_id, u_id, message_id, text):
             return rpl
         else:
             keyboard = c.makeKb(c.getKb(chat_id, 'main')[0], resize_keyboard = True)
-            return [c.toDict(chat_id, l.perdeu_msg, replyMarkup = keyboard)]
+            return [c.toDict(chat_id, l.perdeu(u_name), replyMarkup = keyboard)]

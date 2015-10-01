@@ -291,14 +291,17 @@ def getAdm(chat_id):
 def setCP(chat_id, categoria, palavra):
     g = ndb.Key(Game, chat_id).get()
     g.categoria = categoria
-    g.palavra = palavra
+    print palavra
+    g.palavra = palavra.decode('utf-8')
     mascara = ''
-    for i in range(len(palavra)):
+    for i in range(len(g.palavra)):
         if palavra[i] == ' ':
             mascara = mascara+' '
         else:
             mascara = mascara+'*'
     g.mascara = mascara
+    print mascara
+    print g.mascara
     g.put()
     return mascara
 
@@ -383,15 +386,30 @@ def getLetras(chat_id):
                 letras[j].remove(g.letras[i].upper())
     return letras
 
-def checkLetra(chat_id, u_id, letra):
+def checkLetra(chat_id, u_id, letra): #Ve claramente que é pura gambiarra!
     g = ndb.Key(Game, chat_id).get()
+    chs = ['á','ã','â','é','ê','í','ó','õ','ô','ú','ç'] #Lista de caracteres especiais suportados no momento, NÃO ADICIONAR PALAVRAS COM CARACTERES NÃO SUPORTADOS!
+    for i in range(len(chs)):
+        chs[i] = chs[i].decode('utf-8')
+    ch = ['a','a','a','e','e','i','o','o','o','u','c'] #Acompanha o chs para funcionar. Gambiarra.
+    nPalavra = g.palavra.lower()
+    aux = [None] * len(nPalavra)
+    for i in range(len(nPalavra)):
+        if nPalavra[i] in chs:
+            idc = chs.index(g.palavra[i])
+            idx = g.palavra.index(chs[idc])
+            aux[i] = chs[idc]
+            nPalavra = nPalavra[:idx] + ch[idc] + nPalavra[idx+1:] #Reconstrói a palavra sem caracteres especiais
+            print nPalavra.encode('utf-8')
     if not (letra in g.letras):
-        if letra.lower() in g.palavra.lower():
+        if letra.lower() in nPalavra.lower():
             nMascara = ''
             score = 0
-            for i in range(len(g.palavra)):
-                if g.palavra[i].lower() == letra:
-                    nMascara = nMascara+letra
+            for i in range(len(nPalavra)):
+                if nPalavra[i].lower() == letra:
+                    if aux[i]: #Se existem caracteres especiais
+                        letra = aux[i]
+                    nMascara = nMascara+letra #substitui a letra na posição
                     score += 1
                 else:
                     nMascara = nMascara+g.mascara[i]

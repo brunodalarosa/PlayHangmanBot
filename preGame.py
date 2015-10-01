@@ -21,7 +21,7 @@ def sair(chat_id, u_id, u_name, message_id):
     elif aux == 'setAdm':
         rpl = []
         pl = bds.getPlayers(chat_id)
-        kb = c.makeKb(c.getKb(chat_id,'main')[0], resize_keyboard = True, selective = True)
+        kb = c.makeKb(c.getKb(chat_id,'main', u_id = u_id)[0], resize_keyboard = True, selective = True)
         rpl.append(c.toDict(chat_id, l.playerQuitMsg(u_name), replyTo = message_id, replyMarkup = kb))
         kb = c.makeKb(c.getKb(chat_id,'main')[1], resize_keyboard = True, selective = True)
         rpl.append(c.toDict(chat_id, l.novoAdmMsg(pl[1][0]), replyTo = pl[2][0], replyMarkup = kb))
