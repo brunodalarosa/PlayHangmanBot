@@ -21,3 +21,6 @@ libraries:
   version: "2.5.2"
 - name: PIL
   version: latest
+
+#application teste: ccuembot
+#application real: PlayHangmanBot
