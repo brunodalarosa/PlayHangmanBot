@@ -62,20 +62,12 @@ class WebhookHandler(webapp2.RequestHandler):
         self.response.write(json.dumps(body))
 
         #Função que verifica se o forca_bot foi excluido ou se ele existe no BD
-        def verifyBot(left_chat_participant = None, new_chat_participant = None, group_chat_created = None):
+        def verifyBot(left_chat_participant = None):
             if left_chat_participant:
                 first_name = left_chat_participant['first_name'].encode('utf-8')
-                if first_name == 'ccuemBot':
+                if first_name == '@hangerbot':
                     bds.delChat(chat_id)
                     return
-            if new_chat_participant:
-                first_name = new_chat_participant['first_name'].encode('utf-8')
-                if first_name == 'ccuemBot':
-                    bds.checkChat(chat_id)
-                    return
-            if group_chat_created:
-                bds.checkChat(chat_id)
-                return
             return
 
         #Dados que recebemos do telegram
@@ -95,12 +87,9 @@ class WebhookHandler(webapp2.RequestHandler):
         u_name = user_id.get('first_name').encode('utf-8')
 
         #'Chama' a verificação
-        if new_chat_participant:
-            verifyBot(new_chat_participant = new_chat_participant)
         if left_chat_participant:
             verifyBot(left_chat_participant = left_chat_participant)
-        if group_chat_created:
-            verifyBot(group_chat_created = True)
+
         if not text:
             logging.info('no text')
             return
@@ -118,31 +107,51 @@ class WebhookHandler(webapp2.RequestHandler):
         #Lê as configurações
         def getLanguage(chat_id):
             s = bds.getSettings(chat_id) #Classe settings
-            if s.language == 'ptBR':
-                import ptBR as l
-                return l
-            elif s.language == 'enUS':
-                import enUS as l
-                return l
-            return
+            if s:
+                if s.language == 'ptBR':
+                    import ptBR as l
+                    return l
+                elif s.language == 'enUS':
+                    import enUS as l
+                    return l
+            else:
+                bds.checkChat(chat_id)
+                s = bds.getSettings(chat_id) #Classe settings
+                if s.language == 'ptBR':
+                    import ptBR as l
+                    return l
+                elif s.language == 'enUS':
+                    import enUS as l
+                    return l
+                return
+
 
         #Aqui começa a lógica principal
-        s = bds.getSettings(chat_id)
         l = getLanguage(chat_id)
+        s = bds.getSettings(chat_id)
         ab = bds.getArriscarBlock(chat_id)
+        first = bds.getFirstWelcome(chat_id)[0]
         rpl = [c.toDict(chat_id, 'comando não reconhecido')]
         text = '/start' if text == l.ligar.lower() else text #Tratamento para o caso do /start
         text = l.ajuda.lower() if text.startswith('/help') else text
         text = l.desligar.lower() if text.startswith('/stop') else text
         if text.startswith('@ccuem_bot'):
             text = text[11:]
-
-        if not s.waiting:
+        if u_id in creators:
+                if text.startswith('/delchatadmin'):
+                    chat = text[14:]
+                    if len(chat) > 0:
+                        if bds.delChat(chat):
+                            rpl = [c.toDict(chat_id, 'Chat '+chat+'deletado')]
+                        rpl = [c.toDict(chat_id, 'Chat '+chat+' não existe')]
+        if (not s.waiting) or first:
             #comandos que indiferem do estado atual de jogo
             if '/start' in text:
-                rpl = c.start(chat_id, message_id)
+                rpl = c.start(chat_id, u_id, message_id, first)
             elif bds.getEnabled(chat_id):
-                if l.desligar.lower() in text:
+                if '/kb' in text:
+                    rpl = c.kb(chat_id, u_id, message_id)
+                elif l.desligar.lower() in text:
                     rpl = c.stop(chat_id)
                 elif l.ajuda.lower() in text:
                     rpl = c.ajuda(chat_id)
@@ -154,16 +163,14 @@ class WebhookHandler(webapp2.RequestHandler):
                     rpl = c.voltar(chat_id, l.voltar_msg, message_id, u_id)
                 elif l.comandos.lower() in text:
                     rpl = c.comandos(chat_id, message_id, u_id)
-                elif '/kb' in text:
-                    rpl = c.kb(chat_id, u_id, message_id)
                 #comandos inGame
                 elif bds.getInGame(chat_id):
                     check = bds.checkUid(chat_id, u_id)
-                    if check == True:
+                    if l.cancelar_jogo.lower() in text:
+                        rpl = g.cancelarJogo(chat_id, u_id)
+                    elif check == True:
                         if bds.getArriscarBlock(chat_id):
                             rpl = g.arriscarPalavra2(chat_id, u_id, u_name, message_id, text)
-                        elif l.cancelar_jogo.lower() in text:
-                            rpl = g.cancelarJogo(chat_id, u_id)
                         elif l.arriscar.lower() in text:
                             rpl = g.arriscarPalavra1(chat_id, u_id, message_id)
                         elif (len(text) == 1) or (text.startswith('@ccuemBot')):
@@ -189,10 +196,6 @@ class WebhookHandler(webapp2.RequestHandler):
                 elif (not bds.getPreGame(chat_id)) and (not bds.getInGame(chat_id)):
                     if l.novojogo.lower() in text:
                         rpl = c.novojogo(chat_id, u_id, u_name, message_id)
-
-                #elif '/adm' in text:
-                    #if u_id in creators:
-                        #reply(toDict(chat_id, 'vai mandar msg pra todos'))
         else:
             if l.ajuda.lower() in text:
                 rpl = c.ajuda(chat_id)

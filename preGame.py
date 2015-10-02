@@ -4,12 +4,14 @@
 #Importa os comandos
 import comandos as c
 import bds
+import game as g
 from random import randint, shuffle
 
 def entrar(chat_id, u_id, u_name, message_id):
     l = c.getLanguage(chat_id)
     if bds.addPlayer(chat_id, u_id, u_name, message_id):
-        return [c.toDict(chat_id, l.entrarMsg(u_name))]
+        kb = c.makeKb(c.getKb(chat_id,'main',u_id = u_id)[0], selective = True, resize_keyboard = True)
+        return [c.toDict(chat_id, l.entrarMsg(u_name), replyTo = message_id, replyMarkup = kb )]
     return [c.toDict(chat_id, l.esta_dentro_msg)]
 
 def sair(chat_id, u_id, u_name, message_id):
@@ -21,13 +23,14 @@ def sair(chat_id, u_id, u_name, message_id):
     elif aux == 'setAdm':
         rpl = []
         pl = bds.getPlayers(chat_id)
-        kb = c.makeKb(c.getKb(chat_id,'main', u_id = u_id)[0], resize_keyboard = True, selective = True)
+        kb = c.makeKb(c.getKb(chat_id, 'main', u_id = u_id)[0], selective = True, resize_keyboard = True)
         rpl.append(c.toDict(chat_id, l.playerQuitMsg(u_name), replyTo = message_id, replyMarkup = kb))
         kb = c.makeKb(c.getKb(chat_id,'main')[1], resize_keyboard = True, selective = True)
         rpl.append(c.toDict(chat_id, l.novoAdmMsg(pl[1][0]), replyTo = pl[2][0], replyMarkup = kb))
         return rpl
     elif aux == True:
-        return [c.toDict(chat_id, l.playerQuitMsg(u_name))]
+        kb = c.makeKb(c.getKb(chat_id,'main',u_id = u_id)[0], selective = True, resize_keyboard = True)
+        return [c.toDict(chat_id, l.playerQuitMsg(u_name), replyTo = message_id, replyMarkup = kb)]
     elif aux == 'semPlayer':
         return [c.toDict(chat_id, l.is_out_msg)]
 
@@ -54,7 +57,7 @@ def fecharJogo(chat_id, u_id, message_id):
         rpl.append(c.toDict(chat_id, ordem, replyTo = message_ids[0], replyMarkup = kb))
         rpl.append(c.toDict(chat_id, l.categoria_msg+categoria))
         rpl.append(c.toDict(chat_id, l.palavra_msg+mascara))
-        rpl.append(c.toDict(chat_id, l.vidas_msg+str(vidas)))
+        rpl.append(c.toDict(chat_id, l.vidas_msg+g.vidasEmoji(chat_id)))
         return rpl
     return [c.toDict(chat_id, l.cantdo_msg)]
 

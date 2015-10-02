@@ -1,7 +1,7 @@
 #-*- coding: utf-8 -*-
 #Linguagem Emoji, contém os códigos referentes aos Emojis
 
-emoji_heart = ' ' + (u'\u2764\ufe0f').encode('utf-8')
+emoji_heart = (u'\u2764\ufe0f').encode('utf-8')
 emoji_heartb = ' ' + (u'\U0001f494').encode('utf-8')
 emoji_confetti = ' ' + (u'\U0001f389').encode('utf-8')
 emoji_claps = ' ' + (u'\U0001f44f\U0001f3fc').encode('utf-8')

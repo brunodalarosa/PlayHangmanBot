@@ -3,6 +3,7 @@
 
 import comandos as c
 import bds
+from emojis import *
 
 def cancelarJogo(chat_id, u_id):
     l = c.getLanguage(chat_id)
@@ -34,14 +35,19 @@ def chutarLetra(chat_id, u_id, message_id, letra):
             rpl.append(nextRound(chat_id))
     return rpl
 
+def vidasEmoji(chat_id):
+    vidas = bds.getVidas(chat_id)
+    return emoji_heart*vidas
+
 def nextRound(chat_id):
     l = c.getLanguage(chat_id)
     bds.roundPlus(chat_id)
     players = bds.getPlayers(chat_id)
     aRound = bds.getRound(chat_id)
-    vidas = str(bds.getVidas(chat_id))
+    vidas = vidasEmoji(chat_id)
+    categoria = bds.getCategoria(chat_id)
     keyboard = c.makeKb(c.getKb(chat_id, 'main')[0], resize_keyboard = True, selective = True)
-    return c.toDict(chat_id, (bds.getMascara(chat_id)+'\n'+l.vidas_msg+vidas+'\n'+l.nextPlayer(players[1][aRound])), replyTo = players[2][aRound], replyMarkup = keyboard)
+    return c.toDict(chat_id, (categoria+'\n\n'+bds.getMascara(chat_id)+'\n\n'+l.vidas_msg+vidas+'\n'+l.nextPlayer(players[1][aRound])), replyTo = players[2][aRound], replyMarkup = keyboard)
 
 def arriscarPalavra1(chat_id, u_id, message_id):
     l = c.getLanguage(chat_id)
@@ -70,4 +76,4 @@ def arriscarPalavra2(chat_id, u_id, u_name, message_id, text):
             return rpl
         else:
             keyboard = c.makeKb(c.getKb(chat_id, 'main')[0], resize_keyboard = True)
-            return [c.toDict(chat_id, l.perdeu(u_name), replyMarkup = keyboard)]
+            return [c.toDict(chat_id, l.perdeu(u_name)+'\n'+ l.gameover_msg, replyMarkup = keyboard)]

@@ -6,9 +6,24 @@ from emojis import *
 
 #palavras
 palavras = [
-                ['Things', 'Chair', 'Fire', 'Oven', 'Strings'],
-                ['Games', 'League of Legends', 'Defence of the Ancient', 'Tree of savior', 'Spore']
-            ]
+['Fruits', 'Açai Berries', 'Apple', 'Apricot', 'Avocado', 'Banana', 'Bilberry', 'Blackberry', 'Blackcurrant', 'Blueberry', 'Boysenberry', 'Cantaloupe',
+'Currant', 'Cherry', 'Cherimoya', 'Cloudberry', 'Coconut', 'Cranberry', 'Damson','Dragonfruit', 'Durian', 'Elderberry', 'Feijoa', 'Fig', 'Goji berry', 'Gooseberry', 'Grape', 'Raisin', 'Grapefruit', 'Guava',
+'Huckleberry','Jabouticaba','Jackfruit','Jambul','Jujube','Juniper berry','Kiwi fruit','Kiwano','Kumquat','Lemon','Lime','Loquat','Lychee','Mango','Marion berry','Melon','Cantaloupe','Honeydew','Watermelon','Miracle fruit','Mulberry',
+'Nectarine','Olive','Orange','Blood Orange','Clementine','Mandarine','Tangerine','Papaya','Passionfruit','Peach','Pear','Persimmon','Physalis','Pineapple','Pumpkin','Pomegranate','Pomelo','Purple Mangosteen','Quince','Raspberry','Salmon berry',
+'Black raspberry','Rambutan','Redcurrant','Salal berry','Satsuma','Star fruit','Strawberry','Squash','Tamarillo','Tomato','Ugli fruit'],
+['Countries', 'Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola', 'Argentina', 'Armenia', 'Aruba', 'Australia', 'Austria', 'Azerbaijan',
+'Bangladesh', 'Barbados', 'Belarus', 'Belgium', 'Belize', 'Bhutan', 'Bolivia', 'Bosnia and Herzegovina', 'Botswana', 'Brazil', 'Brunei', 'Bulgaria', 'Burundi',
+'Cambodia', 'Cameroon', 'Canada', 'Chile', 'China', 'Colombia', 'Republic of the Congo', 'Costa Rica', 'Croatia', 'Cuba', 'CzechRepublic',
+'Denmark', 'Djibouti', 'Dominica', 'Dominican Republic', 'Ecuador', 'Egypt', 'El Salvador', 'Equatorial Guinea', 'Estonia', 'Ethiopia', 'Fiji', 'Finland', 'France', 'Georgia', 'Germany', 'Ghana', 'Greece', 'Guatemala', 'Guinea', 'Guyana',
+'Iceland', 'India', 'Indonesia', 'Iran', 'Iraq', 'Ireland', 'Israel', 'Italy', 'Portugal', 'Paraguay', 'New Zealand', 'Mexico', 'Madagascar', 'Peru', 'Russia', 'Serbia', 'Spain', 'Sudan', 'Sweden'],
+['Professions', 'Accountant', 'Actor', 'Architect', 'Astronomer', 'Author', 'Baker', 'Bricklayer', 'Butcher', 'Carpenter', 'Cook', 'Cleaner', 'Dentist', 'Designer', 'Doctor', 'Electrician', 'Engineer', 'Farmer', 'Fireman', 'Fisherman', 'Florist', 'Gardener', 'Hairdresser', 'Journalist', 'Judge', 'Lawyer', 'Lecturer', 'Librarian', 'Lifeguard', 'Mechanic', 'Model', 'Newsreader', 'Nurse', 'Optician', 'Painter', 'Pharmacist', 'Photographer', 'Pilot', 'Plumber', 'Politician', 'Policeman',
+ 'Postman', 'Receptionist', 'Scientist', 'Secretary', 'Shopassistant', 'Soldier', 'Tailor', 'Taxidriver', 'Teacher', 'Translator', 'Travelagent', 'Veterinary', 'Waiter'],
+['Hero or villain of DC or Marvel','batman','flash','wonder women','penguin','super man','grenn lantern','grenn goblin','spider man','thor','hulk','iron man','ant man','human torch','the thing','black window','green arrow','groot','rocket raccoon','magneto','wolverine','storm'],
+['Videogame or game','the legend of zelda','super mario','counter strike','nintendo wii','super nintendo','playstation','steam','defense of the ancients','league of legends','final fantasy','donkey kong','angry birds','fallout','bioshock','tetris','the elders scroll','minecraft','call of duty','battlefield','bomberman','sonic the hedgehog','just dance','nintendo','sony','sega','dreamcast'],
+['Important people (ex: President ou scientist)','albert einstein','barack obama','abraham lincoln','nikola tesla','carl sagan','larry page','steves jobs','mark zuckerberg','tim cook','charles chaplin','platao','aristoteles','dilma rousseff','luiz inacio lula da silva','fernando herinque cardoso','george washington','george walker bush','adolf hitler','shigeru miyamoto','Neil deGrasse Tyson'],
+['Titles or names (actor or character) relacioned to TV or cinema!', 'breaking bad', 'how i met your mother','sense8', 'american beauty','donnie Darko','home alone','the sixth sense','the shinning','titanic','everybody hates chris','the mad hatter','alice in the worderland','harry potter','adventure time','spongebob','Narcos','pineapple express','Pokémon','Yugioh','Hermione','Lord voldemort','Draco Malfoy','Katniss everdeen','hunger gamse','Mockingjay','cathing fire','exorcist','limitless','the hangover','Matrix','the lord of rings','The hobbit','Frodo Baggins','Sauron','Legolas','Gandalf','Albus Dumbledore','Star wars','Luke Skywalker','Chewbacca', 'Yoda'],
+['Pokémon 1st Gen','Bulbasaur', 'Ivysaur', 'Venusaur', 'Charmander', 'Charmeleon', 'Charizard', 'Squirtle', 'Wartortle', 'Blastoise', 'Caterpie', 'Metapod', 'Butterfree', 'Weedle', 'Kakuna', 'Beedrill', 'Pidgey', 'Pidgeotto', 'Pidgeot', 'Rattata', 'Raticate', 'Spearow', 'Fearow', 'Ekans', 'Arbok', 'Pikachu', 'Raichu', 'Sandshrew', 'Sandslash', 'Nidoran', 'Nidorina', 'Nidoqueen', 'Nidorino', 'Nidoking', 'Clefairy', 'Clefable', 'Vulpix', 'Ninetales', 'Jigglypuff', 'Wigglytuff', 'Zubat', 'Golbat', 'Oddish', 'Gloom', 'Vileplume', 'Paras', 'Parasect', 'Venonat', 'Venomoth', 'Diglett', 'Dugtrio', 'Meowth', 'Persian', 'Psyduck', 'Golduck', 'Mankey', 'Primeape', 'Growlithe', 'Arcanine', 'Poliwag', 'Poliwhirl', 'Poliwrath', 'Abra', 'Kadabra', 'Alakazam', 'Machop', 'Machoke', 'Machamp', 'Bellsprout', 'Weepinbell', 'Victreebel', 'Tentacool', 'Tentacruel', 'Geodude', 'Graveler', 'Golem', 'Ponyta', 'Rapidash', 'Slowpoke', 'Slowbro', 'Magnemite', 'Magneton', 'Doduo', 'Dodrio', 'Seel', 'Dewgong', 'Grimer', 'Muk', 'Shellder', 'Cloyster', 'Gastly', 'Haunter', 'Gengar', 'Onix', 'Drowzee', 'Hypno', 'Krabby', 'Kingler', 'Voltorb', 'Electrode', 'Exeggcute', 'Exeggutor', 'Cubone', 'Marowak', 'Hitmonlee', 'Hitmonchan', 'Lickitung', 'Koffing', 'Weezing', 'Rhyhorn', 'Rhydon', 'Chansey', 'Tangela', 'Kangaskhan', 'Horsea', 'Seadra', 'Goldeen', 'Seaking', 'Staryu', 'Starmie', 'Mr.', 'Mime', 'Scyther', 'Jynx', 'Electabuzz', 'Magmar', 'Pinsir', 'Tauros', 'Magikarp', 'Gyarados', 'Lapras', 'Ditto', 'Eevee', 'Vaporeon', 'Jolteon', 'Flareon', 'Porygon', 'Omanyte', 'Omastar', 'Kabuto', 'Kabutops', 'Aerodactyl', 'Snorlax', 'Articuno', 'Zapdos', 'Moltres', 'Dratini', 'Dragonair', 'Dragonite', 'Mewtwo', 'Mew']
+        ]
 
 #Botões dos Keyboards
 novojogo = 'New Game' + emoji_joystick
@@ -31,11 +46,12 @@ esta_fora = 'You are out of this game' + emoji_proibido
 linguas = emoji_planeta + 'Choose a language:'
 iniciar_msg = 'Loading...'
 mudar_lingua = 'Change successful' + emoji_thumbsUp
-start_msg = 'Hi, i am the Forca bot, the master of Hangman games! My duty is to organize and play Hangman games with you and your friends and ensure that we will have fun!\n Press the "new game" button and we shall begin!' + emoji_sorriso
+start_msg = 'Hi, i am the Hangman, master of Hangman games! My duty is to organize and play Hangman games with you and your friends and ensure that we will have fun!\n Press the "new game" button and we shall begin!' + emoji_sorriso
 is_enabled = 'Im already ready!'
 stop_msg = 'Turning off'
-start_help_msg = 'There is no game happening right now, press the button "new game" to start one or press "Rank" to see the ranking.\n You can also change the settings if you want to' + emoji_sorriso
-config_help_msg = 'Choose the language you want.\nObs.: The secrets words of the games depends on the selected language'
+about_msg = 'I am a Open Source project created by @bcesarg6 and @cristoferoswald! Im in constant development and you can help me grown up coding at github.com/bcesarg6/ccuem_bot'
+start_help_msg = 'There is no game happening right now, press the button "new game" to start one or press "Rank" to see the ranking.\n You can also change the settings if you want to' + emoji_sorriso + '\nRemember, if anytime you need a keyboard send me the command "/kb"'
+config_help_msg = 'Choose the language you want. The secret words of the game depends on the selected language\nDid not find your language? You can help my development by making your own translations :)\nRemember, if anytime you need a keyboard send me the command "/kb"'
 voltar_msg = 'Main menu'
 cantdo_msg = 'You cant do this'
 comandos_msg = 'Commands'
@@ -72,7 +88,7 @@ in_game_help_msg = 'Press the letter to guess them or press "Risk" if you think 
 arriscar_msg = 'So you think that you know what is the secret word? ' + emoji_zoando + ' Send me the word, but think wisely, if you fail you will be eliminated!' + emoji_lua
 round_errado_msg = 'It is not your time to play yet! Wait for your turn!' + emoji_lua
 acertou_letra_msg = 'Right letter!' + emoji_claps
-errou_letra_msg = 'Wrong letter' + emoji_triste
+errou_letra_msg = 'Wrong letter' + emoji_triste + emoji_heartb
 jachutada_msg = 'This letter has already been guessed' + emoji_surpreso
 umavida_msg = 'One life left! Discover the secret word or face your DEFEAT!' + emoji_lua
 gameover_msg = emoji_poop + ' GAME OVER LOSERS! ' + emoji_poop

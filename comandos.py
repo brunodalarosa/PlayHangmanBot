@@ -51,7 +51,7 @@ def getKb(chat_id, k, u_id = None):
                     letras = bds.getLetras(chat_id)
                     kb.append([letras[0], letras[1], letras[2], [l.arriscar], [l.comandos]])
             elif bds.getPreGame(chat_id):
-                if u_id in bds.getPlayers[0]:
+                if u_id in bds.getPlayers(chat_id)[0]:
                     kb.append([[l.sair], [l.comandos]])
                 else:
                     kb.append([[l.entrar], [l.comandos]])
@@ -70,29 +70,36 @@ def getKb(chat_id, k, u_id = None):
         kb.append([['Português(BR)' + emoji_br, 'English(US)' + emoji_usa], [l.ajuda], [l.voltar]])
     elif k == 'fora':
         kb.append([[l.esta_fora]])
+    elif k == 'first':
+        kb.append([['Português(BR)' + emoji_br, 'English(US)' + emoji_usa]])
     return kb
 
 
 #Funções dos comandos
-def start(chat_id, message_id):
-    l = getLanguage(chat_id)
-    rpl = []
-    if bds.getEnabled(chat_id):
-        return [toDict(chat_id, l.is_enabled)]
-    bds.setEnabled(chat_id, True)
-    bds.checkChat(chat_id)
-    l = getLanguage(chat_id)
-    kb = getKb(chat_id, 'main', u_id = u_id)
-    if (len(kb) != 1):
-        adm = bds.getAdm(chat_id)
-        keyboard = makeKb(kb[0], resize_keyboard = True)
-        rpl.append(toDict(chat_id, l.iniciar_msg, replyMarkup = keyboard))
-        keyboard = makeKb(kb[1], resize_keyboard = True, selective = True)
-        rpl.append(toDict(chat_id, l.start_msg, replyTo = adm[2], replyMarkup = keyboard))
-    else:
-        keyboard = makeKb(kb[0], resize_keyboard = True)
-        rpl.append(toDict(chat_id, l.start_msg, replyMarkup = keyboard))
-    return rpl
+def start(chat_id, u_id, message_id, first):
+    if not first:
+        l = getLanguage(chat_id)
+        rpl = []
+        if bds.getEnabled(chat_id):
+            return [toDict(chat_id, l.is_enabled)]
+        bds.setEnabled(chat_id, True)
+        bds.checkChat(chat_id)
+        l = getLanguage(chat_id)
+        kb = getKb(chat_id, 'main', u_id = u_id)
+        if (len(kb) != 1):
+            adm = bds.getAdm(chat_id)
+            keyboard = makeKb(kb[0], resize_keyboard = True)
+            rpl.append(toDict(chat_id, l.iniciar_msg, replyMarkup = keyboard))
+            keyboard = makeKb(kb[1], resize_keyboard = True, selective = True)
+            rpl.append(toDict(chat_id, l.start_msg, replyTo = adm[2], replyMarkup = keyboard))
+        else:
+            keyboard = makeKb(kb[0], resize_keyboard = True)
+            rpl.append(toDict(chat_id, l.start_msg, replyMarkup = keyboard))
+        return rpl
+    bds.setFirst(chat_id)
+    bds.setEnabled(chat_id,True)
+    kb = makeKb(getKb(chat_id, 'first')[0], resize_keyboard = True, selective = True)
+    return [toDict(chat_id, 'Im the xxxbot, please choose a language:', replyTo = message_id, replyMarkup = kb)]
 
 def stop(chat_id):
     l = getLanguage(chat_id)
@@ -183,9 +190,8 @@ def voltar(chat_id, msg, message_id, u_id, esp = None):
 
 def config(chat_id, message_id):
     l = getLanguage(chat_id)
-    language_kb = getKb(chat_id, 'config')
     bds.setWaiting(chat_id, True)
-    keyboard = makeKb(language_kb, resize_keyboard = True, selective = True)
+    keyboard = makeKb(getKb(chat_id, 'config')[0], resize_keyboard = True, selective = True)
     return [toDict(chat_id, l.linguas, replyTo = message_id, replyMarkup = keyboard)]
 
 def comandos(chat_id, message_id, u_id):
@@ -202,10 +208,16 @@ def changeLanguage(chat_id, lingua, message_id, u_id):
     if 'português(br)' in lingua:
         bds.setLanguage(chat_id, 'ptBR')
         l = getLanguage(chat_id)
+        if bds.getFirstWelcome(chat_id)[1]:
+            bds.setWelcome(chat_id)
+            return voltar(chat_id, l.start_msg, message_id, u_id, esp = True)
         return voltar(chat_id, l.mudar_lingua, message_id, u_id, esp = True)
     elif 'english(us)' in lingua:
         bds.setLanguage(chat_id, 'enUS')
         l = getLanguage(chat_id)
+        if bds.getFirstWelcome(chat_id)[1]:
+            bds.setWelcome(chat_id)
+            return voltar(chat_id, l.start_msg, message_id, u_id, esp = True)
         return voltar(chat_id, l.mudar_lingua, message_id, u_id, esp = True)
     elif l.voltar.lower() in lingua:
         return voltar(chat_id, l.voltar_msg, message_id, u_id)

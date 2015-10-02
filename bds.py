@@ -34,17 +34,19 @@ def delChat(chat_id):
     if chat_id in c.chats:
         c.chats.remove(chat_id)
         c.put()
-        e.key.delete()
-        s.key.delete()
+        if e:
+            e.key.delete()
+        if s:
+            s.key.delete()
         if g:
             g.key.delete()
-        return
-    return
+        return True
+    return False
 
 #Retorna a lista de todos os chats ativos no momento
 def getChats():
     c = ndb.Key(Chats, 'chats').get()
-    return c.chats
+    return c.chatsgetFirst()
 
 #Guarda o estado de "ligado" e "deligado" de cada chat
 class Enabled(ndb.Model):
@@ -64,17 +66,31 @@ def getEnabled(chat_id):
 
 #Guarda as configurações de cada chat
 class Settings(ndb.Model):
-    language = ndb.StringProperty(indexed = False, default = 'ptBR')
-    waiting = ndb.BooleanProperty(indexed = False, default = False)
+    language = ndb.StringProperty(indexed = False, default = 'enUS')
+    waiting = ndb.BooleanProperty(indexed = False, default = True)
+    first = ndb.BooleanProperty(indexed = False, default = True)
+    welcome = ndb.BooleanProperty(indexed = False, default = True)
+
+def getFirstWelcome(chat_id):
+    s = ndb.Key(Settings, chat_id).get()
+    return [s.first,s.welcome]
+
+def setWelcome(chat_id):
+    s = ndb.Key(Settings, chat_id).get()
+    s.welcome = False
+    s.put()
+
+def setFirst(chat_id):
+    s = ndb.Key(Settings, chat_id).get()
+    s.first = False
+    s.put()
 
 #Retorna a "classe" configurações do chat (caso não existir cria uma nova entidade)
 def getSettings(chat_id):
     s = ndb.Key(Settings, chat_id).get()
     if s:
         return s
-    checkChat(chat_id)
-    s = ndb.Key(Settings, chat_id).get()
-    return s
+    return False
 
 def setLanguage(chat_id, language):
     s = ndb.Key(Settings, chat_id).get()
@@ -224,6 +240,8 @@ def addPlayer(chat_id, u_id, u_name, message_id):
 
 def rmPlayer(chat_id, u_id, message_id):
     g = ndb.Key(Game, chat_id).get()
+    if not g.pre_game:
+        g.rnd = g.rnd-1 if g.rnd != 0 else len(g.u_ids)-1
     if u_id in g.u_ids:
         ind = g.u_ids.index(u_id)
         g.u_ids.pop(ind)
@@ -291,7 +309,6 @@ def getAdm(chat_id):
 def setCP(chat_id, categoria, palavra):
     g = ndb.Key(Game, chat_id).get()
     g.categoria = categoria
-    print palavra
     g.palavra = palavra.decode('utf-8')
     mascara = ''
     for i in range(len(g.palavra)):
@@ -300,10 +317,13 @@ def setCP(chat_id, categoria, palavra):
         else:
             mascara = mascara+'*'
     g.mascara = mascara
-    print mascara
-    print g.mascara
     g.put()
     return mascara
+
+def getCategoria(chat_id):
+    g = ndb.Key(Game, chat_id).get()
+    return g.categoria.encode('utf-8')
+
 
 def checkPalavra(chat_id, u_id, text):
     g = ndb.Key(Game, chat_id).get()
@@ -400,7 +420,6 @@ def checkLetra(chat_id, u_id, letra): #Ve claramente que é pura gambiarra!
             idx = g.palavra.index(chs[idc])
             aux[i] = chs[idc]
             nPalavra = nPalavra[:idx] + ch[idc] + nPalavra[idx+1:] #Reconstrói a palavra sem caracteres especiais
-            print nPalavra.encode('utf-8')
     if not (letra in g.letras):
         if letra.lower() in nPalavra.lower():
             nMascara = ''
