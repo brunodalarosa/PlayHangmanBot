@@ -34,7 +34,7 @@ def sair(chat_id, u_id, u_name, message_id):
     elif aux == 'semPlayer':
         return [c.toDict(chat_id, l.is_out_msg)]
 
-def fecharJogo(chat_id, u_id, message_id):
+def fecharJogo(chat_id, u_id, message_id, date):
     l = c.getLanguage(chat_id)
     rpl = []
     if bds.checkAdm(chat_id, u_id):
@@ -46,7 +46,7 @@ def fecharJogo(chat_id, u_id, message_id):
         categoria = l.palavras[categoria][0]
         mascara = bds.setCP(chat_id, categoria, palavra)
         vidas = bds.setVidas(chat_id)
-        bds.shufflePlayers(chat_id)
+        bds.shufflePlayers(chat_id, date)
         u_names = bds.getPlayers(chat_id)[1]
         message_ids = bds.getPlayers(chat_id)[2]
         ordem = ''

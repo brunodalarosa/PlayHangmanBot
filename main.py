@@ -80,13 +80,16 @@ class WebhookHandler(webapp2.RequestHandler):
         new_chat_participant = message.get('new_chat_participant')
         group_chat_created = message.get('group_chat_created')
         date = message.get('date')
-        text = message.get('text').encode('utf-8').lower() if message.get('text') else message.get('text')
+        text = message.get('text').encode('utf-8') if message.get('text') else message.get('text')
+        if not text.startswith('/admin'):
+            text = text.lower()
         fr = message.get('from')
         chat = message['chat']
         chat_id = str(chat['id'])
         user_id = message['from']
         u_id = str(user_id.get('id')).encode('utf-8')
         u_name = user_id.get('first_name').encode('utf-8')
+        bds.checkChat(chat_id)
 
         #'Chama' a verificação
         if left_chat_participant:
@@ -139,14 +142,33 @@ class WebhookHandler(webapp2.RequestHandler):
         text = l.desligar.lower() if text.startswith('/stop') else text
         if text.startswith('@ccuem_bot'):
             text = text[11:]
-        if u_id in creators:
-                if text.startswith('/delchatadmin'):
-                    chat = text[14:]
-                    if len(chat) > 0:
-                        if bds.delChat(chat):
-                            rpl = [c.toDict(chat_id, 'Chat '+chat+'deletado')]
+        if (u_id in creators) and (text.startswith('/admin')): #Funções especiais dos criadores do bot
+            if text.startswith('/admindelchat'):
+                chat = text[14:]
+                if len(chat) > 0:
+                    if bds.delChat(chat):
+                        rpl = [c.toDict(chat_id, 'Chat '+chat+' deletado')]
+                    else:
                         rpl = [c.toDict(chat_id, 'Chat '+chat+' não existe')]
-        if (not s.waiting) or first:
+            elif text.startswith('/adminshout'):
+                text = text[12:]
+                chats = bds.getChats()
+                rpl = []
+                for i in range(len(chats)):
+                    rpl.append(c.toDict(chats[i], text))
+            elif text.startswith('/admingetdadoschat'):
+                chat = text[19:]
+                if len(chat) > 0:
+                    dados = bds.getDadosChat(chat)
+                    jogos_dia = bds.getJogosDia(chat_id, date)
+                    if dados:
+                        rpl = [c.toDict(chat_id, 'Chat '+str(chat)+'\nJogos: '+ str(dados.games)+'\nJogadores: '+str(len(dados.players))+'\nJogos por dia: '+str(jogos_dia)+'\nTop player: '+str(dados.topPlayer.u_name)+'\n\tScore: '+str(dados.topPlayer.u_score)+'\n\tId: '+str(dados.topPlayer.u_id))]
+                    else:
+                        rpl = [c.toDict(chat_id, 'Chat '+chat+' não existe')]
+            elif text.startswith('/admingetdadosglobais'):
+                resp = bds.getDadosGlobais(date)
+                rpl = [c.toDict(chat_id, 'Chats: '+str(resp[0])+'\nJogadores: '+str(resp[1])+'\nJogos por dia: '+str(resp[2])+'\nJogos: '+str(resp[3]))]
+        elif (not s.waiting) or first:
             #comandos que indiferem do estado atual de jogo
             if '/start' in text:
                 rpl = c.start(chat_id, u_id, message_id, first)
@@ -161,6 +183,8 @@ class WebhookHandler(webapp2.RequestHandler):
                     rpl = c.rank(chat_id)
                 elif l.config.lower() in text:
                     rpl = c.config(chat_id, message_id)
+                elif l.sobre.lower() in text:
+                    rpl = c.sobre(chat_id)
                 elif l.voltar.lower() in text:
                     rpl = c.voltar(chat_id, l.voltar_msg, message_id, u_id)
                 elif l.comandos.lower() in text:
@@ -191,7 +215,7 @@ class WebhookHandler(webapp2.RequestHandler):
                     elif l.sair.lower() in text:
                         rpl = p.sair(chat_id, u_id, u_name, message_id)
                     elif l.fechar_jogo.lower() in text:
-                        rpl = p.fecharJogo(chat_id, u_id, message_id)
+                        rpl = p.fecharJogo(chat_id, u_id, message_id, date)
                     elif l.cancelar_jogo.lower() in text:
                         rpl = p.cancelarJogo(chat_id, u_id)
                 #se preGame e inGame == False (vide flowchart)
@@ -208,7 +232,11 @@ class WebhookHandler(webapp2.RequestHandler):
                 reply(rpl[i])
         except Exception, e:
             print e
-            reply(c.toDict(chat_id, 'erro'))
+            try:
+                reply(c.toDict(chat_id, l.error_msg))
+            except Exception, e:
+                print e
+                reply(c.toDict(chat_id, 'Fatal error, contact @cristoferoswald or @bcesarg6.'))
 
 app = webapp2.WSGIApplication([
     ('/me', MeHandler),

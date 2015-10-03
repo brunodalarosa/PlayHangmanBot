@@ -19,6 +19,7 @@ emoji_poop = ' ' + (u'\U0001f4a9').encode('utf-8')
 emoji_point = ' ' + (u'\U0001f448\U0001f3fb').encode('utf-8')
 emoji_bug = ' ' + (u'\U0001f41e').encode('utf-8')
 
+
 #Emojis botões
 emoji_joystick = ' ' + (u'\U0001f3ae').encode('utf-8')
 emoji_light = ' ' + (u'\U0001f4a1').encode('utf-8')
@@ -32,3 +33,4 @@ emoji_proibido = ' ' + (u'\U0001f6ab').encode('utf-8')
 emoji_planeta = ' ' + (u'\U0001f30e').encode('utf-8')
 emoji_br = ' ' + (u'\U0001f1e7\U0001f1f7').encode('utf-8')
 emoji_usa = ' ' + (u'\U0001f1fa\U0001f1f8').encode('utf-8')
+emoji_livro = ' ' + (u'\U0001f4d6').encode('utf-8')

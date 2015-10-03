@@ -5,20 +5,28 @@
 from google.appengine.ext import ndb
 
 from random import shuffle
+import datetime
 
 #Entidade que guarda os IDs dos chats
 class Chats(ndb.Model):
     chats = ndb.StringProperty(repeated = True)
 
+
 #Checa a exisencia do chat, se não existir cria todas as entidades necessárias
 def checkChat(chat_id):
     c = ndb.Key(Chats, 'chats').get()
+    if not c:
+        c = Chats(id = 'chats')
+        c.put()
+        checkChat(chat_id)
     if not (chat_id in c.chats):
         e = Enabled(id = chat_id)
         s = Settings(id = chat_id)
         r = Rank(id = chat_id)
+        d = Dados(id = chat_id)
         c.chats.append(chat_id)
         r.put()
+        d.put()
         e.put()
         s.put()
         c.put()
@@ -31,22 +39,28 @@ def delChat(chat_id):
     e = ndb.Key(Enabled, chat_id).get()
     s = ndb.Key(Settings, chat_id).get()
     g = ndb.Key(Game, chat_id).get()
+    d = ndb.Key(Dados, chat_id).get()
+    r = ndb.Key(Rank, chat_id).get()
     if chat_id in c.chats:
         c.chats.remove(chat_id)
         c.put()
+        if d:
+            d.key.delete()
         if e:
             e.key.delete()
         if s:
             s.key.delete()
         if g:
             g.key.delete()
+        if r:
+            r.key.delete()
         return True
     return False
 
 #Retorna a lista de todos os chats ativos no momento
 def getChats():
     c = ndb.Key(Chats, 'chats').get()
-    return c.chatsgetFirst()
+    return c.chats
 
 #Guarda o estado de "ligado" e "deligado" de cada chat
 class Enabled(ndb.Model):
@@ -114,33 +128,20 @@ class Rank(ndb.Model):
 
 def addPlayerRank(chat_id, u_id, u_name):
     r = ndb.Key(Rank, chat_id).get()
+    d = ndb.Key(Dados, chat_id).get()
     for i in range(len(r.players)):
         if u_id == r.players[i].u_id:
             return False
     user = User(u_id = u_id, u_name = u_name, u_score = 0)
+    d.players.append(user)
     r.players.append(user)
     r.put()
+    d.put()
     return True
-
-def updateRank(chat_id):
-    r = ndb.Key(Rank, chat_id).get()
-    matriz = []
-    vet = []
-    for i in range(0, (len(r.rank)), 2):
-        aux = []
-        aux.append(r.rank[i])
-        aux.append(int(r.rank[i+1]))
-        matriz.append(aux)
-        i = i+1
-    matriz = sorted(matriz, key=itemgetter(1), reverse=True)
-    for i in range(len(matriz)):
-        vet.append(matriz[i][0])
-        vet.append(str(matriz[i][1]))
-    r.rank = vet
-    r.put()
 
 def getRank(chat_id):
     r = ndb.Key(Rank, chat_id).get()
+    d = ndb.Key(Dados, chat_id).get()
     if len(r.players) != 0:
         rank = sorted(r.players, key = lambda players: players.u_score, reverse = True)
         nomes = []
@@ -148,6 +149,10 @@ def getRank(chat_id):
         for i in range(len(rank)):
             nomes.append(rank[i].u_name.encode('utf-8'))
             scores.append(rank[i].u_score)
+        r.players = rank
+        d.topPlayer = rank[0]
+        r.put()
+        d.put()
     return [nomes, scores]
 
 def addScore(chat_id, u_id, score):
@@ -158,6 +163,50 @@ def addScore(chat_id, u_id, score):
     r.put()
     return
 
+class Dados(ndb.Model):
+    games = ndb.IntegerProperty(indexed = False, default = 0)
+    topPlayer = ndb.StructuredProperty(User, default = User(u_id = 'noID', u_name ='noPlayer', u_score = 0))
+    players = ndb.StructuredProperty(User, repeated = True)
+    last_att = ndb.IntegerProperty(indexed = False, default = 0)
+    jogos_dia = ndb.IntegerProperty(indexed = False, default = 0)
+
+def getDadosChat(chat_id):
+    d = ndb.Key(Dados, chat_id).get()
+    if d:
+        return d
+    return False
+
+def getDadosGlobais(date):
+    c = ndb.Key(Chats, 'chats').get()
+    n_games = 0
+    n_players = 0
+    jogos_dia = 0
+    u_ids = []
+    for i in range (len(c.chats)):
+        d = ndb.Key(Dados, c.chats[i]).get()
+        jogos_dia = jogos_dia + getJogosDia(c.chats[i], date)
+        n_games += d.games
+        for i in range(len(d.players)):
+            if not (d.players[i].u_id in u_ids):
+                u_ids.append(d.players[i].u_id)
+    n_players = len(u_ids)
+    return [len(c.chats), n_players, jogos_dia, n_games]
+
+def setJogosDia(chat_id, date):
+    d = ndb.Key(Dados, chat_id).get()
+    date = int(datetime.datetime.fromtimestamp(date).strftime('%d'))
+    if date != d.last_att:
+        d.last_att = date
+        d.jogos_dia = 0
+    d.jogos_dia += 1
+    d.put()
+
+def getJogosDia(chat_id, date):
+    d = ndb.Key(Dados, chat_id).get()
+    date = int(datetime.datetime.fromtimestamp(date).strftime('%d'))
+    if date != d.last_att:
+        return 0
+    return d.jogos_dia
 
 #Contém todos os dados de cada jogo
 class Game(ndb.Model):
@@ -269,8 +318,9 @@ def getPlayers(chat_id):
     return [u_ids, u_names, message_ids]
 
 #Randomizar a lista de participantes
-def shufflePlayers(chat_id):
+def shufflePlayers(chat_id, date):
     g = ndb.Key(Game, chat_id).get()
+    setJogosDia(chat_id, date)
     u_names_shuf = []
     u_ids_shuf = []
     message_ids_shuf = []
@@ -308,6 +358,8 @@ def getAdm(chat_id):
 
 def setCP(chat_id, categoria, palavra):
     g = ndb.Key(Game, chat_id).get()
+    d = ndb.Key(Dados, chat_id).get()
+    d.games += 1
     g.categoria = categoria
     g.palavra = palavra.decode('utf-8')
     mascara = ''
@@ -318,6 +370,7 @@ def setCP(chat_id, categoria, palavra):
             mascara = mascara+'*'
     g.mascara = mascara
     g.put()
+    d.put()
     return mascara
 
 def getCategoria(chat_id):

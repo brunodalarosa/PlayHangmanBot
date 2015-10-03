@@ -25,6 +25,10 @@ palavras = [
 ['Pokémon 1st Gen','Bulbasaur', 'Ivysaur', 'Venusaur', 'Charmander', 'Charmeleon', 'Charizard', 'Squirtle', 'Wartortle', 'Blastoise', 'Caterpie', 'Metapod', 'Butterfree', 'Weedle', 'Kakuna', 'Beedrill', 'Pidgey', 'Pidgeotto', 'Pidgeot', 'Rattata', 'Raticate', 'Spearow', 'Fearow', 'Ekans', 'Arbok', 'Pikachu', 'Raichu', 'Sandshrew', 'Sandslash', 'Nidoran', 'Nidorina', 'Nidoqueen', 'Nidorino', 'Nidoking', 'Clefairy', 'Clefable', 'Vulpix', 'Ninetales', 'Jigglypuff', 'Wigglytuff', 'Zubat', 'Golbat', 'Oddish', 'Gloom', 'Vileplume', 'Paras', 'Parasect', 'Venonat', 'Venomoth', 'Diglett', 'Dugtrio', 'Meowth', 'Persian', 'Psyduck', 'Golduck', 'Mankey', 'Primeape', 'Growlithe', 'Arcanine', 'Poliwag', 'Poliwhirl', 'Poliwrath', 'Abra', 'Kadabra', 'Alakazam', 'Machop', 'Machoke', 'Machamp', 'Bellsprout', 'Weepinbell', 'Victreebel', 'Tentacool', 'Tentacruel', 'Geodude', 'Graveler', 'Golem', 'Ponyta', 'Rapidash', 'Slowpoke', 'Slowbro', 'Magnemite', 'Magneton', 'Doduo', 'Dodrio', 'Seel', 'Dewgong', 'Grimer', 'Muk', 'Shellder', 'Cloyster', 'Gastly', 'Haunter', 'Gengar', 'Onix', 'Drowzee', 'Hypno', 'Krabby', 'Kingler', 'Voltorb', 'Electrode', 'Exeggcute', 'Exeggutor', 'Cubone', 'Marowak', 'Hitmonlee', 'Hitmonchan', 'Lickitung', 'Koffing', 'Weezing', 'Rhyhorn', 'Rhydon', 'Chansey', 'Tangela', 'Kangaskhan', 'Horsea', 'Seadra', 'Goldeen', 'Seaking', 'Staryu', 'Starmie', 'Mr.', 'Mime', 'Scyther', 'Jynx', 'Electabuzz', 'Magmar', 'Pinsir', 'Tauros', 'Magikarp', 'Gyarados', 'Lapras', 'Ditto', 'Eevee', 'Vaporeon', 'Jolteon', 'Flareon', 'Porygon', 'Omanyte', 'Omastar', 'Kabuto', 'Kabutops', 'Aerodactyl', 'Snorlax', 'Articuno', 'Zapdos', 'Moltres', 'Dratini', 'Dragonair', 'Dragonite', 'Mewtwo', 'Mew']
         ]
 
+categorias = ''
+for i in range(len(palavras)):
+    categorias = categorias+palavras[i][0]+'\n'
+
 #Botões dos Keyboards
 novojogo = 'New Game' + emoji_joystick
 ajuda = 'Help' + emoji_light
@@ -41,6 +45,7 @@ fechar_jogo = 'Start Game' + emoji_foguete
 cancelar_jogo = 'Cancel game' + emoji_x
 arriscar = 'Risk!' + emoji_gritar
 esta_fora = 'You are out of this game' + emoji_proibido
+sobre = 'About' + emoji_livro
 
 #Respostas iniciais
 linguas = emoji_planeta + 'Choose a language:'
@@ -49,15 +54,16 @@ mudar_lingua = 'Change successful' + emoji_thumbsUp
 start_msg = 'Hi, i am the Hangman, master of Hangman games! My duty is to organize and play Hangman games with you and your friends and ensure that we will have fun!\n Press the "new game" button and we shall begin!' + emoji_sorriso
 is_enabled = 'Im already ready!'
 stop_msg = 'Turning off'
-about_msg = 'I am a Open Source project created by @bcesarg6 and @cristoferoswald! Im in constant development and you can help me grown up coding at github.com/bcesarg6/ccuem_bot'
-start_help_msg = 'There is no game happening right now, press the button "new game" to start one or press "Rank" to see the ranking.\n You can also change the settings if you want to' + emoji_sorriso + '\nRemember, if anytime you need a keyboard send me the command "/kb"'
-config_help_msg = 'Choose the language you want. The secret words of the game depends on the selected language\nDid not find your language? You can help my development by making your own translations :)\nRemember, if anytime you need a keyboard send me the command "/kb"'
+about_msg = 'I am a Open Source project created by @bcesarg6 and @cristoferoswald! Im in constant development and you can help me grown up coding at github.com/bcesarg6/PlayHangmanBot\nCategories:\n'+categorias+'Version 1.0:\n\t- First oficial launching version\n\nFuture updates:\n\t- Category and words about the games League of legends and Dota2\n\t- Kick player system\n\t- Word category selection\n\t- Global ranking\n\nFeel free to join the team!' + emoji_sorriso
+start_help_msg = 'There is no game happening right now, press the button "new game" to start one or press "Rank" to see the ranking.\n You can also change the settings if you want to' + emoji_sorriso + '\nRemember, if anytime you need a keyboard send me the command /kb'
+config_help_msg = 'Choose the language you want. The secret words of the game depends on the selected language\nDid not find your language? You can help my development by making your own translations! Press the About button for more information.\nRemember, if anytime you need a keyboard send me the command /kb'
 voltar_msg = 'Main menu'
 cantdo_msg = 'You cant do this'
 comandos_msg = 'Commands'
 ocupado_msg = 'I am busy right now, sorry' + emoji_triste
 teclado_msg = 'Keyboard'
 ranking_msg = emoji_coroa + ' RANKING ' + emoji_coroa
+error_msg = 'An error occurred please contact @cristoferoswald or @bcesarg6 and report it' + emoji_triste
 
 #respostas PreGame
 def inicialMsg(u_name):
@@ -84,7 +90,7 @@ def entrarMsg(u_name):
     return 'Ok '+u_name+', you will play in this game' + emoji_blink
 
 #repostas InGame
-in_game_help_msg = 'Press the letter to guess them or press "Risk" if you think that already know the secret word! If you want to see more options press the "Commands" button'
+in_game_help_msg = 'Press the letter to guess them or press "Risk" if you think that already know the secret word!\nRemember, if anytime you need a keyboard send me the command /kb'
 arriscar_msg = 'So you think that you know what is the secret word? ' + emoji_zoando + ' Send me the word, but think wisely, if you fail you will be eliminated!' + emoji_lua
 round_errado_msg = 'It is not your time to play yet! Wait for your turn!' + emoji_lua
 acertou_letra_msg = 'Right letter!' + emoji_claps

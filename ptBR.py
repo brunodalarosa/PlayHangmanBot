@@ -6,7 +6,7 @@ from emojis import *
 
 #palavras
 palavras = [
-                ['Animail ou espécie', 'macaco', 'elefante','zebra','papagaio','andorinha','golfinho','gorila','tubarao','lobo','ornitorrinco','cavalo','humano','lebre','coelho','periquito','pomba','dinossauro','macaco','borboleta','Baleia', 'Cachorro', 'Cobra', 'Crocodilo', 'Frango', 'Galinha', 'Gambá', 'Gato', 'Leão', 'Girafa', 'Ovelha', 'Polvo', 'Rinocerontes', 'Tartarugas', 'Touro', 'Ursos', 'Vaca','Lontra', 'Onça', 'Porco', 'Urubú', 'Camelo', 'Cascavel', 'Burro'],
+                ['Animal ou espécie', 'macaco', 'elefante','zebra','papagaio','andorinha','golfinho','gorila','tubarao','lobo','ornitorrinco','cavalo','humano','lebre','coelho','periquito','pomba','dinossauro','macaco','borboleta','Baleia', 'Cachorro', 'Cobra', 'Crocodilo', 'Frango', 'Galinha', 'Gambá', 'Gato', 'Leão', 'Girafa', 'Ovelha', 'Polvo', 'Rinocerontes', 'Tartarugas', 'Touro', 'Ursos', 'Vaca','Lontra', 'Onça', 'Porco', 'Urubú', 'Camelo', 'Cascavel', 'Burro'],
                 ['Fruta', 'Abacate', 'Amora', 'Ameixa', 'Acerola', 'Abacaxi', 'Açaí', 'Banana', 'Carambola', 'Caju', 'Cereja', 'Cacau', 'Caqui', 'Cupuaçu', 'Damasco', 'Figo', 'Framboesa', 'Graviola', 'Goiaba', 'Groselha', 'Guaraná', 'Jaca', 'Jabuticaba', 'Kiwi', 'Laranja', 'Limão', 'Melancia', 'Mamão', 'Melão', 'Maracujá', 'Manga', 'Maçã', 'Pera', 'Pêssego', 'Tangerina', 'Tomate', 'Tamarindo', 'Uva'],
                 ['Comidas salgados ou doces','Macarrão instantâneo','cachorro quente','lasanha','frango a passarinho','batata frita','ketchup','chocolate','strogonoff','arroz e feijão','batata doce','pizza','sushi','temaki','fondue de chocolate','bolo','kitkat','pirulito','algodão doce','Escondidinho de carne seca','Torta de limão','Panqueca','Feijoada'],
                 ['Profissão', 'advogado', 'professor', 'zelador','prostituta','médico','marceneiro','designer','desenvolvedor de jogos','dublador','escritor','cozinheiro','pedreiro','vendedor','gerente','caminhoneiro','taxista','pintor','mecânico','auxiliar','estagiário','carteiro','cirurgião','oftalmologista','analista de sistemas','empresário','piloto','bancário','jardineiro','fotógrafo','escrivão','juiz','delegado','soldado','sargento','xerife','engenheiro','mestre de obras','tradutor','farmacêutico','veterinário','costureiro','recepcionista','cientista','político','encanador','eletricista','massoterapeuta','garçom'],
@@ -19,7 +19,9 @@ palavras = [
                 ['País', 'brasil', 'estados Unidos', 'alemanha', 'japão', 'coréia do sul', 'áfrica do sul', 'holanda', 'argentina', 'espanha', 'chile', 'equador', 'canadá', 'singapura', 'índia', 'emirados árabes', 'itália', 'inglaterra', 'áustria', 'grécia', 'república Checa','austrália','madagáscar','rússia','china','méxico','colômbia','etiópia','bolívia'],
                 ['Pokémon 1st Gen','Bulbasaur', 'Ivysaur', 'Venusaur', 'Charmander', 'Charmeleon', 'Charizard', 'Squirtle', 'Wartortle', 'Blastoise', 'Caterpie', 'Metapod', 'Butterfree', 'Weedle', 'Kakuna', 'Beedrill', 'Pidgey', 'Pidgeotto', 'Pidgeot', 'Rattata', 'Raticate', 'Spearow', 'Fearow', 'Ekans', 'Arbok', 'Pikachu', 'Raichu', 'Sandshrew', 'Sandslash', 'Nidoran', 'Nidorina', 'Nidoqueen', 'Nidorino', 'Nidoking', 'Clefairy', 'Clefable', 'Vulpix', 'Ninetales', 'Jigglypuff', 'Wigglytuff', 'Zubat', 'Golbat', 'Oddish', 'Gloom', 'Vileplume', 'Paras', 'Parasect', 'Venonat', 'Venomoth', 'Diglett', 'Dugtrio', 'Meowth', 'Persian', 'Psyduck', 'Golduck', 'Mankey', 'Primeape', 'Growlithe', 'Arcanine', 'Poliwag', 'Poliwhirl', 'Poliwrath', 'Abra', 'Kadabra', 'Alakazam', 'Machop', 'Machoke', 'Machamp', 'Bellsprout', 'Weepinbell', 'Victreebel', 'Tentacool', 'Tentacruel', 'Geodude', 'Graveler', 'Golem', 'Ponyta', 'Rapidash', 'Slowpoke', 'Slowbro', 'Magnemite', 'Magneton', 'Doduo', 'Dodrio', 'Seel', 'Dewgong', 'Grimer', 'Muk', 'Shellder', 'Cloyster', 'Gastly', 'Haunter', 'Gengar', 'Onix', 'Drowzee', 'Hypno', 'Krabby', 'Kingler', 'Voltorb', 'Electrode', 'Exeggcute', 'Exeggutor', 'Cubone', 'Marowak', 'Hitmonlee', 'Hitmonchan', 'Lickitung', 'Koffing', 'Weezing', 'Rhyhorn', 'Rhydon', 'Chansey', 'Tangela', 'Kangaskhan', 'Horsea', 'Seadra', 'Goldeen', 'Seaking', 'Staryu', 'Starmie', 'Mr.', 'Mime', 'Scyther', 'Jynx', 'Electabuzz', 'Magmar', 'Pinsir', 'Tauros', 'Magikarp', 'Gyarados', 'Lapras', 'Ditto', 'Eevee', 'Vaporeon', 'Jolteon', 'Flareon', 'Porygon', 'Omanyte', 'Omastar', 'Kabuto', 'Kabutops', 'Aerodactyl', 'Snorlax', 'Articuno', 'Zapdos', 'Moltres', 'Dratini', 'Dragonair', 'Dragonite', 'Mewtwo', 'Mew'],
             ]
-
+categorias = ''
+for i in range(len(palavras)):
+    categorias = categorias+palavras[i][0]+'\n'
 #Botões dos Keyboards
 novojogo = 'Novo Jogo' + emoji_joystick
 ajuda = 'Ajuda' + emoji_light
@@ -36,6 +38,7 @@ fechar_jogo = 'Começar jogo' + emoji_foguete
 cancelar_jogo = 'Cancelar jogo' + emoji_x
 arriscar = 'Arriscar' + emoji_gritar
 esta_fora = 'Você está fora desse jogo' + emoji_proibido
+sobre = 'Sobre' + emoji_livro
 
 #Respostas iniciais
 linguas = emoji_planeta + 'Escolha a linguagem:'
@@ -43,16 +46,17 @@ iniciar_msg = 'Carregando...'
 mudar_lingua = 'Mudança feita com sucesso' + emoji_thumbsUp
 start_msg = 'Olá, eu sou o Hangman, mestre de jogos da forca! Meu dever é organizar e jogar jogos da forca e garantir que você se divirta!\nAperte no botão "novo jogo" para começarmos!' + emoji_sorriso
 is_enabled = 'Já estou ligado!'
-about_msg = 'Sou um projeto de código aberto criado pelo @bcesarg6 e @cristoferoswald! Estou em constante desenvolvimento e você pode me ajudar a crescer contribuindo em github.com/bcesarg6/ccuem_bot'
+about_msg = 'Sou um projeto de código aberto criado pelo @bcesarg6 e @cristoferoswald! Estou em constante desenvolvimento e você pode me ajudar a crescer contribuindo em https://github.com/bcesarg6/PlayHangmanBot\nCategorias:\n'+categorias+'Versão 1.0:\n\t- Versão de lançamento oficial\n\nAtualizações planejadas:\n\t- Recurso remover jogador da partda\n\t- Seleção de categoria desejada\n\t- Adicionar categorias especificas sobre os jogos League of legends e Dota2\n\t- Ranking global\n\nSinta-se a vontade para se juntar a equipe!' + emoji_sorriso
 stop_msg = 'Desligado'
 start_help_msg = 'Não há nenhum jogo em andamento, clique no botão "novo jogo" para começar um jogo ou veja o ranking no botão "Rank".\nVocê também pode alterar as configurações se desejar' + emoji_sorriso + '\nLembre-se se você precisar do telcado envie /kb'
-config_help_msg = 'Escolha a minha lingua. ATENÇÃO: As palavras do jogo dependem da língua escolhida\nNão encontrou sua lingua? Você pode ajudar no meu desenvolvimento adicionando uma tradução :)\nLembre-se se você precisar do telcado envie /kb'
+config_help_msg = 'Escolha a minha lingua. ATENÇÃO: As palavras do jogo dependem da língua escolhida\nNão encontrou sua lingua? Você pode ajudar no meu desenvolvimento adicionando uma tradução, clique em Sobre para mais informações\nLembre-se se você precisar do telcado envie /kb'
 voltar_msg = 'Menu inicial'
 cantdo_msg = 'Você não pode fazer isso'
 comandos_msg = 'Comandos'
 ocupado_msg = 'Estou ocupado agora, desculpe' + emoji_triste
 teclado_msg = 'Teclado'
 ranking_msg = emoji_coroa + ' RANKING ' + emoji_coroa
+error_msg = 'Um erro ocorreu, por favor entre em contato com @cristoferoswald ou @bcesarg6 e reporte o ocorrido' + emoji_triste
 
 #respostas PreGame
 def inicialMsg(u_name):
@@ -67,7 +71,7 @@ sem_jogador_msg = 'Todos os jogadores sairam, o jogo será cancelado' + emoji_su
 cancelar_jogo_msg = 'Jogo cancelado pelo administrador'
 is_out_msg = 'Você não participa desse jogo' + emoji_lua
 vidas_msg = 'Vidas: '
-pre_game_help_msg = 'Jogo em modo de entrada, clique em Entrar para participar\nADM: Clique em Fechar Jogo para começar o jogo com os participantes atuais'
+pre_game_help_msg = 'Jogo em modo de entrada, clique em Entrar para participar\nADM: Clique em "Começar jogo" para começar com os participantes atuais\nLembre-se se você precisar do telcado envie /kb '
 
 def novoAdmMsg(u_name):
     return 'Um novo administrador foi definido! '+u_name+' é o novo administrador.' + emoji_oculos
@@ -79,7 +83,7 @@ def entrarMsg(u_name):
     return 'Ok '+u_name+', você vai participar dessa rodada' + emoji_blink
 
 #repostas InGame
-in_game_help_msg = 'Clique nas letras para chuta-las ou em Arriscar se você acha que já descobriu a palavra secreta! se quiser mais opções clique em Comandos' + '\nLembre-se se você precisar do telcado envie /kb'
+in_game_help_msg = 'Clique nas letras para chuta-las ou em Arriscar se você acha que já descobriu a palavra secreta!' + '\nLembre-se se você precisar do telcado envie /kb'
 arriscar_msg = 'Então você acha que já descobriu qual é a palavra? ' + emoji_zoando + ' Me mande a palavra, mas pense bem, se você errar será eliminado!' + emoji_lua
 round_errado_msg = 'Não é a sua vez de jogar, espere a sua vez!' + emoji_lua
 acertou_letra_msg = 'Você acertou!' + emoji_claps
