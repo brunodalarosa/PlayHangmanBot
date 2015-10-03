@@ -102,7 +102,7 @@ def start(chat_id, u_id, message_id, first):
     kb = makeKb(getKb(chat_id, 'first')[0], resize_keyboard = True, selective = True)
     rpl = []
     rpl.append(toDict(chat_id, 'Im the PlayHangmanBot, please choose a language:', replyTo = message_id, replyMarkup = kb))
-    rpl.append(toDict('-27550731', 'Novo chat criado: '+chat_id))
+    rpl.append(toDict('-27626712', 'Novo chat criado: '+chat_id))
     return rpl
 
 def stop(chat_id):
@@ -130,8 +130,9 @@ def rank(chat_id):
     l = getLanguage(chat_id)
     rank = bds.getRank(chat_id)
     ranking = l.ranking_msg+'\n'
-    for i in range(len(rank[0])):
-        ranking = ranking+rank[0][i]+' - '+str(rank[1][i])+'\n'
+    if len(rank) > 0:
+        for i in range(len(rank[0])):
+            ranking = ranking+rank[0][i]+' - '+str(rank[1][i])+'\n'
     return [toDict(chat_id, ranking)]
 
 def kb(chat_id, u_id, message_id):

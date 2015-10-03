@@ -153,7 +153,8 @@ def getRank(chat_id):
         d.topPlayer = rank[0]
         r.put()
         d.put()
-    return [nomes, scores]
+        return [nomes, scores]
+    return []
 
 def addScore(chat_id, u_id, score):
     r = ndb.Key(Rank, chat_id).get()
@@ -167,7 +168,7 @@ class Dados(ndb.Model):
     games = ndb.IntegerProperty(indexed = False, default = 0)
     topPlayer = ndb.StructuredProperty(User, default = User(u_id = 'noID', u_name ='noPlayer', u_score = 0))
     players = ndb.StructuredProperty(User, repeated = True)
-    last_att = ndb.IntegerProperty(indexed = False, default = 0)
+    last_att = ndb.IntegerProperty(indexed = False, default = 1)
     jogos_dia = ndb.IntegerProperty(indexed = False, default = 0)
 
 def getDadosChat(chat_id):

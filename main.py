@@ -7,6 +7,7 @@ import logging
 import random
 import urllib
 import urllib2
+import time
 
 #app engine imports
 from google.appengine.api import urlfetch
@@ -22,13 +23,13 @@ import game as g
 #TOKEN TESTE: 105794279:AAEZQkZX-HnXHMBG8NHkc0CWyDjvpOnHM-U
 #TOKEN BOT REAL: 130009542:AAHNWctXOV5L_BPf7TTnFTgmQi6O7zD89Rw ***SÓ MUDAR DEPOIS DE TESTAR TODOS OS BUGS***
 #TOKEN do bot no telegram
-TOKEN = '105794279:AAEZQkZX-HnXHMBG8NHkc0CWyDjvpOnHM-U'
+TOKEN = '130009542:AAHNWctXOV5L_BPf7TTnFTgmQi6O7zD89Rw'
 
 #URL base para funcionamento do sistema de Webhook
 BASE_URL = 'https://api.telegram.org/bot' + TOKEN + '/'
 
 #Versão atual
-VERSION = '2.a'
+VERSION = '1.0'
 
 #Nossos IDs
 creators = ['112228809', '112255461']
@@ -67,7 +68,7 @@ class WebhookHandler(webapp2.RequestHandler):
         def verifyBot(left_chat_participant = None):
             if left_chat_participant:
                 first_name = left_chat_participant['first_name'].encode('utf-8')
-                if first_name == '@hangerbot':
+                if first_name == 'The Hangman':
                     bds.delChat(chat_id)
                     return
             return
@@ -81,8 +82,9 @@ class WebhookHandler(webapp2.RequestHandler):
         group_chat_created = message.get('group_chat_created')
         date = message.get('date')
         text = message.get('text').encode('utf-8') if message.get('text') else message.get('text')
-        if not text.startswith('/admin'):
-            text = text.lower()
+        if text:
+            if not text.startswith('/admin'):
+                text = text.lower()
         fr = message.get('from')
         chat = message['chat']
         chat_id = str(chat['id'])
@@ -136,12 +138,12 @@ class WebhookHandler(webapp2.RequestHandler):
         s = bds.getSettings(chat_id)
         ab = bds.getArriscarBlock(chat_id)
         first = bds.getFirstWelcome(chat_id)[0]
-        rpl = [c.toDict(chat_id, 'comando não reconhecido')]
+        rpl = [c.toDict(chat_id, l.sorry_msg)]
         text = '/start' if text == l.ligar.lower() else text #Tratamento para o caso do /start
         text = l.ajuda.lower() if text.startswith('/help') else text
         text = l.desligar.lower() if text.startswith('/stop') else text
-        if text.startswith('@ccuem_bot'):
-            text = text[11:]
+        if text.startswith('@PlayHangmanBot'):
+            text = text[15:]
         if (u_id in creators) and (text.startswith('/admin')): #Funções especiais dos criadores do bot
             if text.startswith('/admindelchat'):
                 chat = text[14:]
@@ -155,14 +157,15 @@ class WebhookHandler(webapp2.RequestHandler):
                 chats = bds.getChats()
                 rpl = []
                 for i in range(len(chats)):
+                    time.sleep(1)
                     rpl.append(c.toDict(chats[i], text))
             elif text.startswith('/admingetdadoschat'):
                 chat = text[19:]
                 if len(chat) > 0:
                     dados = bds.getDadosChat(chat)
-                    jogos_dia = bds.getJogosDia(chat_id, date)
+                    jogos_dia = bds.getJogosDia(chat, date)
                     if dados:
-                        rpl = [c.toDict(chat_id, 'Chat '+str(chat)+'\nJogos: '+ str(dados.games)+'\nJogadores: '+str(len(dados.players))+'\nJogos por dia: '+str(jogos_dia)+'\nTop player: '+str(dados.topPlayer.u_name)+'\n\tScore: '+str(dados.topPlayer.u_score)+'\n\tId: '+str(dados.topPlayer.u_id))]
+                        rpl = [c.toDict(chat_id, 'Chat '+str(chat)+'\nJogos: '+ str(dados.games)+'\nJogadores: '+str(len(dados.players))+'\nJogos por dia: '+str(jogos_dia)+'\nTop player: '+dados.topPlayer.u_name.encode('utf-8')+'\n\tScore: '+str(dados.topPlayer.u_score)+'\n\tId: '+str(dados.topPlayer.u_id))]
                     else:
                         rpl = [c.toDict(chat_id, 'Chat '+chat+' não existe')]
             elif text.startswith('/admingetdadosglobais'):
@@ -199,8 +202,8 @@ class WebhookHandler(webapp2.RequestHandler):
                             rpl = g.arriscarPalavra2(chat_id, u_id, u_name, message_id, text)
                         elif l.arriscar.lower() in text:
                             rpl = g.arriscarPalavra1(chat_id, u_id, message_id)
-                        elif (len(text) == 1) or (text.startswith('@ccuemBot')):
-                            if text.startswith('@ccuemBot'):
+                        elif (len(text) == 1) or (text.startswith('@PlayHangmanBot')):
+                            if text.startswith('@PlayHangmanBot'):
                                 text = text[10:]
                             rpl = g.chutarLetra(chat_id, u_id, message_id, text)
                     elif check == 'rnd':

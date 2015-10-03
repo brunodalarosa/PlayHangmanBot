@@ -54,7 +54,7 @@ mudar_lingua = 'Change successful' + emoji_thumbsUp
 start_msg = 'Hi, i am the Hangman, master of Hangman games! My duty is to organize and play Hangman games with you and your friends and ensure that we will have fun!\n Press the "new game" button and we shall begin!' + emoji_sorriso
 is_enabled = 'Im already ready!'
 stop_msg = 'Turning off'
-about_msg = 'I am a Open Source project created by @bcesarg6 and @cristoferoswald! Im in constant development and you can help me grown up coding at github.com/bcesarg6/PlayHangmanBot\nCategories:\n'+categorias+'Version 1.0:\n\t- First oficial launching version\n\nFuture updates:\n\t- Category and words about the games League of legends and Dota2\n\t- Kick player system\n\t- Word category selection\n\t- Global ranking\n\nFeel free to join the team!' + emoji_sorriso
+about_msg = 'I am a Open Source project created by @bcesarg6 and @cristoferoswald! Im in constant development and you can help me grown up coding at github.com/bcesarg6/PlayHangmanBot\n\nCategories:\n'+categorias+'\nVersion 1.0:\n\t- First oficial launching version\n\nFuture updates:\n\t- Category and words about the games League of legends and Dota2\n\t- Kick player system\n\t- Word category selection\n\t- Global ranking\n\nFeel free to join the team!' + emoji_sorriso
 start_help_msg = 'There is no game happening right now, press the button "new game" to start one or press "Rank" to see the ranking.\n You can also change the settings if you want to' + emoji_sorriso + '\nRemember, if anytime you need a keyboard send me the command /kb'
 config_help_msg = 'Choose the language you want. The secret words of the game depends on the selected language\nDid not find your language? You can help my development by making your own translations! Press the About button for more information.\nRemember, if anytime you need a keyboard send me the command /kb'
 voltar_msg = 'Main menu'
@@ -64,6 +64,7 @@ ocupado_msg = 'I am busy right now, sorry' + emoji_triste
 teclado_msg = 'Keyboard'
 ranking_msg = emoji_coroa + ' RANKING ' + emoji_coroa
 error_msg = 'An error occurred please contact @cristoferoswald or @bcesarg6 and report it' + emoji_triste
+sorry_msg = 'Sorry, what did you say?'
 
 #respostas PreGame
 def inicialMsg(u_name):

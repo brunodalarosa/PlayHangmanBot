@@ -46,7 +46,7 @@ iniciar_msg = 'Carregando...'
 mudar_lingua = 'Mudança feita com sucesso' + emoji_thumbsUp
 start_msg = 'Olá, eu sou o Hangman, mestre de jogos da forca! Meu dever é organizar e jogar jogos da forca e garantir que você se divirta!\nAperte no botão "novo jogo" para começarmos!' + emoji_sorriso
 is_enabled = 'Já estou ligado!'
-about_msg = 'Sou um projeto de código aberto criado pelo @bcesarg6 e @cristoferoswald! Estou em constante desenvolvimento e você pode me ajudar a crescer contribuindo em https://github.com/bcesarg6/PlayHangmanBot\nCategorias:\n'+categorias+'Versão 1.0:\n\t- Versão de lançamento oficial\n\nAtualizações planejadas:\n\t- Recurso remover jogador da partda\n\t- Seleção de categoria desejada\n\t- Adicionar categorias especificas sobre os jogos League of legends e Dota2\n\t- Ranking global\n\nSinta-se a vontade para se juntar a equipe!' + emoji_sorriso
+about_msg = 'Sou um projeto de código aberto criado pelo @bcesarg6 e @cristoferoswald! Estou em constante desenvolvimento e você pode me ajudar a crescer contribuindo em https://github.com/bcesarg6/PlayHangmanBot\n\nCategorias:\n'+categorias+'\nVersão 1.0:\n\t- Versão de lançamento oficial\n\nAtualizações planejadas:\n\t- Recurso remover jogador da partda\n\t- Seleção de categoria desejada\n\t- Adicionar categorias especificas sobre os jogos League of legends e Dota2\n\t- Ranking global\n\nSinta-se a vontade para se juntar a equipe!' + emoji_sorriso
 stop_msg = 'Desligado'
 start_help_msg = 'Não há nenhum jogo em andamento, clique no botão "novo jogo" para começar um jogo ou veja o ranking no botão "Rank".\nVocê também pode alterar as configurações se desejar' + emoji_sorriso + '\nLembre-se se você precisar do telcado envie /kb'
 config_help_msg = 'Escolha a minha lingua. ATENÇÃO: As palavras do jogo dependem da língua escolhida\nNão encontrou sua lingua? Você pode ajudar no meu desenvolvimento adicionando uma tradução, clique em Sobre para mais informações\nLembre-se se você precisar do telcado envie /kb'
@@ -57,6 +57,7 @@ ocupado_msg = 'Estou ocupado agora, desculpe' + emoji_triste
 teclado_msg = 'Teclado'
 ranking_msg = emoji_coroa + ' RANKING ' + emoji_coroa
 error_msg = 'Um erro ocorreu, por favor entre em contato com @cristoferoswald ou @bcesarg6 e reporte o ocorrido' + emoji_triste
+sorry_msg = 'Desculpe, o que você disse?'
 
 #respostas PreGame
 def inicialMsg(u_name):
