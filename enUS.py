@@ -101,6 +101,14 @@ umavida_msg = 'One life left! Discover the secret word or face your DEFEAT!' + e
 gameover_msg = emoji_poop + ' GAME OVER LOSERS! ' + emoji_poop
 fora_msg = 'You are not in this game, wait for this game end to enter in another one!'
 
+
+def googleMsg(palavra):
+    palavras = palavra.split(' ')
+    palavra = ''
+    for i in range(len(palavras)):
+        palavra = palavra + palavras[i] +'%20'
+    return 'Discover: https://google.com/#q='+palavra
+
 def perdeu(u_name):
     return u_name + ' Risked it all and losed! The player was eliminated!' + emoji_lua
 

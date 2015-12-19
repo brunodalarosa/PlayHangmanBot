@@ -94,6 +94,13 @@ umavida_msg = 'Somente uma vida restante! Descubra a palavra ou aceite sua DERRO
 gameover_msg = emoji_poop + ' PERDERAM, FIM DE JOGO ' + emoji_poop
 fora_msg = 'Você não participa dessa rodada, espere ela acabar para participar de um novo'
 
+def googleMsg(palavra):
+    palavras = palavra.split(' ')
+    palavra = ''
+    for i in range(len(palavras)):
+        palavra = palavra + palavras[i] +'%20'
+    return 'Descubra: https://google.com/#q='+palavra
+
 def perdeu(u_name):
     return u_name + ' arriscou e errou! O jogador foi eliminado!' + emoji_lua
 

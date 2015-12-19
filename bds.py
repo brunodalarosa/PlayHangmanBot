@@ -187,9 +187,9 @@ def getDadosGlobais(date):
         d = ndb.Key(Dados, c.chats[i]).get()
         jogos_dia = jogos_dia + getJogosDia(c.chats[i], date)
         n_games += d.games
-        for i in range(len(d.players)):
-            if not (d.players[i].u_id in u_ids):
-                u_ids.append(d.players[i].u_id)
+        for j in range(len(d.players)):
+            if not (d.players[j].u_id in u_ids):
+                u_ids.append(d.players[j].u_id)
     n_players = len(u_ids)
     return [len(c.chats), n_players, jogos_dia, n_games]
 

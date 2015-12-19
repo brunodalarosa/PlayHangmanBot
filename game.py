@@ -57,23 +57,25 @@ def arriscarPalavra1(chat_id, u_id, message_id):
 def arriscarPalavra2(chat_id, u_id, u_name, message_id, text):
     l = c.getLanguage(chat_id)
     bds.setArriscarBlock(chat_id, False)
-    if bds.checkPalavra(chat_id, u_id, text):
+    rpl = []
+    palavra = bds.getPalavra(chat_id)
+    if bds.checkPalavra(chat_id, u_id, text): #Jogador acertou o chute e venceu. O jogo acaba.
         keyboard = c.makeKb(c.getKb(chat_id, 'main')[0], resize_keyboard = True)
-        return [c.toDict(chat_id, l.venceu(u_name), replyMarkup = keyboard)]
-    else:
+        rpl.append(c.toDict(chat_id, l.venceu(u_name), replyMarkup = keyboard))
+        rpl.append(c.toDict(chat_id, l.googleMsg(palavra)))
+        return rpl
+    else: #Jogador errou o chute
         rm = bds.rmPlayer(chat_id, u_id, message_id)
-        if rm == True:
-            rpl = []
+        if rm == True: #Jogador não era Adm, nada acontece.
             rpl.append(c.toDict(chat_id, l.perdeu(u_name), replyTo = message_id, replyMarkup = c.makeKbh(True, selective = True)))
             rpl.append(nextRound(chat_id))
             return rpl
-        elif rm == 'setAdm':
-            rpl = []
+        elif rm == 'setAdm': #Jogador era Adm e o Adm será passado para outro
             adm = bds.getAdm(chat_id)
             rpl.append(c.toDict(chat_id, l.perdeu(u_name), replyTo = message_id, replyMarkup = c.makeKbh(True, selective = True)))
             rpl.append(c.toDict(chat_id, l.novoAdmMsg(adm[1])))
             rpl.append(nextRound(chat_id))
             return rpl
-        else:
+        else: #O jogo acaba
             keyboard = c.makeKb(c.getKb(chat_id, 'main')[0], resize_keyboard = True)
             return [c.toDict(chat_id, l.perdeu(u_name)+'\n'+ l.gameover_msg, replyMarkup = keyboard)]
