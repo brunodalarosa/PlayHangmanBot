@@ -157,7 +157,7 @@ class WebhookHandler(webapp2.RequestHandler):
                 chats = bds.getChats()
                 rpl = []
                 for i in range(len(chats)):
-                    time.sleep(1)
+                    time.sleep(0.2)
                     rpl.append(c.toDict(chats[i], text))
             elif text.startswith('/admingetdadoschat'):
                 chat = text[19:]
@@ -233,13 +233,17 @@ class WebhookHandler(webapp2.RequestHandler):
         try:
             for i in range(len(rpl)):
                 reply(rpl[i])
+                time.sleep(0.2)
         except Exception, e:
             print e
             try:
                 reply(c.toDict(chat_id, l.error_msg))
             except Exception, e:
                 print e
-                reply(c.toDict(chat_id, 'Fatal error, contact @cristoferoswald or @bcesarg6.'))
+                try:
+                    reply(c.toDict(chat_id, 'Fatal error, contact @cristoferoswald or @bcesarg6.'))
+                except Exception, e:
+                    print e
 
 app = webapp2.WSGIApplication([
     ('/me', MeHandler),
