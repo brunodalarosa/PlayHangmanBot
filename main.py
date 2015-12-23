@@ -169,15 +169,16 @@ class WebhookHandler(webapp2.RequestHandler):
                     else:
                         rpl = [c.toDict(chat_id, 'Chat '+chat+' não existe')]
             elif text.startswith('/admingetdadosglobais'):
+                urlfetch.set_default_fetch_deadline(300)
                 resp = bds.getDadosGlobais(date)
                 rpl = [c.toDict(chat_id, 'Chats: '+str(resp[0])+'\nJogadores: '+str(resp[1])+'\nJogos por dia: '+str(resp[2])+'\nJogos: '+str(resp[3]))]
         elif (not s.waiting) or first:
             #comandos que indiferem do estado atual de jogo
             if '/start' in text:
-                rpl = c.start(chat_id, u_id, message_id, first)
+                rpl = c.start(chat_id, u_id, first)
             elif bds.getEnabled(chat_id):
                 if ('/kb' in text) or (l.att_kb in text):
-                    rpl = c.kb(chat_id, u_id, message_id)
+                    rpl = c.kb(chat_id, u_id, message_id, s.waiting)
                 elif l.desligar.lower() in text:
                     rpl = c.stop(chat_id)
                 elif l.ajuda.lower() in text:
@@ -228,22 +229,33 @@ class WebhookHandler(webapp2.RequestHandler):
         else:
             if l.ajuda.lower() in text:
                 rpl = c.ajuda(chat_id)
+            elif '/kb' in text:
+                rpl = c.kb(chat_id, u_id, message_id, s.waiting)
             else:
                 rpl = c.changeLanguage(chat_id, text, message_id, u_id)
-        try:
-            for i in range(len(rpl)):
-                reply(rpl[i])
+
+        error = False
+        for i in range(len(rpl)):
                 time.sleep(0.4)
-        except Exception, e:
-            print e
-            try:
-                reply(c.toDict(chat_id, l.error_msg))
-            except Exception, e:
-                print e
                 try:
-                    reply(c.toDict(chat_id, 'Fatal error, contact @cristoferoswald or @bcesarg6.'))
+                    reply(rpl[i])
                 except Exception, e:
+                    error = True
                     print e
+                    if (str(e) == "HTTP Error 429: Unknown") and (not error):
+                        i = i - 1
+                    else:
+                        try:
+                            reply(c.toDict(chat_id, l.error_msg))
+                        except Exception, e:
+                            print e
+                            try:
+                                reply(c.toDict(chat_id, 'Fatal error, contact @cristoferoswald or @bcesarg6.'))
+                            except Exception, e:
+                                print e
+        """for i in range(len(rpl)):
+            time.sleep(0.4)
+            reply(rpl[i])"""
 
 app = webapp2.WSGIApplication([
     ('/me', MeHandler),

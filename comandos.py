@@ -78,7 +78,7 @@ def getKb(chat_id, k, u_id = None):
 
 
 #Funções dos comandos
-def start(chat_id, u_id, message_id, first):
+def start(chat_id, u_id, first):
     if not first:
         l = getLanguage(chat_id)
 
@@ -101,9 +101,9 @@ def start(chat_id, u_id, message_id, first):
         return rpl
     bds.setFirst(chat_id)
     bds.setEnabled(chat_id,True)
-    kb = makeKb(getKb(chat_id, 'first')[0], resize_keyboard = True, selective = True)
+    kb = makeKb(getKb(chat_id, 'first')[0], resize_keyboard = True)
     rpl = []
-    rpl.append(toDict(chat_id, 'Im the PlayHangmanBot, please choose a language:', replyTo = message_id, replyMarkup = kb))
+    rpl.append(toDict(chat_id, 'Im the PlayHangmanBot, please choose a language:', replyMarkup = kb))
     rpl.append(toDict('-27626712', 'Novo chat criado: '+chat_id))
     return rpl
 
@@ -137,7 +137,7 @@ def rank(chat_id):
             ranking = ranking+rank[0][i]+' - '+str(rank[1][i])+'\n'
     return [toDict(chat_id, ranking)]
 
-def kb(chat_id, u_id, message_id):
+def kb(chat_id, u_id, message_id, waiting):
     l = getLanguage(chat_id)
     kb = getKb(chat_id, 'main', u_id = u_id)
     keyboard = makeKb(kb[0], resize_keyboard = True, selective = True)
@@ -148,6 +148,9 @@ def kb(chat_id, u_id, message_id):
         if bds.checkAdm(chat_id, u_id):
             i = 1
     keyboard = makeKb(kb[i], resize_keyboard = True, selective = True)
+    if waiting:
+        kb = getKb(chat_id, 'config')
+        keyboard = makeKb(kb[0], resize_keyboard = True, selective = True)
     return [toDict(chat_id, l.teclado_msg, replyTo = message_id, replyMarkup = keyboard)]
 
 

@@ -57,7 +57,7 @@ config_help_msg = 'Escolha a minha lingua. ATENÇÃO: As palavras do jogo depend
 voltar_msg = 'Menu inicial'
 cantdo_msg = 'Você não pode fazer isso'
 comandos_msg = 'Comandos'
-ocupado_msg = 'Estou ocupado agora, desculpe' + emoji_triste
+ocupado_msg = 'Estou ocupado agora, desculpe' + emoji_triste + ' Por favor, selecione sua linguagem primeiro, mande /kb para ver o teclado'
 teclado_msg = 'Teclado'
 ranking_msg = emoji_coroa + ' RANKING ' + emoji_coroa
 error_msg = 'Um erro ocorreu, por favor entre em contato com @cristoferoswald ou @bcesarg6 e reporte o ocorrido' + emoji_triste
@@ -103,7 +103,7 @@ def googleMsg(palavra):
     palavra = ''
     for i in range(len(palavras)):
         palavra = palavra + palavras[i] +'%20'
-    return 'Descubra: https://google.com/#q='+palavra
+    return ('Descubra: https://google.com/#q='+palavra).encode('utf-8')
 
 def perdeu(u_name):
     return u_name + ' arriscou e errou! O jogador foi eliminado!' + emoji_lua
