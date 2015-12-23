@@ -11,7 +11,6 @@ import datetime
 class Chats(ndb.Model):
     chats = ndb.StringProperty(repeated = True)
 
-
 #Checa a exisencia do chat, se não existir cria todas as entidades necessárias
 def checkChat(chat_id):
     c = ndb.Key(Chats, 'chats').get()
@@ -62,6 +61,31 @@ def getChats():
     c = ndb.Key(Chats, 'chats').get()
     return c.chats
 
+def checkChatBd(chat_id):
+    c = ndb.Key(Chats, 'chats').get()
+    e = ndb.Key(Enabled, chat_id).get()
+    s = ndb.Key(Settings, chat_id).get()
+    d = ndb.Key(Dados, chat_id).get()
+    r = ndb.Key(Rank, chat_id).get()
+    status = True
+    if not e:
+        e = Enabled(id = chat_id)
+        e.put()
+        status = False
+    if not s:
+        s = Settings(id = chat_id)
+        s.put()
+        status = False
+    if not d:
+        d = Dados(id = chat_id)
+        d.put()
+        status = False
+    if not r:
+        r = Rank(id = chat_id)
+        r.put()
+        status = False
+    return status
+
 #Guarda o estado de "ligado" e "deligado" de cada chat
 class Enabled(ndb.Model):
     enabled = ndb.BooleanProperty(indexed = False, default = False)
@@ -104,7 +128,9 @@ def getSettings(chat_id):
     s = ndb.Key(Settings, chat_id).get()
     if s:
         return s
-    return False
+    if checkChat(chat_id):
+        checkChatBd(chat_id)
+    getSettings(chat_id)
 
 def setLanguage(chat_id, language):
     s = ndb.Key(Settings, chat_id).get()

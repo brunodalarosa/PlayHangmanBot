@@ -22,6 +22,10 @@ palavras = [
 categorias = ''
 for i in range(len(palavras)):
     categorias = categorias+palavras[i][0]+'\n'
+
+#Keyboard padrão
+att_kb = 'Enviar teclado'
+
 #Botões dos Keyboards
 novojogo = 'Novo Jogo' + emoji_joystick
 ajuda = 'Ajuda' + emoji_light

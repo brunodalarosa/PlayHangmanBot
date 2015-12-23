@@ -29,6 +29,9 @@ categorias = ''
 for i in range(len(palavras)):
     categorias = categorias+palavras[i][0]+'\n'
 
+#Keyaboar padrão
+att_kb = 'Send Keyboard'
+
 #Botões dos Keyboards
 novojogo = 'New Game' + emoji_joystick
 ajuda = 'Help' + emoji_light

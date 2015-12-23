@@ -72,6 +72,8 @@ def getKb(chat_id, k, u_id = None):
         kb.append([[l.esta_fora]])
     elif k == 'first':
         kb.append([['Português(BR)' + emoji_br, 'English(US)' + emoji_usa]])
+    if (len(kb) == 0):
+        kb = [[l.att_kb]]
     return kb
 
 

@@ -157,7 +157,7 @@ class WebhookHandler(webapp2.RequestHandler):
                 chats = bds.getChats()
                 rpl = []
                 for i in range(len(chats)):
-                    time.sleep(0.2)
+                    time.sleep(0.1)
                     rpl.append(c.toDict(chats[i], text))
             elif text.startswith('/admingetdadoschat'):
                 chat = text[19:]
@@ -176,7 +176,7 @@ class WebhookHandler(webapp2.RequestHandler):
             if '/start' in text:
                 rpl = c.start(chat_id, u_id, message_id, first)
             elif bds.getEnabled(chat_id):
-                if '/kb' in text:
+                if ('/kb' in text) or (l.att_kb in text):
                     rpl = c.kb(chat_id, u_id, message_id)
                 elif l.desligar.lower() in text:
                     rpl = c.stop(chat_id)
@@ -233,7 +233,7 @@ class WebhookHandler(webapp2.RequestHandler):
         try:
             for i in range(len(rpl)):
                 reply(rpl[i])
-                time.sleep(0.2)
+                time.sleep(0.4)
         except Exception, e:
             print e
             try:
