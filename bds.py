@@ -388,7 +388,7 @@ def setCP(chat_id, categoria, palavra):
     d = ndb.Key(Dados, chat_id).get()
     d.games += 1
     g.categoria = categoria
-    g.palavra = palavra.decode('utf-8')
+    g.palavra = palavra#palavra.decode('utf-8')
     mascara = ''
     for i in range(len(g.palavra)):
         if palavra[i] == ' ':
@@ -489,9 +489,12 @@ def getLetras(chat_id):
 def checkLetra(chat_id, u_id, letra): #Ve claramente que é pura gambiarra!
     g = ndb.Key(Game, chat_id).get()
     chs = ['á','ã','â','é','ê','í','ó','õ','ô','ú','ç'] #Lista de caracteres especiais suportados no momento, NÃO ADICIONAR PALAVRAS COM CARACTERES NÃO SUPORTADOS!
+    ch = ['a','a','a','e','e','i','o','o','o','u','c'] #Acompanha o chs para funcionar. Gambiarra.
     for i in range(len(chs)):
         chs[i] = chs[i].decode('utf-8')
-    ch = ['a','a','a','e','e','i','o','o','o','u','c'] #Acompanha o chs para funcionar. Gambiarra.
+        ch[i] = ch[i].decode('utf-8')
+
+    letra.decode('utf-8')
     nPalavra = g.palavra.lower()
     aux = [None] * len(nPalavra)
     for i in range(len(nPalavra)):
@@ -506,9 +509,11 @@ def checkLetra(chat_id, u_id, letra): #Ve claramente que é pura gambiarra!
             score = 0
             for i in range(len(nPalavra)):
                 if nPalavra[i].lower() == letra:
+                    letraAnt = letra
                     if aux[i]: #Se existem caracteres especiais
                         letra = aux[i]
                     nMascara = nMascara+letra #substitui a letra na posição
+                    letra = letraAnt
                     score += 1
                 else:
                     nMascara = nMascara+g.mascara[i]

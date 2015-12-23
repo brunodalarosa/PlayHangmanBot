@@ -29,7 +29,7 @@ TOKEN = '130009542:AAHNWctXOV5L_BPf7TTnFTgmQi6O7zD89Rw'
 BASE_URL = 'https://api.telegram.org/bot' + TOKEN + '/'
 
 #Versão atual
-VERSION = '1.0'
+VERSION = '1.4'
 
 #Nossos IDs
 creators = ['112228809', '112255461']

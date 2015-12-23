@@ -42,7 +42,7 @@ def fecharJogo(chat_id, u_id, message_id, date):
         bds.setInGame(chat_id, True)
         categoria = randint(0, (len(l.palavras)-1))
         palavra = randint(1, (len(l.palavras[categoria])-1))
-        palavra = l.palavras[categoria][palavra]
+        palavra = l.palavras[categoria][palavra].decode('utf-8')
         categoria = l.palavras[categoria][0]
         mascara = bds.setCP(chat_id, categoria, palavra)
         vidas = bds.setVidas(chat_id)
