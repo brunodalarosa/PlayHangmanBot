@@ -521,6 +521,8 @@ def checkLetra(chat_id, u_id, letra): #Ve claramente que é pura gambiarra!
             addScore(chat_id, u_id, (score*2))
             g.letras.append(letra)
             g.put()
+            if g.palavra.lower() == nMascara:
+                return nMascara.encode('utf-8')
             return True
         g.letras.append(letra)
         g.put()

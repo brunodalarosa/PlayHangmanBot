@@ -206,7 +206,7 @@ class WebhookHandler(webapp2.RequestHandler):
                         elif (len(text) == 1) or (text.startswith('@PlayHangmanBot')):
                             if text.startswith('@PlayHangmanBot'):
                                 text = text[10:]
-                            rpl = g.chutarLetra(chat_id, u_id, message_id, text)
+                            rpl = g.chutarLetra(chat_id, u_id, u_name, message_id, text)
                     elif check == 'rnd':
                         rpl = [c.toDict(chat_id, l.round_errado_msg)]
                     elif check == 'out':
@@ -240,9 +240,10 @@ class WebhookHandler(webapp2.RequestHandler):
                 try:
                     reply(rpl[i])
                 except Exception, e:
-                    error = True
                     print e
                     if (str(e) == "HTTP Error 429: Unknown") and (not error):
+                        error = True
+                        time.sleep(1)
                         i = i - 1
                     else:
                         try:

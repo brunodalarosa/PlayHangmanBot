@@ -13,15 +13,18 @@ def cancelarJogo(chat_id, u_id):
         return [c.toDict(chat_id, l.cancelar_jogo_msg, replyMarkup = keyboard)]
     return [c.toDict(chat_id, l.cantdo_msg)]
 
-def chutarLetra(chat_id, u_id, message_id, letra):
+def chutarLetra(chat_id, u_id, u_name, message_id, letra):
     l = c.getLanguage(chat_id)
     r = bds.checkLetra(chat_id, u_id, letra)
+    #print r
     rpl = []
     if r == True: #Se acertou a letra
         rpl.append(c.toDict(chat_id, l.acertou_letra_msg, replyTo = message_id, replyMarkup = c.makeKbh(True, selective = True)))
         rpl.append(nextRound(chat_id))
     elif r == 2: #Se a letra já foi chutada
         rpl.append(c.toDict(chat_id, l.jachutada_msg))
+    elif type(r) == type("str"):
+        rpl = arriscarPalavra2(chat_id, u_id, u_name, message_id, r)
     else: #Se errou a letra
         rpl.append(c.toDict(chat_id, l.errou_letra_msg, replyTo = message_id, replyMarkup = c.makeKbh(True, selective = True)))
         vida = bds.menosVida(chat_id)
