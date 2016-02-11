@@ -40,21 +40,27 @@ def delChat(chat_id):
     g = ndb.Key(Game, chat_id).get()
     d = ndb.Key(Dados, chat_id).get()
     r = ndb.Key(Rank, chat_id).get()
+    status = False
     if chat_id in c.chats:
         c.chats.remove(chat_id)
         c.put()
-        if d:
-            d.key.delete()
-        if e:
-            e.key.delete()
-        if s:
-            s.key.delete()
-        if g:
-            g.key.delete()
-        if r:
-            r.key.delete()
-        return True
-    return False
+        status = True
+    if d:
+        d.key.delete()
+        status = True
+    if e:
+        e.key.delete()
+        status = True
+    if s:
+        s.key.delete()
+        status = True
+    if g:
+        g.key.delete()
+        status = True
+    if r:
+        r.key.delete()
+        status = True
+    return status
 
 #Retorna a lista de todos os chats ativos no momento
 def getChats():
@@ -231,9 +237,12 @@ def setJogosDia(chat_id, date):
 def getJogosDia(chat_id, date):
     d = ndb.Key(Dados, chat_id).get()
     date = int(datetime.datetime.fromtimestamp(date).strftime('%d'))
-    if date != d.last_att:
-        return 0
-    return d.jogos_dia
+    if d:
+        if date != d.last_att:
+            return 0
+        return d.jogos_dia
+    delChat(chat_id)
+    return 0
 
 #Contém todos os dados de cada jogo
 class Game(ndb.Model):
