@@ -18,6 +18,9 @@ def getLanguage(chat_id):
     elif s.language == 'enUS':
         import enUS as l
         return l
+    elif s.language == 'hbIL':
+        import hbIL as l
+        return l
     return
 
 #Recebe os dados que serão repondidos e transforma em um dict
@@ -67,11 +70,11 @@ def getKb(chat_id, k, u_id = None):
         elif bds.getPreGame(chat_id):
             kb.append([[l.ajuda, l.rank], [l.config, l.voltar], [l.desligar]])
     elif k == 'config':
-        kb.append([['Português(BR)' + emoji_br, 'English(US)' + emoji_usa], [l.ajuda], [l.voltar]])
+        kb.append([['Português(BR)' + emoji_br, 'English(US)' + emoji_usa, 'עברית (ישראל)' + emoji_hb], [l.ajuda], [l.voltar]])
     elif k == 'fora':
         kb.append([[l.esta_fora]])
     elif k == 'first':
-        kb.append([['Português(BR)' + emoji_br, 'English(US)' + emoji_usa]])
+        kb.append([['Português(BR)' + emoji_br, 'English(US)' + emoji_usa, 'עברית (ישראל)' + emoji_hb]])
     if (len(kb) == 0):
         kb = [[l.att_kb]]
     return kb
@@ -141,12 +144,15 @@ def kb(chat_id, u_id, message_id, waiting):
     l = getLanguage(chat_id)
     kb = getKb(chat_id, 'main', u_id = u_id)
     keyboard = makeKb(kb[0], resize_keyboard = True, selective = True)
-    if (bds.getInGame(chat_id)) or (not bds.getPreGame(chat_id)):
+    if bds.getEnabled(chat_id):
+        if (bds.getInGame(chat_id)) or (not bds.getPreGame(chat_id)):
+            i = 0
+        elif bds.getPreGame(chat_id):
+            i = 0
+            if bds.checkAdm(chat_id, u_id):
+                i = 1
+    else:
         i = 0
-    elif bds.getPreGame(chat_id):
-        i = 0
-        if bds.checkAdm(chat_id, u_id):
-            i = 1
     keyboard = makeKb(kb[i], resize_keyboard = True, selective = True)
     if waiting:
         kb = getKb(chat_id, 'config')
@@ -228,6 +234,13 @@ def changeLanguage(chat_id, lingua, message_id, u_id):
         return voltar(chat_id, l.mudar_lingua, message_id, u_id, esp = True)
     elif 'english(us)' in lingua:
         bds.setLanguage(chat_id, 'enUS')
+        l = getLanguage(chat_id)
+        if bds.getFirstWelcome(chat_id)[1]:
+            bds.setWelcome(chat_id)
+            return voltar(chat_id, l.start_msg, message_id, u_id, esp = True)
+        return voltar(chat_id, l.mudar_lingua, message_id, u_id, esp = True)
+    elif 'עברית (ישראל)' in lingua:
+        bds.setLanguage(chat_id, 'hbIL')
         l = getLanguage(chat_id)
         if bds.getFirstWelcome(chat_id)[1]:
             bds.setWelcome(chat_id)

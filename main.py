@@ -19,23 +19,22 @@ import bds
 import comandos as c
 import preGame as p
 import game as g
+import tokens as t
 
-#TOKEN TESTE: 105794279:AAEZQkZX-HnXHMBG8NHkc0CWyDjvpOnHM-U
-#TOKEN BOT REAL: 130009542:AAHNWctXOV5L_BPf7TTnFTgmQi6O7zD89Rw ***SÓ MUDAR DEPOIS DE TESTAR TODOS OS BUGS***
 #TOKEN do bot no telegram
-TOKEN = '130009542:AAHNWctXOV5L_BPf7TTnFTgmQi6O7zD89Rw'
+TOKEN = t.real_tk
 
 #URL base para funcionamento do sistema de Webhook
 BASE_URL = 'https://api.telegram.org/bot' + TOKEN + '/'
 
 #Versão atual
-VERSION = '1.4'
+VERSION = '1.5'
 
 #Nossos IDs
 creators = ['112228809', '112255461']
 
 #Línguas suportadas
-linguas = ['português(br)', 'english(us)']
+linguas = ['português(br)', 'english(us)', 'hebrew(il)']
 # ==================================================
 
 #Metodos que configuram a conexao do telegram com o App Engine
@@ -93,7 +92,7 @@ class WebhookHandler(webapp2.RequestHandler):
         u_name = user_id.get('first_name').encode('utf-8')
         bds.checkChat(chat_id)
 
-        #'Chama' a verificação
+        #'Chama' a verificação.
         if left_chat_participant:
             verifyBot(left_chat_participant = left_chat_participant)
 
@@ -121,6 +120,9 @@ class WebhookHandler(webapp2.RequestHandler):
                 elif s.language == 'enUS':
                     import enUS as l
                     return l
+                elif s.language == 'hbIL':
+                    import hbIL as l
+                    return l
             else:
                 bds.checkChat(chat_id)
                 s = bds.getSettings(chat_id) #Classe settings
@@ -129,6 +131,9 @@ class WebhookHandler(webapp2.RequestHandler):
                     return l
                 elif s.language == 'enUS':
                     import enUS as l
+                    return l
+                elif s.language == 'hbIL':
+                    import hbIL as l
                     return l
                 return
 
