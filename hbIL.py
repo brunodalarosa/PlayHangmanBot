@@ -110,7 +110,7 @@ def googleMsg(palavra):
     palavra = ''
     for i in range(len(palavras)):
         palavra = palavra + palavras[i] +'%20'
-    return 'המילה: https://google.com/#q='+palavra
+    return (('המילה').decode('utf-8')+': https://google.com/#q=' + palavra).encode('utf-8')
 
 def perdeu(u_name):
     return 'השחקן ' + u_name + ' סיכן את הכל והפסיד! השחקן יצא מהמשחק! ' + emoji_lua
