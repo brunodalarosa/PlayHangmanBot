@@ -7,6 +7,31 @@ import bds
 import game as g
 from random import randint, shuffle
 
+def categorias(chat_id, u_id, message_id):
+    l = c.getLanguage(chat_id)
+    if bds.checkAdm(chat_id, u_id):
+        bds.setCategorias(chat_id,True)
+    return [c.toDict(chat_id, l.cat_msg, replyTo = message_id, replyMarkup = c.makeFr(True, selective = True))]
+
+def setCategorias(chat_id, text, message_id, u_id):
+    l = c.getLanguage(chat_id)
+    cats = []
+    text = text.split(' ')
+    try:
+        for i in range(len(text)):
+            if ((int(text[i]) <= len(l.palavras)) and (int(text[i]) >= 0) and (int(text[i]) not in cats)): #Tratamento de macacagem
+                cats.append(int(text[i]))
+            else:
+                int('a') # T_T
+    except Exception, e: #Caso existam elementos diferentes de numeros
+        return [c.toDict(chat_id, l.cat_erro_msg, replyTo = message_id, replyMarkup = c.makeFr(True, selective = True))]
+
+    bds.setCats(chat_id,cats)
+    kb = c.makeKb(c.getKb(chat_id,'main',u_id = u_id)[1], selective = True, resize_keyboard = True)
+    return [c.toDict(chat_id, l.categorias_msg, replyTo = message_id, replyMarkup = kb)]
+
+
+
 def entrar(chat_id, u_id, u_name, message_id):
     l = c.getLanguage(chat_id)
     if bds.addPlayer(chat_id, u_id, u_name, message_id):
@@ -40,7 +65,12 @@ def fecharJogo(chat_id, u_id, message_id, date):
     if bds.checkAdm(chat_id, u_id):
         bds.setPreGame(chat_id, False)
         bds.setInGame(chat_id, True)
-        categoria = randint(0, (len(l.palavras)-1))
+        lista = bds.getCats(chat_id)
+        if ((len(lista) == 0) or (0 in lista)):
+            categoria = randint(0, (len(l.palavras)-1))
+        else:
+            cat = randint(0, len(lista)-1)
+            categoria = lista[cat]-1
         palavra = randint(1, (len(l.palavras[categoria])-1))
         palavra = l.palavras[categoria][palavra].decode('utf-8')
         categoria = l.palavras[categoria][0]

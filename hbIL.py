@@ -49,6 +49,8 @@ cancelar_jogo = 'בטל משחק' + emoji_x
 arriscar = 'נחש!' + emoji_gritar
 esta_fora = 'יצאת מהמשחק' + emoji_proibido
 sobre = 'אודות' + emoji_livro
+categorias_btn = 'Select categories' + emoji_ferramenta
+
 
 #Respostas iniciais
 linguas = emoji_planeta + 'בחר שפה:'
@@ -83,6 +85,16 @@ cancelar_jogo_msg = 'המשחק בוטל על ידי מנהל המשחק.'
 is_out_msg = 'אתה לא במשחק' + emoji_lua
 vidas_msg = 'חיים: '
 pre_game_help_msg = 'אני ממתין לאנשים להצטרף למשחק, הקש אנטר כדי להצטרף!\nמנהל: לחץ "התחל משחק" כדי להתחיל את המשחק עם השחקנים הנוכחיים!'
+
+cat_msg = 'Select the categories of words that you want in your game, send me the numbers with spaces between them to choose the categories!\n\nCATEGORIES:\n'
+for i in range(len(palavras)):
+        cat_msg = cat_msg +'\t '+str(i+1)+' - '+palavras[i][0]+'\n'
+
+cat_msg = cat_msg + 'To play with all categories just send me 0\nRemenber, your selection will be saved!\n Example: 1 3 5 8 13'
+
+cat_erro_msg = 'Error!' + emoji_heartb + '\nBe sure to no include words or letters within the text!\nExample: 1 3 5 8 13\nOr just 0 to default selection (All categories)' + emoji_blink
+categorias_msg = 'Done! Good game!' + emoji_sorriso
+
 
 def novoAdmMsg(u_name):
     return 'מנהל חדש נבחר! '+u_name+' הוא המנהל החדש.' + emoji_oculos

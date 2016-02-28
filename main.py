@@ -144,9 +144,11 @@ class WebhookHandler(webapp2.RequestHandler):
         ab = bds.getArriscarBlock(chat_id)
         first = bds.getFirstWelcome(chat_id)[0]
         rpl = [c.toDict(chat_id, l.sorry_msg)]
+
         text = '/start' if text == l.ligar.lower() else text #Tratamento para o caso do /start
         text = l.ajuda.lower() if text.startswith('/help') else text
         text = l.desligar.lower() if text.startswith('/stop') else text
+
         if text.startswith('@PlayHangmanBot'):
             text = text[15:]
         if (u_id in creators) and (text.startswith('/admin')): #Funções especiais dos criadores do bot
@@ -219,8 +221,12 @@ class WebhookHandler(webapp2.RequestHandler):
 
                 #comandos preGame
                 elif bds.getPreGame(chat_id):
-                    if l.entrar.lower() in text:
+                    if s.categorias and bds.checkAdm(chat_id, u_id):
+                        rpl = p.setCategorias(chat_id, text, message_id,u_id)
+                    elif l.entrar.lower() in text:
                         rpl = p.entrar(chat_id, u_id, u_name, message_id)
+                    elif l.categorias_btn.lower() in text:
+                        rpl = p.categorias(chat_id, u_id, message_id)
                     elif l.sair.lower() in text:
                         rpl = p.sair(chat_id, u_id, u_name, message_id)
                     elif l.fechar_jogo.lower() in text:
@@ -241,14 +247,14 @@ class WebhookHandler(webapp2.RequestHandler):
 
         error = False
         for i in range(len(rpl)):
-                time.sleep(0.4)
+                time.sleep(1.5)
                 try:
                     reply(rpl[i])
                 except Exception, e:
                     print e
                     if (str(e) == "HTTP Error 429: Unknown") and (not error):
                         error = True
-                        time.sleep(1)
+                        time.sleep(2)
                         i = i - 1
                     else:
                         try:

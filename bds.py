@@ -114,6 +114,19 @@ class Settings(ndb.Model):
     waiting = ndb.BooleanProperty(indexed = False, default = True)
     first = ndb.BooleanProperty(indexed = False, default = True)
     welcome = ndb.BooleanProperty(indexed = False, default = True)
+    categorias = ndb.BooleanProperty(indexed = False, default = False)
+    cats = ndb.IntegerProperty(repeated = True)
+
+def setCats(chat_id,cats):
+    s = ndb.Key(Settings, chat_id).get()
+    s.cats = cats
+    s.categorias = False
+    s.put()
+    return
+
+def getCats(chat_id):
+    s = ndb.Key(Settings, chat_id).get()
+    return s.cats
 
 def getFirstWelcome(chat_id):
     s = ndb.Key(Settings, chat_id).get()
@@ -147,6 +160,12 @@ def setLanguage(chat_id, language):
 def setWaiting(chat_id, waiting):
     s = ndb.Key(Settings, chat_id).get()
     s.waiting = waiting
+    s.put()
+    return
+
+def setCategorias(chat_id, state):
+    s = ndb.Key(Settings, chat_id).get()
+    s.categorias = state
     s.put()
     return
 

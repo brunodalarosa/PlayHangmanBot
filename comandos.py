@@ -35,7 +35,7 @@ def makeKbh(hide_keyboard, selective = None):
     selective = selective if selective else False
     return json.dumps({'hide_keyboard':hide_keyboard, 'selective':selective})
 
-#Recebe uma matriz e a tranforma em um teclado personalizado
+#Recebe uma matriz e a transforma em um teclado personalizado
 def makeKb(kb, resize_keyboard = None, one_time_keyboard = None, selective = None):
     resize_keyboard = resize_keyboard if resize_keyboard else False
     one_time_keyboard = one_time_keyboard if one_time_keyboard else False
@@ -52,17 +52,17 @@ def getKb(chat_id, k, u_id = None):
                     kb.append([[l.voltar]])
                 else:
                     letras = bds.getLetras(chat_id)
-                    kb.append([letras[0], letras[1], letras[2], [l.arriscar], [l.comandos]])
+                    kb.append([letras[0], letras[1], letras[2], [l.arriscar], [l.comandos]]) #letters keyboard
             elif bds.getPreGame(chat_id):
                 if u_id in bds.getPlayers(chat_id)[0]:
-                    kb.append([[l.sair], [l.comandos]])
+                    kb.append([[l.sair], [l.comandos]]) #Pre-game in
                 else:
-                    kb.append([[l.entrar], [l.comandos]])
-                kb.append([[l.cancelar_jogo, l.fechar_jogo], [l.comandos]])
+                    kb.append([[l.entrar], [l.comandos]]) #Pre-game out
+                kb.append([[l.cancelar_jogo, l.fechar_jogo],[l.categorias_btn], [l.comandos]]) #Pre-game admin
             else:
-                kb.append([[l.novojogo], [l.ajuda, l.rank], [l.config, l.sobre], [l.desligar]])
+                kb.append([[l.novojogo], [l.ajuda, l.rank], [l.config, l.sobre], [l.desligar]]) #Main
         else:
-            kb.append([[l.ligar]])
+            kb.append([[l.ligar]]) #Off
     elif k == 'cmd':
         if bds.getInGame(chat_id):
             kb.append([[l.ajuda, l.rank], [l.config], [l.voltar], [l.desligar]])
