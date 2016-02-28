@@ -58,7 +58,7 @@ cancelar_jogo = 'בטל משחק' + emoji_x
 arriscar = 'נחש!' + emoji_gritar
 esta_fora = 'יצאת מהמשחק' + emoji_proibido
 sobre = 'אודות' + emoji_livro
-categorias_btn = 'Select categories' + emoji_ferramenta
+categorias_btn = 'בחר קטגוריות' + emoji_ferramenta
 
 
 #Respostas iniciais
@@ -77,7 +77,7 @@ comandos_msg = 'פקודות'
 ocupado_msg = 'אני עסוק כרגע, מצטער' + emoji_triste + ' בבקשה, בחרו את השפה שלכם. כדי לצפות במקלדת שלחו את הפקודה /kb'
 teclado_msg = 'מקלדת'
 ranking_msg = emoji_coroa + ' ניקוד ' + emoji_coroa
-error_msg = 'שגיאה התרחשה. נא צרו קשר עם @cristoferoswald או עם @bcesarg6 ודווחו עליה.' + emoji_triste
+error_msg = 'שגיאה התרחשה. נא צרו קשר עם @Shushishtok ודווחו עליה.' + emoji_triste
 sorry_msg = 'מצטער, מה אמרת?'
 
 #respostas PreGame
