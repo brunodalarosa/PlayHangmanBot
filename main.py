@@ -82,6 +82,10 @@ class WebhookHandler(webapp2.RequestHandler):
         date = message.get('date')
         text = message.get('text').encode('utf-8') if message.get('text') else message.get('text')
         if text:
+            #if text.startswith('@ccuem_bot'):
+            #    text = text[11:]
+            if text.startswith('@PlayHangmanBot'):
+                text = text[15:]
             if not text.startswith('/admin'):
                 text = text.lower()
         fr = message.get('from')
@@ -142,15 +146,26 @@ class WebhookHandler(webapp2.RequestHandler):
         l = getLanguage(chat_id)
         s = bds.getSettings(chat_id)
         ab = bds.getArriscarBlock(chat_id)
+        shout = bds.getShout()
         first = bds.getFirstWelcome(chat_id)[0]
         rpl = [c.toDict(chat_id, l.sorry_msg)]
 
         text = '/start' if text == l.ligar.lower() else text #Tratamento para o caso do /start
         text = l.ajuda.lower() if text.startswith('/help') else text
         text = l.desligar.lower() if text.startswith('/stop') else text
+        if shout:
+            try:
+                reply(c.toDict(shout[0], shout[1].encode('utf-8')))
+            except Exception, e:
+                print e
+                if (str(e) == "HTTP Error 403: Forbidden"):
+                    bds.delChat(shout[0])
+                    bds.lessPos()
+                    reply(c.toDict('-27626712', ('Chat ' + shout[0].encode('utf-8') + ' excluído')))
+                else:
+                    time.sleep(0.5)
+                    reply(c.toDict(shout[0], shout[1].encode('utf-8')))
 
-        if text.startswith('@PlayHangmanBot'):
-            text = text[15:]
         if (u_id in creators) and (text.startswith('/admin')): #Funções especiais dos criadores do bot
             if text.startswith('/admindelchat'):
                 chat = text[14:]
@@ -159,13 +174,18 @@ class WebhookHandler(webapp2.RequestHandler):
                         rpl = [c.toDict(chat_id, 'Chat '+chat+' deletado')]
                     else:
                         rpl = [c.toDict(chat_id, 'Chat '+chat+' não existe')]
-            elif text.startswith('/adminshout'):
-                text = text[12:]
-                chats = bds.getChats()
-                rpl = []
-                for i in range(len(chats)):
-                    time.sleep(0.1)
-                    rpl.append(c.toDict(chats[i], text))
+            elif text.startswith('/adminsetshout'):
+                text = text[15  :]
+                bds.setShout(text)
+                rpl = [c.toDict(chat_id, 'Mensagem sendo transmitida!')]
+            elif text.startswith('/admingetshout'):
+                if shout:
+                    rpl = [c.toDict(chat_id, 'Mensagem:\n' + shout[1].encode('utf-8') + '\n\nRestantes: ' + str(shout[2] + 1))]
+                else:
+                    rpl = [c.toDict(chat_id, 'Não há mensagem sendo transmitida')]
+            elif text.startswith('/admindelshout'):
+                bds.delShout()
+                rpl = [c.toDict(chat_id, 'Mensagem apagada')]
             elif text.startswith('/admingetdadoschat'):
                 chat = text[19:]
                 if len(chat) > 0:

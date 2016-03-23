@@ -108,6 +108,45 @@ def getEnabled(chat_id):
     e = ndb.Key(Enabled, chat_id).get()
     return e.enabled
 
+class Shout(ndb.Model):
+    shout = ndb.StringProperty(indexed = False, default = '')
+    pos = ndb.IntegerProperty(indexed = False, default = 0)
+    enable = ndb.BooleanProperty(indexed = False, default = False)
+
+def getShout():
+    s = ndb.Key(Shout, 'Shout').get()
+    if not s:
+        s = Shout(id = 'Shout')
+        s.put()
+        s = ndb.Key(Shout, 'Shout').get()
+    if s.enable:
+        chats = getChats()
+        s.pos = s.pos + 1 if (s.pos + 1) < len(chats) else 0
+        if s.pos == 0:
+            s.enable = False
+        s.put()
+        return [chats[s.pos], s.shout, (len(chats) - (s.pos + 1))]
+    return None
+
+def setShout(shout):
+    s = ndb.Key(Shout, 'Shout').get()
+    s.shout = shout
+    s.enable = True
+    s.put()
+    return
+
+def delShout():
+    s = ndb.Key(Shout, 'Shout').get()
+    s.enable = False
+    s.pos = 0
+    s.shout = ''
+    s.put()
+
+def lessPos():
+    s = ndb.Key(Shout, 'Shout').get()
+    s.pos = s.pos - 1
+    s.put()
+
 #Guarda as configurações de cada chat
 class Settings(ndb.Model):
     language = ndb.StringProperty(indexed = False, default = 'enUS')
