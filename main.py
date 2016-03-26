@@ -154,6 +154,7 @@ class WebhookHandler(webapp2.RequestHandler):
         text = l.ajuda.lower() if text.startswith('/help') else text
         text = l.desligar.lower() if text.startswith('/stop') else text
         if shout:
+            bds.checkChatBd(shout[0])
             try:
                 reply(c.toDict(shout[0], shout[1].encode('utf-8')))
             except Exception, e:

@@ -265,6 +265,8 @@ def getDadosChat(chat_id):
     d = ndb.Key(Dados, chat_id).get()
     if d:
         return d
+    d = Dados(id = chat_id)
+    d.put()
     return False
 
 def getDadosGlobais(date):
@@ -275,6 +277,9 @@ def getDadosGlobais(date):
     u_ids = []
     for i in range (len(c.chats)):
         d = ndb.Key(Dados, c.chats[i]).get()
+        if not d:
+            getDadosChat(c.chats[i])
+            d = ndb.Key(Dados, c.chats[i]).get()
         jogos_dia = jogos_dia + getJogosDia(c.chats[i], date)
         n_games += d.games
         for j in range(len(d.players)):
@@ -562,12 +567,13 @@ def checkLetra(chat_id, u_id, letra): #Ve claramente que é pura gambiarra!
         ch[i] = ch[i].decode('utf-8')
 
     letra.decode('utf-8')
+    palavra = g.palavra.lower()
     nPalavra = g.palavra.lower()
     aux = [None] * len(nPalavra)
     for i in range(len(nPalavra)):
         if nPalavra[i] in chs:
-            idc = chs.index(g.palavra[i])
-            idx = g.palavra.index(chs[idc])
+            idc = chs.index(palavra[i])
+            idx = palavra.index(chs[idc])
             aux[i] = chs[idc]
             nPalavra = nPalavra[:idx] + ch[idc] + nPalavra[idx+1:] #Reconstrói a palavra sem caracteres especiais
     if not (letra in g.letras):
