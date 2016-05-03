@@ -158,7 +158,7 @@ class WebhookHandler(webapp2.RequestHandler):
             try:
                 reply(c.toDict(shout[0], shout[1].encode('utf-8')))
             except Exception, e:
-                logging.info((str(e) + ' = ' shout[0].encode('utf-8')))
+                logging.info((str(e) + ' = ' + shout[0].encode('utf-8')))
                 if (str(e) == "HTTP Error 403: Forbidden"):
                     bds.delChat(shout[0])
                     bds.lessPos()
