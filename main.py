@@ -76,8 +76,8 @@ class WebhookHandler(webapp2.RequestHandler):
         update_id = body['update_id']
         message = body['message']
         message_id = str(message.get('message_id')).encode('utf-8')
-        left_chat_participant = message.get('left_chat_participant')
-        new_chat_participant = message.get('new_chat_participant')
+        left_chat_participant = message.get('left_chat_member')
+        new_chat_participant = message.get('new_chat_member')
         group_chat_created = message.get('group_chat_created')
         date = message.get('date')
         text = message.get('text').encode('utf-8') if message.get('text') else message.get('text')
@@ -158,7 +158,7 @@ class WebhookHandler(webapp2.RequestHandler):
             try:
                 reply(c.toDict(shout[0], shout[1].encode('utf-8')))
             except Exception, e:
-                print e
+                logging.info((str(e) + ' = ' shout[0].encode('utf-8')))
                 if (str(e) == "HTTP Error 403: Forbidden"):
                     bds.delChat(shout[0])
                     bds.lessPos()

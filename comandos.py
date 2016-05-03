@@ -25,7 +25,15 @@ def getLanguage(chat_id):
 
 #Recebe os dados que serão repondidos e transforma em um dict
 def toDict(chat_id, text, replyTo = None, replyMarkup = None):
-    return dict(chat_id = chat_id, text = text, reply_to_message_id = replyTo, reply_markup = replyMarkup)
+    #chat_id = int(chat_id)
+    if replyMarkup:
+        if replyTo:
+            d = dict(chat_id = chat_id, text = text, reply_to_message_id = replyTo, reply_markup = replyMarkup)
+            return d
+        d = dict(chat_id = chat_id, text = text, reply_markup = replyMarkup)
+        return d
+    d = dict(chat_id = chat_id, text = text)
+    return d
 
 def makeFr(force_reply, selective = None):
     selective = selective if selective else False
