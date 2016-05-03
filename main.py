@@ -165,7 +165,10 @@ class WebhookHandler(webapp2.RequestHandler):
                     reply(c.toDict('-27626712', ('Chat ' + shout[0].encode('utf-8') + ' excluído')))
                 else:
                     time.sleep(0.5)
-                    reply(c.toDict(shout[0], shout[1].encode('utf-8')))
+                    try:
+                        reply(c.toDict(shout[0], shout[1].encode('utf-8')))
+                    except Exception, e:
+                        print(e)
 
         if (u_id in creators) and (text.startswith('/admin')): #Funções especiais dos criadores do bot
             if text.startswith('/admindelchat'):
