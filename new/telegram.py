@@ -22,12 +22,18 @@ class Hangman (object):
             if not self.text.startswith('/admin'):
                 self.text = self.text.lower()
 
+    def __str__(self):
+        return str(self.__class__) + ": " + str(self.__dict__)
+
 class User(object):
     def __init__(self, user):
         self.id         = user['id']
         self.first_name	= user['first_name']
         self.last_name  = user.get('last_name')
         self.username   = user.get('username')
+
+    def __str__(self):
+        return str(self.__class__) + ": " + str(self.__dict__)
 
 class Chat(object):
     def __init__(self, chat):
@@ -38,7 +44,13 @@ class Chat(object):
         self.first_name = chat.get('first_name')
         self.last_name  = chat.get('last_name')
 
+    def __str__(self):
+        return str(self.__class__) + ": " + str(self.__dict__)
+
 class Location(object):
     def __init__(self,location):
         self.longitude = location['longitude']
         self.latitude  = location['latitude']
+
+    def __str__(self):
+        return str(self.__class__) + ": " + str(self.__dict__)

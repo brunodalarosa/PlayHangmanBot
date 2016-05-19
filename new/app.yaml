@@ -1,0 +1,26 @@
+application: ccuembot
+version: 4
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+handlers:
+- url: /favicon\.ico
+  static_files: favicon.ico
+  upload: favicon\.ico
+
+- url: /set_webhook
+  login: admin
+  script: main.app
+
+- url: .*
+  script: main.app
+
+libraries:
+- name: webapp2
+  version: "2.5.2"
+- name: PIL
+  version: latest
+
+#application teste: ccuembot
+#application real: playhangmanbot

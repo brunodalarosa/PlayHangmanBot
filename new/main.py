@@ -16,14 +16,14 @@ import webapp2
 
 #Imports nossos
 import bds as bd
-import commands as c
-import preGame as p
-import game as g
+#import commands as c
+#import preGame as p
+#import game as g
 import telegram as t
 import * from token
 
 #TOKEN do bot no telegram
-TOKEN = t.real_tk
+TOKEN = test_tk
 
 #URL base para funcionamento do sistema de Webhook
 BASE_URL = 'https://api.telegram.org/bot' + TOKEN + '/'
@@ -65,6 +65,7 @@ class WebhookHandler(webapp2.RequestHandler):
         self.response.write(json.dumps(body))
 
         hangman = t.Hangman(body['message']) #Constrói o objeto principal
+        print(hangman)
 
 
         #Função que envia o dict para o Telegram
