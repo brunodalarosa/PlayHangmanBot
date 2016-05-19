@@ -20,7 +20,7 @@ import bds as bd
 #import preGame as p
 #import game as g
 import telegram as t
-import * from token
+from tokens import *
 
 #TOKEN do bot no telegram
 TOKEN = test_tk
@@ -65,7 +65,30 @@ class WebhookHandler(webapp2.RequestHandler):
         self.response.write(json.dumps(body))
 
         hangman = t.Hangman(body['message']) #Constrói o objeto principal
-        print(hangman)
+        #print(hangman)
+        data = bd.configure(hangman) #Magia negra ou gambiarra? Fica ai a duvida
+
+        shout = bd.getShout(data)
+        if shout:
+            bd.checkChatBd(shout[0])
+            try:
+                reply(c.toDict(shout[0], shout[1].encode('utf-8')))
+            except Exception, e:
+                logging.info((str(e) + ' = ' + shout[0].encode('utf-8')))
+                if (str(e) == "HTTP Error 403: Forbidden"):
+                    bds.delChat(shout[0])
+                    bds.lessPos()
+                    reply(c.toDict('-27626712', ('Chat ' + shout[0].encode('utf-8') + ' excluído')))
+                else:
+                    time.sleep(0.5)
+                    try:
+                        reply(c.toDict(shout[0], shout[1].encode('utf-8')))
+                    except Exception, e:
+                        print(e)
+
+
+
+
 
 
         #Função que envia o dict para o Telegram
