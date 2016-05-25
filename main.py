@@ -74,7 +74,7 @@ class WebhookHandler(webapp2.RequestHandler):
 
         #Dados que recebemos do telegram
         update_id = body['update_id']
-        message = body['message']
+        message = body.get('message') if body.get('message') else body.get('edited_message')
         message_id = str(message.get('message_id')).encode('utf-8')
         left_chat_participant = message.get('left_chat_member')
         new_chat_participant = message.get('new_chat_member')

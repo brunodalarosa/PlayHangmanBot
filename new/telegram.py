@@ -6,7 +6,7 @@ import json
 
 #Import local
 #import bds as bd
-
+#body.get('message') if body.get('message') else body.get('edited_message')
 class Hangman (object):
     def __init__(self, message):
         self.message_id       = message['message_id']
