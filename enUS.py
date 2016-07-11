@@ -132,7 +132,7 @@ def googleMsg(palavra):
     return ('Discover: https://google.com/#q=' + palavra).encode('utf-8')
 
 def perdeu(u_name):
-    return u_name + ' Risked it all and losed! The player was eliminated!' + emoji_lua
+    return u_name + ' Risked it all and lost! The player was eliminated!' + emoji_lua
 
 def nextPlayer(u_name):
     return u_name + '\'s turn ' + emoji_point
