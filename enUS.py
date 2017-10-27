@@ -91,7 +91,7 @@ sem_jogador_msg = 'All the players left, the game will be cancelled! ' + emoji_s
 cancelar_jogo_msg = 'Game canceled by the admin'
 is_out_msg = 'You are not in this game' + emoji_lua
 vidas_msg = 'Lives: '
-pre_game_help_msg = 'I am waiting for people to join the game, press "Enter" to join \nAdmin: Press "Start game" to begin the game with this players'
+pre_game_help_msg = 'I am waiting for people to join the game, press "Enter" to join \nAdmin: Press "Start game" to begin the game with these players'
 
 cat_msg = 'Select the categories of words that you want in your game, send me the numbers with spaces between them to choose the categories!\n\nCATEGORIES:\n'
 for i in range(len(palavras)):

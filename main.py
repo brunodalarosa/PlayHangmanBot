@@ -119,29 +119,22 @@ class WebhookHandler(webapp2.RequestHandler):
         #Lê as configurações
         def getLanguage(chat_id):
             s = bds.getSettings(chat_id) #Classe settings
-            if s:
-                if s.language == 'ptBR':
-                    import ptBR as l
-                    return l
-                elif s.language == 'enUS':
-                    import enUS as l
-                    return l
-                elif s.language == 'hbIL':
-                    import hbIL as l
-                    return l
-            else:
+            if not s:
                 bds.checkChat(chat_id)
                 s = bds.getSettings(chat_id) #Classe settings
-                if s.language == 'ptBR':
-                    import ptBR as l
-                    return l
-                elif s.language == 'enUS':
-                    import enUS as l
-                    return l
-                elif s.language == 'hbIL':
-                    import hbIL as l
-                    return l
-                return
+            if s.language == 'ptBR':
+                import ptBR as l
+                return l
+            elif s.language == 'enUS':
+                import enUS as l
+                return l
+            elif s.language == 'hbIL':
+                import hbIL as l
+                return l
+            elif s.language == 'ruRU':
+                import ruRU as l
+                return l
+            return
 
 
         #Aqui começa a lógica principal

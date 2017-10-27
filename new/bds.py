@@ -93,6 +93,10 @@ class ChatInfo(ndb.Model):
             import hbIL as l
             self.language = l
 
+        if self.language == 'ruRU':
+            import ruRU as l
+            self.language = l
+
 class Game(ndb.Model):
     u_ids           = ndb.StringProperty(repeated = True)
     u_names         = ndb.StringProperty(repeated = True)
