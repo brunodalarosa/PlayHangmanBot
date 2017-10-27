@@ -21,6 +21,9 @@ def getLanguage(chat_id):
     elif s.language == 'hbIL':
         import hbIL as l
         return l
+    elif s.language == 'ruRU':
+        import ruRU as l
+        return l
     return
 
 #Recebe os dados que serão repondidos e transforma em um dict
